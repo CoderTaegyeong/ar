@@ -35,7 +35,7 @@ import gui.wiget.ZonedClock;
 import util.Style;
 
 public class AppContainer {
-	private JFrame frame = new JFrame();
+	private JFrame frame;
 	private BorderLayoutPanel rootPanel = new BorderLayoutPanel();
 	private ConfigDialog config = new ConfigDialog(this);
 	
@@ -171,10 +171,10 @@ public class AppContainer {
 	}
 
     public void removeViews(SubApp subApp) {
-    	int prevSize = viewList.size();
+    	int viewCount = viewList.size();
     	viewList.removeIf(view -> subApp != null && view.parentApp() != null && view.parentApp().equals(subApp));
-    	int removeCount = prevSize - viewList.size();
-    	sysout("prevSize::"+ prevSize, "removeCount : "+ removeCount);
+    	int removeCount = viewCount - viewList.size();
+    	sysout("Remove Views -- View Count : "+ viewCount, "removeCount : "+ removeCount);
     	if(cardIndex != -1) move(-removeCount);
     }
     
@@ -267,7 +267,7 @@ public class AppContainer {
 	}
 	
     public void showFrame() {
-    	frame.dispose();
+    	if(frame != null) frame.dispose();
 		frame = new JFrame("항공권 예약 어플리케이션");
 		frame.setIconImage(contIcon.getImage());
 		frame.setContentPane(rootPanel.getPanel());
