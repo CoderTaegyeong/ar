@@ -14,6 +14,12 @@ public class GridBagPanel extends CustomPanel{
 	
 	{ rootPanel.setLayout(new GridBagLayout()); }
 
+	public GridBagPanel() {}
+	
+	public GridBagPanel(int width, int height) {
+		setSize(width, height);
+	}
+	
 	public void add(CustomPanel panel, int gridx, int gridy, int weightx, int weighty) {
 		add(panel.getPanel(), gridx, gridy, weightx, weighty);
 	}
@@ -51,8 +57,12 @@ public class GridBagPanel extends CustomPanel{
 	}
 	
 	public void addNextRow(CustomPanel panel) {
+		addNextRow(panel.getPanel());
+	}
+	
+	public void addNextRow(JComponent comp) {
 		gbc.gridwidth = maxgridx;
-		add(panel.getPanel(), 1, ++gbc.gridy, 1, 1);
+		add(comp, 1, ++gbc.gridy, 1, 1);
 	}
 	
 	public void removeAll() {

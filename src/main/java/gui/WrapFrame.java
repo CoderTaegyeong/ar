@@ -147,11 +147,11 @@ public class WrapFrame implements Runnable {
 		parent.addMouseListener(new MouseAdapter() {
 			WrapFrame frame = new WrapFrame(parent);
 			{
-				JPanel panel = new JPanel();
+				JPanel panel = new JPanel(new BorderLayout());
 				frame.getFrame().setContentPane(panel);
 				JLabel label = new JLabel(text);
-				panel.add(label);
-				label.setHorizontalAlignment(JLabel.CENTER);
+				panel.add(label, BorderLayout.CENTER);
+				label.setHorizontalAlignment(JLabel.LEFT);
 				label.setFont(font == null ? Gui.font(23) : font);
 				label.setForeground(Color.BLACK);
 				panel.setBorder(new LineBorder(Color.DARK_GRAY, 1));
@@ -159,8 +159,9 @@ public class WrapFrame implements Runnable {
 			}
 			public void mouseEntered(MouseEvent e) {
 				if(frame.getFrame().isVisible()) return;
-				frame.setProperties(0, 0.1f, 1f, 1500);
-				frame.start(e.getLocationOnScreen().x, parent.getLocationOnScreen().y+ parent.getHeight(), width, height);
+				frame.setProperties(0, 0.1f, 1f, 1200);
+				frame.start(e.getLocationOnScreen().x, e.getLocationOnScreen().y + 50,
+						width < 0 ? parent.getWidth() : width, height < 0 ? parent.getHeight() : height);
 			}
 		});
 	}

@@ -2,9 +2,12 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
@@ -23,6 +26,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -51,6 +55,10 @@ public final class Gui {
 		return createLabel(text, fgColor, font(size), alignment);
 	}
 
+	public static LayoutManager flowLayout() {
+		return new FlowLayout(FlowLayout.CENTER,0,0);
+	}
+	
 	public static JLabel createLabel(String text, Color fgColor, Font font, int alignment) {
 		JLabel label = new JLabel(text);
 		label.setHorizontalAlignment(alignment);
@@ -84,25 +92,60 @@ public final class Gui {
 		return new ImageIcon(getResizedImage(path, width, height));
 	}
 	
-	public static ImageIcon getResizedIcon(String path, String defaultPath, int width, int height) {
+	public static Image getResizedImage(String path, String defaultPath, int width, int height) {
 		File file = new File(path);
 		if(file.exists())
-			return getResizedIcon(path, width, height);
+			return getResizedImage(path, width, height);
 		else
-			return getResizedIcon(defaultPath, width, height);
+			return getResizedImage(defaultPath, width, height);
+	}
+
+	
+	public static ImageIcon getResizedIcon(String path, String defaultPath, int width, int height) {
+		return new ImageIcon(getResizedImage(path, defaultPath, width, height));
 	}
 	
 	public static ImageIcon getResizedIcon(ImageIcon icon, int width, int height) {
 		return new ImageIcon(getResizedImage(icon.getImage(), width, height));
 	}
 	
-	public static Image getResizedImage(String path, int width, int height) {
+	public static Image getImage(String path) {
+		return getImage(new File(path));
+	}
+	
+	public static Image scaleDown(String imagePath, int maxWidth, int maxHeight) {
+		return scaleDown(getImage(imagePath), maxWidth, maxHeight);
+	}
+	
+	public static Image scaleDown(Image originalImage, int maxWidth, int maxHeight) {
+	    int originalWidth = originalImage.getWidth(null);
+	    int originalHeight = originalImage.getHeight(null);
+	    if (originalWidth > maxWidth || originalHeight > maxHeight) {
+	        double ratio = (double) originalWidth / (double) originalHeight;
+	        if (originalWidth > maxWidth) {
+	            originalWidth = maxWidth;
+	            originalHeight = (int) (originalWidth / ratio);
+	        }
+	        if (originalHeight > maxHeight) {
+	            originalHeight = maxHeight;
+	            originalWidth = (int) (originalHeight * ratio);
+	        }
+	    }
+	    return originalImage.getScaledInstance(originalWidth, originalHeight, Image.SCALE_SMOOTH);
+	}
+	
+	public static Image getImage(File file) {
 		try {
-			return getResizedImage(ImageIO.read(new File(path)), width, height);
+			return ImageIO.read(file);
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static Image getResizedImage(String path, int width, int height) {
+		return getResizedImage(getImage(path), width, height);
 	}
 	
 	public static Image getResizedImage(Image image, int width, int height) {
@@ -110,16 +153,17 @@ public final class Gui {
 	}
 	
 	public static void addBorderOnEnterMouse(JComponent comp, Consumer<?> action) {
-		addBorderOnEnterMouse(comp, action, Color.RED, 1);
+		addBorderOnEnterMouse(comp, action, Color.RED, Cursor.HAND_CURSOR, 1);
 	}
 
 	public static void addBorderOnEnterMouse(JComponent comp, Consumer<?> action, int t) {
-		addBorderOnEnterMouse(comp, action, Color.RED, t);
+		addBorderOnEnterMouse(comp, action, Color.RED, Cursor.HAND_CURSOR, t);
 	}
 	
-	public static void addBorderOnEnterMouse(JComponent comp, Consumer<?> action, Color color, int t) {
+	public static void addBorderOnEnterMouse(JComponent comp, Consumer<?> action, Color color, int cursor, int t) {
 		Border empty = BorderFactory.createEmptyBorder(t,t,t,t);
 		Border line = BorderFactory.createLineBorder(color, t);
+		comp.setCursor(new Cursor(cursor));
 		comp.setBorder(empty);
 		comp.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) { action.accept(null); }
@@ -283,11 +327,11 @@ public final class Gui {
         }
     }
 	
-	public static File[] getFiles(String exts) {
+	public static File[] getFiles(String... exts) {
 		return getFiles(null, null, exts);
 	}
 	
-	public static File getFile(String exts) {
+	public static File getFile(String... exts) {
 		return getFile(null, null, exts);
 	}
 //-------------------------------------------End JFileChooser----------------------------------//

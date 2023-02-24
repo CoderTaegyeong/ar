@@ -1,4 +1,4 @@
-package gui.panel.button;
+package gui.panel.button.input;
 
 import java.util.function.Consumer;
 
@@ -9,7 +9,7 @@ import javax.swing.JRadioButton;
 
 import gui.panel.input.InputComponent;
 
-public class RadioButtonPanel extends AbstractButtonPanel implements InputComponent{
+public class RadioButtonPanel extends InputButtonPanel implements InputComponent{
 	ButtonGroup buttonGroup = new ButtonGroup();
 	
 	@Override
@@ -48,12 +48,6 @@ public class RadioButtonPanel extends AbstractButtonPanel implements InputCompon
 		for(AbstractButton button : getButtonList())
 			if(button.isSelected()) return button.getName();
 		return null;
-	}
-
-	@Override
-	public void setValue(Object value) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

@@ -16,23 +16,23 @@ public class BorderLayoutPanel extends CustomPanel{
 	{ rootPanel.setLayout(new BorderLayout()); }
 	
 	public void addNorth(CustomPanel panel) {
-		addNorth(panel.panel());
+		addNorth(panel.getPanel());
 	}
 	
 	public void addWest(CustomPanel panel) {
-		addWest(panel.panel());
+		addWest(panel.getPanel());
 	}
 	
 	public void addCenter(CustomPanel panel) {
-		addCenter(panel.panel());
+		addCenter(panel.getPanel());
 	}
 	
 	public void addEast(CustomPanel panel) {
-		addEast(panel.panel());
+		addEast(panel.getPanel());
 	}
 	
 	public void addSouth(CustomPanel panel) {
-		addSouth(panel.panel());
+		addSouth(panel.getPanel());
 	}
 	
 	public void addNorth(JComponent comp) {
@@ -67,7 +67,7 @@ public class BorderLayoutPanel extends CustomPanel{
 	}
 	
 	public JPanel newPanel(Dimension dim, String direction, int alignment) {
-		JPanel panel = new JPanel(new FlowLayout(alignment));
+		JPanel panel = new JPanel(new FlowLayout(alignment, 0, 0));
 		if(dim != null) panel.setPreferredSize(dim);
 		rootPanel.add(panel, direction);
 		return panel;

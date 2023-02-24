@@ -9,6 +9,8 @@ import app.reserv.Reservation;
 import app.schedule.Schedule;
 import gui.Gui;
 import test.Debug;
+import travel.Travel;
+import travel.Travel;
 
 public class ArApplication {
 	public static final String RES_PATH = "src/main/resources/";
@@ -31,6 +33,7 @@ public class ArApplication {
 		service.addSubApp(new LoginApp());
 		service.addSubApp(new Schedule());
 		service.addSubApp(new AdminApp());
+		service.addSubApp(new Travel());
 		service.start();
 
 		//앱 시작시 로그인 창을 띄운다

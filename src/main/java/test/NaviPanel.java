@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 
 import gui.Gui;
 import gui.panel.button.ButtonPanel;
-import gui.panel.button.CheckBoxPanel;
-import gui.panel.button.RadioButtonPanel;
+import gui.panel.button.input.CheckBoxPanel;
+import gui.panel.button.input.RadioButtonPanel;
 
 public class NaviPanel{
 	public NaviPanel() {

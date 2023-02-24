@@ -36,8 +36,4 @@ public class ButtonPanel extends AbstractButtonPanel{
 		JButton button = new RoundButton(name);
 		settingButton(button, action);
 	}
-	
-	public void reset() {
-		
-	}
 }

@@ -5,21 +5,16 @@ import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import gui.panel.CustomPanel;
 import gui.panel.InputPanel;
 
 public class TextFieldPanel extends InputPanel{
 	private JLabel label;
-	private JTextField textField = new JTextField();
+	private JTextField textField = new JTextField(10);
 	
 	{ rootPanel.setLayout(new BorderLayout()) ;}
 
-	public TextFieldPanel() {
-		this(null);
-	}
-	
 	public TextFieldPanel(String name) {
-		this(null, name);
+		this(name, name);
 	}
 	
 	public TextFieldPanel(String name, String labelText) {
@@ -27,11 +22,9 @@ public class TextFieldPanel extends InputPanel{
 	}
 	
 	public TextFieldPanel(String name, String labelText, String labelDirection) {
-		if(name != null) setName(name);
-		if(labelText != null) {
-			label = new JLabel();
-			rootPanel.add(label, labelDirection);
-		}
+		setName(name);
+		label = new JLabel(labelText);
+		rootPanel.add(label, labelDirection);
 		rootPanel.add(textField, BorderLayout.CENTER);
 	}
 	
@@ -49,15 +42,15 @@ public class TextFieldPanel extends InputPanel{
 
 	@Override
 	public String getValue() {
-		return null;
+		return textField.getText();
 	}
 
 	@Override
 	public void setValue(Object value) {
-		
+		textField.setText(value.toString());
 	}
 	
 	public void reset() {
-		
+		textField.setText("");
 	}
 }

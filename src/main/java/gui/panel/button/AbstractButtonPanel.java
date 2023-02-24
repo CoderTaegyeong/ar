@@ -21,13 +21,13 @@ public abstract class AbstractButtonPanel extends CustomPanel {
 	
 	private Color bgColor, fgColor;
 	
-	public abstract void addButton(String name, Consumer<?> c);
+	public abstract void addButton(String buttonName, Consumer<?> c);
 	
-	public abstract void addButton(String name, ImageIcon icon, Consumer<?> c);
+	public abstract void addButton(String buttonName, ImageIcon icon, Consumer<?> c);
 	
-	public abstract void addButton(String name);
+	public abstract void addButton(String buttonName);
 	
-	public abstract void addButton(String name, ImageIcon icon);
+	public abstract void addButton(String buttonName, ImageIcon icon);
 
 	public abstract void addButton(ImageIcon icon, Consumer<?> c);
 
@@ -117,14 +117,6 @@ public abstract class AbstractButtonPanel extends CustomPanel {
 		buttonList.forEach(b -> b.setForeground(foreground));
 	}
 
-	public void clearSelection() {
-		buttonList.forEach(b -> { b.setSelected(false); });
-	}
-	
-//	public String getValue() {
-//		return buttonList.stream().map(b -> b.getName()).collect(Collectors.joining(","));
-//	}
-	
 	public void removeAll() {
 		super.removeAll();
 		buttonList.clear();

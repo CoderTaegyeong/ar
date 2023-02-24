@@ -6,9 +6,9 @@ import java.awt.LayoutManager;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
-
-public class CustomPanel {
+public abstract class CustomPanel {
 	protected JPanel rootPanel = new JPanel();
 	
 	public void add(JComponent comp) {
@@ -17,10 +17,6 @@ public class CustomPanel {
 	
 	public void add(CustomPanel custom) {
 		add(custom.rootPanel);
-	}
-	
-	public JPanel panel() {
-		return rootPanel;
 	}
 	
 	public void setSize(int width, int height) {
@@ -42,5 +38,13 @@ public class CustomPanel {
 	
 	public void removeAll() {
 		rootPanel.removeAll();
+	}
+	
+	public void setBorder(Border border) {
+		rootPanel.setBorder(null);
+	}
+	
+	public void add(JComponent comp, Object constraints) {
+		rootPanel.add(comp, constraints);
 	}
 }

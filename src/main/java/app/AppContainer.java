@@ -11,6 +11,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,6 +28,7 @@ import app.reserv.SelectSeat;
 import entity.TicketDTO;
 import gui.Gui;
 import gui.WrapFrame;
+import gui.panel.ImagePanel;
 import gui.panel.button.ButtonPanel;
 import gui.panel.layout.BorderLayoutPanel;
 import gui.wiget.ZonedClock;
@@ -59,6 +61,7 @@ public class AppContainer {
 	private Dimension botBothSide = new Dimension(200,50);
 	private ImageIcon contIcon = new ImageIcon(IMG_PATH+"conticon.png");
 	private Font subAppTitleFont = Gui.createFont("맑은 고딕", 28);
+	private List<ImagePanel> iconPanelList;
 	private List<JPanel> iconPanels;
 	private List<JLabel> titleLables;
 	
@@ -73,10 +76,14 @@ public class AppContainer {
 
 		topPanel.setBackgrounds(style.getColor("topBotColor"));
 		botPanel.setBackgrounds(style.getColor("topBotColor"));
-		container.setBorder(BorderFactory.createLineBorder(style.getColor("contBorder"), 20));
+		cardPanel.setBorder(BorderFactory.createLineBorder(style.getColor("contBorder"), 20));
 		container.setBackground(style.getColor("contBg"));
-		iconPanels.forEach(p->p.setBackground(style.getColor("contBg")));
-		titleLables.forEach(l->l.setForeground(style.getColor("subTitle")));
+		iconPanelList.forEach(p->{
+			if(p.getLabel() != null) p.getLabel().setForeground(style.getColor("subTitle"));
+			p.getPanel().setBackground(style.getColor("contBg"));
+		});
+//		iconPanels.forEach(p->p.setBackground(style.getColor("contBg")));
+//		titleLables.forEach(l->l.setForeground(style.getColor("subTitle")));
 	}
 	//-----------------------------------Style---------------------------------
 	public AppContainer() {
@@ -210,8 +217,9 @@ public class AppContainer {
 	}
 	
 	public void addAppIcons(List<SubApp> appList) {
-		iconPanels = new Vector<JPanel>();
-		titleLables = new Vector<JLabel>();
+		iconPanelList = new Vector<ImagePanel>();
+//		iconPanels = new Vector<JPanel>();
+//		titleLables = new Vector<JLabel>();
 		container.removeAll();
 		for(int i=0; i<rows * cols; i++) {
 			if(i < appList.size())
@@ -223,21 +231,31 @@ public class AppContainer {
 	}
 	
 	public void addAppIcon(SubApp subApp) {
-		JPanel iconPanel = new JPanel(new BorderLayout());
-		iconPanels.add(iconPanel);
-		container.add(iconPanel);
+		ImagePanel iconPanel = new ImagePanel();
+		iconPanelList.add(iconPanel);
+		container.add(iconPanel.getPanel());
+		
 		if(subApp == null) return;
-		
-		JLabel titleLabel = new JLabel(subApp.getTitle());
-		titleLabel.setHorizontalAlignment(JLabel.CENTER);
-		titleLabel.setFont(subAppTitleFont);
-		titleLables.add(titleLabel);
-		
-		JLabel iconLabel = new JLabel(Gui.getResizedIcon(IMG_PATH+subApp.getClass().getSimpleName()+".PNG", IMG_PATH+"defaultimg.PNG", 100, 100));
-		iconPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		iconPanel.add(iconLabel, BorderLayout.CENTER);
-		iconPanel.add(titleLabel, BorderLayout.SOUTH);
-		Gui.addBorderOnEnterMouse(iconPanel, b->addView(subApp.requestView()), 2);
+		iconPanel.setText(subApp.getTitle());
+		iconPanel.setAlignment(JLabel.CENTER);
+		iconPanel.setFont(subAppTitleFont);
+		iconPanel.setImage(Gui.getResizedImage(IMG_PATH+subApp.getClass().getSimpleName()+".PNG", IMG_PATH+"defaultimg.PNG", 100, 100));
+		Gui.addBorderOnEnterMouse(iconPanel.getPanel(), b->addView(subApp.requestView()), 2);
+//		JPanel iconPanel = new JPanel(new BorderLayout());
+//		iconPanels.add(iconPanel);
+//		container.add(iconPanel);
+//		if(subApp == null) return;
+//		
+//		JLabel titleLabel = new JLabel(subApp.getTitle());
+//		titleLabel.setHorizontalAlignment(JLabel.CENTER);
+//		titleLabel.setFont(subAppTitleFont);
+//		titleLables.add(titleLabel);
+//		
+//		JLabel iconLabel = new JLabel(Gui.getResizedIcon(IMG_PATH+subApp.getClass().getSimpleName()+".PNG", IMG_PATH+"defaultimg.PNG", 100, 100));
+//		iconPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//		iconPanel.add(iconLabel, BorderLayout.CENTER);
+//		iconPanel.add(titleLabel, BorderLayout.SOUTH);
+//		Gui.addBorderOnEnterMouse(iconPanel, b->addView(subApp.requestView()), 2);
 	}
 	
 	public void update() {
