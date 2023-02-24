@@ -26,7 +26,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -50,6 +49,11 @@ public final class Gui {
     public static final Color DARK_BLUE = new Color(20, 20, 70);
     
 	private Gui() {}
+	
+	public static JComponent setMargin(JComponent comp, int top, int left, int bottom, int right) {
+		comp.setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
+		return comp;
+	}
 	
 	public static JLabel createLabel(String text, Color fgColor, int size, int alignment) {
 		return createLabel(text, fgColor, font(size), alignment);

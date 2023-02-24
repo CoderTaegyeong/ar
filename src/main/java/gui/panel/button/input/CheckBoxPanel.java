@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 
 import gui.panel.input.InputComponent;
-import util.StrUtil;
 
 public class CheckBoxPanel extends InputButtonPanel implements InputComponent{
 	

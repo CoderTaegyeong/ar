@@ -62,11 +62,11 @@ public class BorderLayoutPanel extends CustomPanel{
 		}
 	}
 	
-	public JPanel newPanel(int width, int height, String direction) {
-		return newPanel(new Dimension(width, height), direction, 0);
+	public JPanel newPanel(String direction, int width, int height) {
+		return newPanel(direction, new Dimension(width, height), 0);
 	}
 	
-	public JPanel newPanel(Dimension dim, String direction, int alignment) {
+	public JPanel newPanel(String direction, Dimension dim, int alignment) {
 		JPanel panel = new JPanel(new FlowLayout(alignment, 0, 0));
 		if(dim != null) panel.setPreferredSize(dim);
 		rootPanel.add(panel, direction);
@@ -80,6 +80,6 @@ public class BorderLayoutPanel extends CustomPanel{
 	}
 	
 	public JPanel newPanel(String direction) {
-		return newPanel(null, direction, 0);
+		return newPanel(direction, null, 0);
 	}
 }

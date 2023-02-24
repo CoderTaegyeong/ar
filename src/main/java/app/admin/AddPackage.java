@@ -1,16 +1,13 @@
 package app.admin;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.io.File;
 
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 import app.AppView;
-import app.ArApplication;
 import entity.PackageDTO;
 import gui.Gui;
 import gui.InputForm;
@@ -45,16 +42,12 @@ public class AddPackage extends AppView{
 		BorderLayoutPanel blPanel = new BorderLayoutPanel();
 		rootPanel = blPanel.getPanel();
 		imagePanel = new ImagePanel();
-		imagePanel.setImage(Gui.getImage(ArApplication.IMG_PATH+"n1.png"), 300, 300);
-		imagePanel.setText("N1.png");
 		imagePanel.setFont(Gui.font(20));
-		JPanel panel = blPanel.newPanel(BorderLayout.EAST);
+		JPanel panel = blPanel.newPanel(BorderLayout.EAST, 350, 600);
 		panel.add(imagePanel.getPanel());
-		panel.setBorder(new LineBorder(Color.RED, 1));
 		
-		formPanel = new GridBagPanel(500, 400);
+		formPanel = new GridBagPanel(600, 400);
 		blPanel.addCenter(formPanel);
-		formPanel.setSize(400, 400);
 		
 		addComponent(new TextFieldPanel("id","패키지 번호"));
 		addComponent(new TextFieldPanel("imagePath","이미지 경로"));
@@ -69,18 +62,23 @@ public class AddPackage extends AppView{
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		buttonPanel.addButton("이미지로드",b->loadImage());
 		buttonPanel.addButton("패키지등록",b->uploadPackage());
-		buttonPanel.addButton("리셋",b->packageInput.resetForm());
+		buttonPanel.addButton("리셋",b->reset());
 		formPanel.addNextRow(buttonPanel);
 	}
 	
+	private void reset() {
+		packageInput.resetForm();
+		imagePanel.removeImage();
+	}
+
 	private void loadImage() {
-		File file = Gui.getFile(null,new File(ArApplication.IMG_PATH),"png","jpg");
+		File file = Gui.getFile(null,new File("C:/Users/GGG/Desktop"),"png","jpg");
 		if(file == null) return;
 		Image image = Gui.getImage(file);
 		System.out.println(file + " image:" + image);
 		if(image != null) {
-			imagePanel.setImage(Gui.scaleDown(image, 400, 300));
 			imagePanel.setText(file.getName());
+			imagePanel.setImage(Gui.scaleDown(image, 400, 300));
 		}
 	}
 
@@ -90,7 +88,7 @@ public class AddPackage extends AppView{
 	}
 	
 	public void uploadPackage() {
-//		adminApp.addPackage(packageInput.saveTo(new PackageDTO()));
+		adminApp.addPackage(packageInput.saveTo(new PackageDTO()));
 		System.out.println(packageInput.saveTo(new PackageDTO()));
 	}
 	

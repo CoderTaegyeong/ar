@@ -1,4 +1,4 @@
-package travel;
+package app.travel;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class Travel extends SubApp{
 		return DAO.sql.select(query, new BeanPropertyRowMapper<>(PackageDTO.class));
 	}
 
-	public void openDetail(int packId) {
+	public void openDetail(PackageDTO pack) {
 		
 	}
 }

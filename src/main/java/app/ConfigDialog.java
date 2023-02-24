@@ -72,7 +72,7 @@ public class ConfigDialog {
 
 	public void loadStyle() {
 		try {
-			JsonReader jsonReader = new JsonReader(new FileReader(ArApplication.RES_PATH+"style.json"));
+			JsonReader jsonReader = new JsonReader(new FileReader(ArApplication.RES_PATH+"Style.json"));
 			container.style = gson.fromJson(jsonReader, Style.class);
 			styleBtnPanel.removeAll();
 			int styleCount = container.style.colors.size();
@@ -84,7 +84,7 @@ public class ConfigDialog {
 				styleBtnPanel.getButton(i).setBorder(border2);
 				styleBtnPanel.getButton(i).setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
-			Debug.sysout("++++++++++++style.json++++++++++\n", gson.toJson(container.style),"\n------------style------------");
+			Debug.sysout("++++++++++++Style.json++++++++++++\n", gson.toJson(container.style),"\n------------style------------");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

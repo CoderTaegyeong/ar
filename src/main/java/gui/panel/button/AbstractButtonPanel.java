@@ -12,7 +12,6 @@ import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 
 import gui.panel.CustomPanel;
-import gui.panel.input.InputComponent;
 
 public abstract class AbstractButtonPanel extends CustomPanel {
 	protected List<AbstractButton> buttonList = new Vector<>();

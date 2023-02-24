@@ -7,10 +7,9 @@ import app.dash.DashBoard;
 import app.login.LoginApp;
 import app.reserv.Reservation;
 import app.schedule.Schedule;
+import app.travel.Travel;
 import gui.Gui;
 import test.Debug;
-import travel.Travel;
-import travel.Travel;
 
 public class ArApplication {
 	public static final String RES_PATH = "src/main/resources/";

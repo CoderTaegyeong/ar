@@ -1,17 +1,16 @@
 package app;
 
 import static app.ArApplication.IMG_PATH;
+import static gui.Gui.*;
 import static test.Debug.sysout;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -26,12 +25,12 @@ import javax.swing.JPanel;
 import app.login.LoginApp;
 import app.reserv.SelectSeat;
 import entity.TicketDTO;
-import gui.Gui;
 import gui.WrapFrame;
 import gui.panel.ImagePanel;
 import gui.panel.button.ButtonPanel;
 import gui.panel.layout.BorderLayoutPanel;
 import gui.wiget.ZonedClock;
+import util.StrUtil;
 import util.Style;
 
 public class AppContainer {
@@ -42,48 +41,42 @@ public class AppContainer {
 	private CardLayout cardLayout = new CardLayout();
 	private int cardIndex;
 	private JPanel cardPanel;
-	private AppView currentView;
 	
+	private BorderLayoutPanel topPanel, botPanel;
+
 	private final int rows = 3, cols = 3;
 	private JPanel container;
 	private List<AppView> viewList = new Vector<>();
-
-	private BorderLayoutPanel topPanel, botPanel;
+	private AppView currentView;
 	
 	private JLabel viewIconLabel = new JLabel();
 	private JLabel viewTitleLabel = new JLabel();
-	private JLabel timeLabel = new JLabel();
 	private JLabel viewInfoLabel = new JLabel();
+	private JLabel timeLabel = new JLabel();
 	
 	//+++++++++++++++++++++++++++++++++++Style+++++++++++++++++++++++++++++++
 	public Style style;
 	private String timeFormat = "YYYY-MM-dd EEE HH:mm:ss";
 	private Dimension botBothSide = new Dimension(200,50);
 	private ImageIcon contIcon = new ImageIcon(IMG_PATH+"conticon.png");
-	private Font subAppTitleFont = Gui.createFont("맑은 고딕", 28);
+	private Font subAppTitleFont = createFont("맑은 고딕", 28);
 	private List<ImagePanel> iconPanelList;
-	private List<JPanel> iconPanels;
-	private List<JLabel> titleLables;
 	
 	public void setStyle() {
-		timeLabel.setFont(Gui.createFont(17));
-		timeLabel.setFont(Gui.createFont(17));
-		viewTitleLabel.setFont(Gui.createFont(28));
-
+		timeLabel.setFont(createFont(17));
+		timeLabel.setFont(createFont(17));
+		viewTitleLabel.setFont(createFont(28));
+		cardPanel.setBorder(BorderFactory.createLineBorder(style.getColor("contBorder"), 20));
 		viewTitleLabel.setForeground(style.getColor("fontColor"));
 		viewInfoLabel.setForeground(style.getColor("fontColor"));
 		timeLabel.setForeground(style.getColor("fontColor"));
-
 		topPanel.setBackgrounds(style.getColor("topBotColor"));
 		botPanel.setBackgrounds(style.getColor("topBotColor"));
-		cardPanel.setBorder(BorderFactory.createLineBorder(style.getColor("contBorder"), 20));
 		container.setBackground(style.getColor("contBg"));
-		iconPanelList.forEach(p->{
-			if(p.getLabel() != null) p.getLabel().setForeground(style.getColor("subTitle"));
-			p.getPanel().setBackground(style.getColor("contBg"));
+		iconPanelList.forEach(ip->{ if(ip.getLabel() != null) 
+			ip.getLabel().setForeground(style.getColor("subTitle"));
+			ip.getPanel().setBackground(style.getColor("contBg")); 
 		});
-//		iconPanels.forEach(p->p.setBackground(style.getColor("contBg")));
-//		titleLables.forEach(l->l.setForeground(style.getColor("subTitle")));
 	}
 	//-----------------------------------Style---------------------------------
 	public AppContainer() {
@@ -101,23 +94,25 @@ public class AppContainer {
 		container.setPreferredSize(cardPanel.getPreferredSize());
 
 		topPanel = new BorderLayoutPanel();
-		JPanel topLeftPan = topPanel.newPanel(300, 40, BorderLayout.WEST);
+		JPanel topLeftPan = topPanel.newPanel(BorderLayout.WEST, 300, 40);
 		topLeftPan.setLayout(new FlowLayout(FlowLayout.LEFT));
 		topLeftPan.add(viewIconLabel);
 		topLeftPan.add(viewTitleLabel);
 		
 		ButtonPanel topBtnPanel = new ButtonPanel();
-		topBtnPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		topBtnPanel .setLayout(new FlowLayout(FlowLayout.LEFT));
 		for(int i=1; i<=8; i++) {
 			final int a = i;
 			topBtnPanel.addButton(new ImageIcon(IMG_PATH+"n"+i+".PNG"), b->action(a));
 		}
-		
 		topPanel.addCenter(topBtnPanel);
-		topPanel.newPanel(BorderLayout.EAST).add(Gui.createIconLabel(IMG_PATH+"config.png", 33, 33, b->config.open()));;
+		
+		topPanel.newPanel(BorderLayout.EAST)
+		.add(setMargin(createIconLabel(IMG_PATH+"config.png", 33, 33, b->config.open()), 5, 0, 0, 5));
 		
 		botPanel = new BorderLayoutPanel();
-		botPanel.newPanel(botBothSide, BorderLayout.WEST, FlowLayout.RIGHT).add(viewInfoLabel);
+		botPanel.newPanel(BorderLayout.WEST, botBothSide, FlowLayout.RIGHT)
+			.add(setMargin(viewInfoLabel, 6, 0, 0, 0));
 		viewInfoLabel.setPreferredSize(new Dimension(botBothSide.width - 20, botBothSide.height));
 		
 		ButtonPanel botBtnPan = new ButtonPanel();
@@ -192,7 +187,7 @@ public class AppContainer {
 	public void addView(AppView appView) {
 		if(appView == null) return;
 		if(viewList.size() >= 25) {
-			WrapFrame.alert("Max View Count is 25", Gui.font(50), cardPanel);
+			WrapFrame.alert("Max View Count is 25", font(50), cardPanel);
 			return;
 		}
 		if(!viewList.contains(appView)) {
@@ -218,8 +213,6 @@ public class AppContainer {
 	
 	public void addAppIcons(List<SubApp> appList) {
 		iconPanelList = new Vector<ImagePanel>();
-//		iconPanels = new Vector<JPanel>();
-//		titleLables = new Vector<JLabel>();
 		container.removeAll();
 		for(int i=0; i<rows * cols; i++) {
 			if(i < appList.size())
@@ -239,23 +232,8 @@ public class AppContainer {
 		iconPanel.setText(subApp.getTitle());
 		iconPanel.setAlignment(JLabel.CENTER);
 		iconPanel.setFont(subAppTitleFont);
-		iconPanel.setImage(Gui.getResizedImage(IMG_PATH+subApp.getClass().getSimpleName()+".PNG", IMG_PATH+"defaultimg.PNG", 100, 100));
-		Gui.addBorderOnEnterMouse(iconPanel.getPanel(), b->addView(subApp.requestView()), 2);
-//		JPanel iconPanel = new JPanel(new BorderLayout());
-//		iconPanels.add(iconPanel);
-//		container.add(iconPanel);
-//		if(subApp == null) return;
-//		
-//		JLabel titleLabel = new JLabel(subApp.getTitle());
-//		titleLabel.setHorizontalAlignment(JLabel.CENTER);
-//		titleLabel.setFont(subAppTitleFont);
-//		titleLables.add(titleLabel);
-//		
-//		JLabel iconLabel = new JLabel(Gui.getResizedIcon(IMG_PATH+subApp.getClass().getSimpleName()+".PNG", IMG_PATH+"defaultimg.PNG", 100, 100));
-//		iconPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-//		iconPanel.add(iconLabel, BorderLayout.CENTER);
-//		iconPanel.add(titleLabel, BorderLayout.SOUTH);
-//		Gui.addBorderOnEnterMouse(iconPanel, b->addView(subApp.requestView()), 2);
+		iconPanel.setImage(getResizedImage(IMG_PATH+subApp.getClass().getSimpleName()+".PNG", IMG_PATH+"defaultimg.PNG", 100, 100));
+		addBorderOnEnterMouse(iconPanel.getPanel(), b->addView(subApp.requestView()), 2);
 	}
 	
 	public void update() {
@@ -274,7 +252,7 @@ public class AppContainer {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setMinimumSize(new Dimension(style.width, style.height));
-		Gui.moveToCenter(frame, style.width, style.height+100);
+		moveToCenter(frame, style.width, style.height+100);
     }
 	
 	public JFrame getFrame() {
@@ -283,10 +261,8 @@ public class AppContainer {
 	
 	//_______________________________________DEBUG_______________________________________________
 	public void updateViewCount() {
-		String text = "<html>View Count : "+ viewList.size() + "<br>" +
-					  "Card Index : "+ cardIndex + "<br> Current View : "+ 
-				      (currentView != null ? currentView.getClass().getSimpleName() : "Home") +" </html>";
-		viewInfoLabel.setText(text);
+		viewInfoLabel.setText(StrUtil.addBr("View Count : "+ viewList.size(), "Card Index : "+ cardIndex, 
+				"Current View :"+ (currentView != null ? currentView.getClass().getSimpleName() : "Home")));
 	}
 	
 	public void action(int i) {
@@ -321,7 +297,7 @@ public class AppContainer {
 					{initRootPanel();}
 					@Override
 					public void initRootPanel() {
-						z.setFontColor(Gui.createFont(20), Color.yellow, Color.BLACK);
+						z.setFontColor(createFont(20), Color.yellow, Color.BLACK);
 						z.initRootPanel();
 
 						rootPanel.add(z.getPanel());

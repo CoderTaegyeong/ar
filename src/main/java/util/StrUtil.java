@@ -16,16 +16,14 @@ public class StrUtil {
 	public static String addBr(String... strings) {
 	    StringBuilder sb = new StringBuilder("<html>");
 	    for (String s : strings) {
-	        sb.append(s);
-	        sb.append("<br>");
+	    	sb.append(s).append("<br>").append("</html>");
 	    }
-	    sb.append("</html>");
 	    return sb.toString();
 	}
 	
 	public static String shorten(String str, int n) {
 	    if (str.length() > n) {
-	        return str.substring(0, n - 3) + "...";
+	        return str.substring(0, n-1) + "...";
 	    } else {
 	        return str;
 	    }
