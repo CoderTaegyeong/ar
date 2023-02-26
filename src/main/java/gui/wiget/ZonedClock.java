@@ -2,6 +2,7 @@ package gui.wiget;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,7 +14,9 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import gui.Gui;
 import gui.panel.layout.BorderLayoutPanel;
+import util.StrUtil;
 
 @SuppressWarnings("serial")
 public class ZonedClock {
@@ -25,10 +28,10 @@ public class ZonedClock {
 	
 	private ZonedDateTime zonedTime;
 	
-	private JPanel timePanel = new JPanel();
+	private JPanel timePanel = new JPanel(Gui.flowLayout(FlowLayout.CENTER));
 	
 	private LocalDateTime time = LocalDateTime.now();
-	private int size = 300, size2 = 30;
+	private int size = 300, size2 = 40;
 	private int r, length;
 	
 	private int hour = 0;
@@ -40,16 +43,23 @@ public class ZonedClock {
 	private final BasicStroke stroke2 = new BasicStroke(2);
 	private final BasicStroke stroke3 = new BasicStroke(3);
 	
-	private Font font;
+	private Font clockFont;
 	private String zoneId;
 
-	private String format = "HH:mm:ss";
+	private String format = "dd일 HH:mm:ss";
 	
-	public void setFontColor(Font font, Color fg, Color bgColor) {
-		timeLabel.setFont(font);
-		timeLabel.setForeground(fg);
+	private Color fgColor = Color.BLACK, bgColor = Color.WHITE;
+	
+	public void setColor(Color fgColor, Color bgColor) {
+		this.fgColor = fgColor;
+		this.bgColor = bgColor;
+		timeLabel.setForeground(fgColor);
 		timePanel.setBackground(bgColor);
-		size2 = (int) (font.getSize() * 1.8);
+	}
+	
+	public void setFont(Font font) {
+		size2 = (int) (font.getSize() * 3.2);
+		timeLabel.setFont(font);
 		timePanel.setPreferredSize(new Dimension(size, size2));
 	}
 	
@@ -85,9 +95,9 @@ public class ZonedClock {
 			rootPanel.addSouth(timePanel);
 			timePanel.add(timeLabel);
 		}
+		setFont(Gui.font(size / 7));
 		rootPanel.setSize(size, remove == 1 ? size2 : remove == 2 ? size : size + size2);
-		
-		font = new Font(Font.SANS_SERIF,Font.PLAIN, Math.max(size / 20, 7));
+		clockFont = new Font(Font.SANS_SERIF,Font.PLAIN, Math.max(size / 15, 9));
 		r = size / 2;
 		length = size / 3 + 5;
 	}
@@ -95,7 +105,7 @@ public class ZonedClock {
 	private class AnalogClock extends JPanel{
 		public void paint(Graphics g) {
 			g2 = (Graphics2D) g;
-			g2.setFont(font);
+			g2.setFont(clockFont);
 			// 시간 정보를 가져온다.
 			min = time.getMinute();
 			hour = time.getHour();
@@ -111,15 +121,16 @@ public class ZonedClock {
 			if (min == 60 && hour == 12) {
 				hour = 0;
 			}
-	
-			g.clearRect(0, 0, size, size);
+			g.setColor(bgColor);
+			g.fillRect(0, 0, size, size);
+			g.setColor(fgColor);
 			drawRect();
 			g2.setStroke(stroke1);
-			drawLine(length, sec * 6);
+			drawLine((int)(length * 0.90), sec * 6);
 			g2.setStroke(stroke2);
-			drawLine((int)(length * 0.8), min * 6);
+			drawLine((int)(length * 0.75), min * 6);
 			g2.setStroke(stroke3);
-			drawLine((int)(length * 0.7), hour * 30 + min / 2);
+			drawLine((int)(length * 0.55), hour * 30 + min / 2);
 		}
 	
 		public void drawRect() {
@@ -142,8 +153,8 @@ public class ZonedClock {
 		}
 	
 		public void drawTimeString(int angle, String i) {
-			int x = r + (int) (r * 0.8 * Math.sin(angle * Math.PI / 180)) - 1;
-			int y = r - (int) (r * 0.8 * Math.cos(angle * Math.PI / 180)) + 4;
+			int x = r + (int) (r * 0.75 * Math.sin(angle * Math.PI / 180)) - 1;
+			int y = r - (int) (r * 0.75 * Math.cos(angle * Math.PI / 180)) + 5;
 			g2.drawString(i, x, y);
 		}
 	
@@ -160,7 +171,7 @@ public class ZonedClock {
 			ZoneId timeZone = ZoneId.of(zoneId);
 			zonedTime = ZonedDateTime.of(time, timeZone);
 		}
-			timeLabel.setText(zoneId + " "+ zonedTime.format(DateTimeFormatter.ofPattern(format)));
+			timeLabel.setText(StrUtil.addBr("["+zoneId+"]", zonedTime.format(DateTimeFormatter.ofPattern(format))));
 		if(analogClock != null)
 			analogClock.repaint();
 	}

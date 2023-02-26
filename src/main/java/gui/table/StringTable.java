@@ -2,33 +2,30 @@ package gui.table;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
 @SuppressWarnings("serial")
 public class StringTable extends ListTable{
 	private List<List<String>> stringList;
-	private List<String> columnNames;
 	
 	public StringTable() {}
 	
 	public StringTable(String...columns) {
-		setColumns(columns);
+		setColumnNames(columns);
 	}
 	
 	public StringTable(List<List<String>> stringList, String... columns) {
 		setList(stringList);
-		setColumns(columns);
+		setColumnNames(columns);
 	}
 	
-	public void setStringModel() {
-		if(tableModel == null && columnNames != null && !columnNames.isEmpty()
-				&& stringList != null && !stringList.isEmpty())
+	private void setStringModel() {
+		if(tableModel == null && columnNames != null && !columnNames.isEmpty())
 			setModel(tableModel = new StringListTableModel());
 	}
 	
-	public void setColumns(String... columns) {
+	public void setColumnNames(String... columns) {
 		if(columns != null && columns.length != 0) {
 			columnNames = Arrays.asList(columns);
 		} else if(!stringList.isEmpty()) {
@@ -43,10 +40,9 @@ public class StringTable extends ListTable{
 		setStringModel();
 	}
 	
-	public AbstractTableModel getModel() {
-		return tableModel;
+	public List<String> getColumnNames(){
+		return columnNames;
 	}
-	
 	
 	public List<List<String>> getList(){
 		return stringList;

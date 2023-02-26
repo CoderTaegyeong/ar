@@ -1,7 +1,13 @@
 package app;
 
 import static app.ArApplication.IMG_PATH;
-import static gui.Gui.*;
+import static gui.Gui.addBorderOnEnterMouse;
+import static gui.Gui.createFont;
+import static gui.Gui.createIconLabel;
+import static gui.Gui.font;
+import static gui.Gui.getResizedImage;
+import static gui.Gui.moveToCenter;
+import static gui.Gui.setMargin;
 import static test.Debug.sysout;
 
 import java.awt.BorderLayout;
@@ -22,8 +28,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import app.admin.AdminApp;
 import app.login.LoginApp;
 import app.reserv.SelectSeat;
+import app.view.TextView;
 import entity.TicketDTO;
 import gui.WrapFrame;
 import gui.panel.ImagePanel;
@@ -40,12 +48,10 @@ public class AppContainer {
 	
 	private CardLayout cardLayout = new CardLayout();
 	private int cardIndex;
-	private JPanel cardPanel;
-	
+	private JPanel cardPanel, container;
 	private BorderLayoutPanel topPanel, botPanel;
 
 	private final int rows = 3, cols = 3;
-	private JPanel container;
 	private List<AppView> viewList = new Vector<>();
 	private AppView currentView;
 	
@@ -53,7 +59,7 @@ public class AppContainer {
 	private JLabel viewTitleLabel = new JLabel();
 	private JLabel viewInfoLabel = new JLabel();
 	private JLabel timeLabel = new JLabel();
-	
+
 	//+++++++++++++++++++++++++++++++++++Style+++++++++++++++++++++++++++++++
 	public Style style;
 	private String timeFormat = "YYYY-MM-dd EEE HH:mm:ss";
@@ -134,7 +140,7 @@ public class AppContainer {
 		container.setName("Container");
 		cardPanel.add(container, container.getName());
 		
-		AppService.getInstance().updateSubAppIcons();
+		AppService.instance().updateSubAppIcons();
 
 		move(-100);
 		updateViewCount();
@@ -146,10 +152,11 @@ public class AppContainer {
      * d == -200 : removeView()
      */
 	public void move(int d) {
-		if(AppService.getInstance().getMember() == null) return;
+		if(AppService.instance().getAttribute("Member") == null) return;
 		
 		currentView = null;
 		if(d == -100 || viewList.isEmpty()) {
+			System.out.println(d);
 			cardLayout.show(cardPanel, container.getName());
 			viewTitleLabel.setText("Home");
 			viewIconLabel.setIcon(contIcon);
@@ -259,70 +266,71 @@ public class AppContainer {
 		return frame;
 	}
 	
-	//_______________________________________DEBUG_______________________________________________
+	//___________________________________________DEBUG_________________________________________________
 	public void updateViewCount() {
-		viewInfoLabel.setText(StrUtil.addBr("View Count : "+ viewList.size(), "Card Index : "+ cardIndex, 
-				"Current View :"+ (currentView != null ? currentView.getClass().getSimpleName() : "Home")));
+		viewInfoLabel.setText(StrUtil.addBr("View Count : "+ viewList.size(), "Card Index : "+ cardIndex
+					,"Current View :"+ (currentView == null ? "Home" : 
+					currentView.getClass().getSimpleName().isEmpty() ? "Anonymous" : 
+					currentView.getClass().getSimpleName())
+					));
 	}
 	
 	public void action(int i) {
 		sysout("Debug Button :", i);
-		AppService a = AppService.getInstance();
 
 		if(i==1) {
-			a.addSubApp(new LoginApp());
-			a.updateSubAppIcons();
+			AppService.instance().addSubApp(new AdminApp());
+			AppService.instance().updateSubAppIcons();
 		}
 		if(i==2) { 
-			a.removeSubApp(a.getSubApp(LoginApp.class));
-			a.updateSubAppIcons();
+			AppService.instance().removeSubApp(AppService.instance().getSubApp(AdminApp.class));
+			AppService.instance().updateSubAppIcons();
 		}
 		
 		if(i==3) {
-//			Gui.getFile(frame, new File(ArApplication.RES_PATH), ".jar");
-//			File file = Gui.getFile(frame, new File(ArApplication.RES_PATH), ".jar");
-//			sysout("selected File : ", file);
-			
-			
 			SelectSeat s = new SelectSeat(null, new TicketDTO());
-			
 			addView(s);
 		}
-//			AppService.getInstance().updateSubAppIcons();
 		
 		if(i==4) {
 			addView(
 				new AppView() {
-					ZonedClock z = new ZonedClock(200);
+					ZonedClock clock = new ZonedClock(110);
 					{initRootPanel();}
 					@Override
 					public void initRootPanel() {
-						z.setFontColor(createFont(20), Color.yellow, Color.BLACK);
-						z.initRootPanel();
-
-						rootPanel.add(z.getPanel());
-						
-						rootPanel.add(new JLabel("asds"));
+						clock.setColor(Color.yellow, Color.BLACK);
+						clock.initRootPanel();
+						JPanel panel = new JPanel(new BorderLayout());
+						panel.add(clock.getPanel(), "Center");
+//						rootPanel.setBackground(Color.black);
+//						panel.setBorder(new LineBorder(Color.YELLOW, 2));
+						rootPanel.add(panel);
 					}
 					@Override
 					public void update(LocalDateTime time) {
-						z.setTime(time);
+						clock.setTime(time);
+					}
+					public String getTitle() {
+						return "Analog Clock";
 					}
 				}
 			);
 		}
 		
 		if(i == 5) {
-			initRootPanel();
-			sysout("initRootPanel()");
+//			initRootPanel();
+//			sysout("initRootPanel()");
+			addView(AppService.instance().getSubApp(LoginApp.class).requestView());
 		}
 		if( i == 6) {
-			WrapFrame.greenAlert("Gr한글은어떨가요?n23ert", cardPanel);
+			WrapFrame.greenAlert("Success !", iconPanelList.get(0).getPanel(), font(25));
+			WrapFrame.alert("Alert !", iconPanelList.get(1).getPanel());
 		}
 		
 		if(i == 7) {
-			WrapFrame.alert("Gr한글은어떨가요?nAL숫자함?23ert!!", cardPanel);
+			addView(new TextView("title1", "seececesfaefsazc4216542365874463q23743q23684732q86437q2683214563f", b->action(2)));
 		}
 	}
-	//_______________________________________DEBUG_______________________________________________
+	//___________________________________________DEBUG_________________________________________________
 }

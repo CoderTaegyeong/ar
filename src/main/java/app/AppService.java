@@ -1,10 +1,11 @@
 package app;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
-import entity.MemberDTO;
 import test.Debug;
 import util.Style;
 
@@ -12,11 +13,12 @@ public class AppService {
 	private List<SubApp> appList = new Vector<>();
 	private AppContainer appContainer = new AppContainer();
 	private static AppService appService;
-	private MemberDTO member = new MemberDTO();
+
+	private Map<String, Object> appInfoMap = new HashMap<>();
 	
 	private AppService() {}
 
-	public static AppService getInstance() {
+	public static AppService instance() {
 		return appService == null ? appService = new AppService() : appService;
 	}
 	
@@ -47,11 +49,11 @@ public class AppService {
 		for(AppView view : appViews) closeView(view);
 	}
 	
-	public SubApp getSubApp(Class<? extends SubApp> subAppClass) {
+	public <T extends SubApp> T getSubApp(Class<T> subAppClass) {
 		for(SubApp subApp : appList) {
-			if(subApp.getClass().equals(subAppClass)) {
-//				sysout("getSubApp  :  " + subApp);
-				return subApp;
+			if(subAppClass.isInstance(subApp)) {
+				Debug.sysout("getSubApp : " +subApp);
+				return subAppClass.cast(subApp);
 			}
 		}
 		return null;
@@ -69,13 +71,6 @@ public class AppService {
 		return appContainer.style;
 	}
 	
-	public void setMemberDTO(MemberDTO member) {
-		this.member = member;
-	}
-	public MemberDTO getMember() {
-		return member;
-	}
-	
 	public void start() {
 		appContainer.initRootPanel();
 		appContainer.showFrame();
@@ -85,5 +80,17 @@ public class AppService {
 	
 	public void update() {
 		appContainer.update();
+	}
+	
+	public void setAttr(String key, Object value) {
+		appInfoMap.put(key, value);
+	}
+	
+	public Object getAttribute(String key) {
+		return appInfoMap.get(key);
+	}
+	
+	public String getAttr(String key) {
+		return getAttribute(key).toString();
 	}
 }

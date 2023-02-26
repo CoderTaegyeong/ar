@@ -15,18 +15,18 @@ public class DashBoard extends SubApp {
 	
 	public void openUpdate(BoardVO vo) {
 		boardUpdate.setData(vo);
-		AppService.getInstance().openView(boardUpdate);
+		AppService.instance().openView(boardUpdate);
 	}
 	
 	public void openInsert() {
 		boardInsert.initRootPanel();
-		AppService.getInstance().openView(boardInsert);
+		AppService.instance().openView(boardInsert);
 	}
 	
 	public void openList(List<BoardVO> voList) {
-		AppService.getInstance().closeViews(boardInsert, boardUpdate);
+		AppService.instance().closeViews(boardInsert, boardUpdate);
 		boardList.createTable(voList);
-		AppService.getInstance().openView(boardList);
+		AppService.instance().openView(boardList);
 	}
 
 	public void openList() {

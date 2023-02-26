@@ -89,7 +89,7 @@ public class BoardInsert extends AppView {
  
             @Override
             public void actionPerformed(ActionEvent e) {
-            	AppService.getInstance().closeView(BoardInsert.this);
+            	AppService.instance().closeView(BoardInsert.this);
                 dash.openList();
             }
         });

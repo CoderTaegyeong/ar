@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
-import entity.mapper.StringListRowMapper;
+import entity.mapper.StringRowMapper;
 
 
 public class SqlUtil {
@@ -28,22 +28,22 @@ public class SqlUtil {
 		return jdbcTemplate.query(sql, rowMapper, args).stream().findAny();
 	}
 	
-	public List<String> selectOne(String query){
-		List<List<String>> result = jdbcTemplate.query(query, new StringListRowMapper());
+	public List<String> selectOne(String query, Object... args){
+		List<List<String>> result = jdbcTemplate.query(query, new StringRowMapper(), args);
 		return result.get(0);
+	}
+	
+	public List<List<String>> select(String query, Object... args) {
+		return jdbcTemplate.query(query, new StringRowMapper(), args);
 	}
 	
 	/**
 	 * @return 첫 행은 칼럼 이름으로 사용된다.
 	 */
-	public List<List<String>> select(String query) {
-		return select(query, true);
-	}
-	
-	public List<List<String>> select(String query, boolean withColumnName) {
-		StringListRowMapper rowMapper = new StringListRowMapper();
-		List<List<String>> result = jdbcTemplate.query(query, rowMapper);
-		if(withColumnName) result.add(0, rowMapper.getColumnNames());
+	public List<List<String>> selectWithColumnName(String query, Object... args) {
+		StringRowMapper rowMapper = new StringRowMapper();
+		List<List<String>> result = jdbcTemplate.query(query, rowMapper, args);
+		result.add(0, rowMapper.getColumnNames());
 		return result;
 	}
 
@@ -51,8 +51,8 @@ public class SqlUtil {
 		return select("SELECT * FROM " + tableName);
 	}
 
-	public <T> List<T> select(String query, RowMapper<T> rowMapper) {
-		return jdbcTemplate.query(query, rowMapper);
+	public <T> List<T> select(String query, RowMapper<T> rowMapper, Object... args) {
+		return jdbcTemplate.query(query, rowMapper, args);
 	}
 
 	public <T> List<T> selectTable(String tableName, RowMapper<T> rowMapper) {
@@ -62,15 +62,16 @@ public class SqlUtil {
 	/**
 	 * @param DB 테이블 칼럼 명과 rowData 의 필드 명이 같아야 합니다.
 	 */
-	public int insert(String tableName, Object rowData) {
+	public int simpleInsert(String tableName, Object rowData) {
 		BeanPropertySqlParameterSource bpsps = new BeanPropertySqlParameterSource(rowData);
 	    return new SimpleJdbcInsert(jdbcTemplate).withTableName(tableName).execute(bpsps);
 	}
-
-	/**
-	 * sql.insert("TableName", VO, "id", "board_seq") <BR>
-	 * 시퀀스 증가 SimpleJdbcInsert.executeAndReturnKey 를 하려는데 오류가 난다. 임시로 사용
-	 */
+	
+	public int insert(String tableName, Object rowData) {
+		return insert(tableName, rowData, "", "");
+	}
+	
+	/** sql.insert("TableName", DTO, "id", "SequenceName") */
 	public int insert(String tableName, Object rowData, String seqColumn, String seqName) {
 		String query = "INSERT INTO " +tableName+ "(";
 	    String columnNames = "";

@@ -16,15 +16,15 @@ public class Reservation extends SubApp {
 //		System.out.println(ticketDTO);
 //	}
 	public void openReservView() {
-		AppService.getInstance().openView(reservView);
+		AppService.instance().openView(reservView);
 	}
 	
 	public void openAirplaneView() {
-		AppService.getInstance().openView(airplaneView);
+		AppService.instance().openView(airplaneView);
 	}
 	
 	public void openSeatView(TicketDTO ticketDTO) {
-		AppService.getInstance().openView(selectSeat);
+		AppService.instance().openView(selectSeat);
 	}
 	
 	@Override

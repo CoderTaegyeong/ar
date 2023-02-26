@@ -16,9 +16,9 @@ public class StrUtil {
 	public static String addBr(String... strings) {
 	    StringBuilder sb = new StringBuilder("<html>");
 	    for (String s : strings) {
-	    	sb.append(s).append("<br>").append("</html>");
+	    	sb.append(s).append("<br>");
 	    }
-	    return sb.toString();
+	    return sb.append("</html>").toString();
 	}
 	
 	public static String shorten(String str, int n) {

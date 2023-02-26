@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Image;
+import java.util.Arrays;
 
 //CREATE TABLE TRAVEL_PACKAGE 
 //(
@@ -9,33 +10,39 @@ import java.awt.Image;
 //, TITLE VARCHAR2(255) 
 //, travelloc VARCHAR2(255) 
 //, traveldays NUMBER(10) 
-//, price VARCHAR2(20) 
+//, price NUMBER(20) 
 //, detailtext VARCHAR2(255) 
 //);
 //
 
 public class PackageDTO {
 	private int id;
-	private String imagePath;
+	private byte[] image;
 	private String title;
 	private String travelLoc;
-	private int travelDays; 
+	private String travelDays; 
 	private int price;
 	private String detailText;
 	public int getId() {
 		return id;
 	}
+	public String getTravelDays() {
+		return travelDays;
+	}
+	public void setTravelDays(String travelDays) {
+		this.travelDays = travelDays;
+	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getImagePath() {
-		return imagePath;
-	}
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
 	public String getTitle() {
 		return title;
+	}
+	public byte[] getImage() {
+		return image;
+	}
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 	public void setTitle(String title) {
 		this.title = title;
@@ -45,12 +52,6 @@ public class PackageDTO {
 	}
 	public void setTravelLoc(String travelLoc) {
 		this.travelLoc = travelLoc;
-	}
-	public int getTravelDays() {
-		return travelDays;
-	}
-	public void setTravelDays(int travelDays) {
-		this.travelDays = travelDays;
 	}
 	public int getPrice() {
 		return price;
@@ -66,7 +67,7 @@ public class PackageDTO {
 	}
 	@Override
 	public String toString() {
-		return "PackageDTO [id=" + id + ", imagePath=" + imagePath + ", title=" + title + ", travelLoc=" + travelLoc
-				+ ", travelDays=" + travelDays + ", price=" + price + ", detailText=" + detailText + "]";
+		return "PackageDTO [id=" + id + ", image=" + image + ", title=" + title + ", travelLoc="
+				+ travelLoc + ", travelDays=" + travelDays + ", price=" + price + ", detailText=" + detailText + "]";
 	}
 }

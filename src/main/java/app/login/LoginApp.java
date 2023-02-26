@@ -9,13 +9,13 @@ public class LoginApp extends SubApp{
 	private AirLineSignUp airLineSignUp = new AirLineSignUp(this); 
 	
 	public void openSignUp() {
-		AppService.getInstance().closeView(airLineSignUp);
-		AppService.getInstance().openView(airLineSignUp);
+		AppService.instance().closeView(airLineSignUp);
+		AppService.instance().openView(airLineSignUp);
 	}
 	
 	public void openMain() {
-		AppService.getInstance().closeView(airLineSignUp);
-		AppService.getInstance().openView(airLineMain);
+		AppService.instance().closeView(airLineSignUp);
+		AppService.instance().openView(airLineMain);
 	}
 	
 	@Override

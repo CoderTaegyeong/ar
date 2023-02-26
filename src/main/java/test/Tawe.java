@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import gui.Gui;
 
 
-public class T {
+public class Tawe {
 public static void main(String[] args) throws Exception {
 		String str = Files.readString(new File("src/main/resources/text.txt").toPath());
 //		System.out.println(str);

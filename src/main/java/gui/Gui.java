@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -12,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -22,17 +22,14 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import app.ArApplication;
 import gui.panel.CustomPanel;
-import gui.panel.button.RoundButton;
 import gui.table.DataTable;
 import gui.table.ListTable;
 import gui.table.StringTable;
@@ -50,6 +47,12 @@ public final class Gui {
     
 	private Gui() {}
 	
+	public static CustomPanel setMargin(CustomPanel customPanel, int top, int left, int bottom, int right) {
+		customPanel.getPanel().setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
+		return customPanel;
+	}
+
+	
 	public static JComponent setMargin(JComponent comp, int top, int left, int bottom, int right) {
 		comp.setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
 		return comp;
@@ -58,9 +61,14 @@ public final class Gui {
 	public static JLabel createLabel(String text, Color fgColor, int size, int alignment) {
 		return createLabel(text, fgColor, font(size), alignment);
 	}
+	
+	public static JLabel createLabel(Color fgColor, Font font, int alignment) {
+		return createLabel("", fgColor, font, alignment);
+	}
 
-	public static LayoutManager flowLayout() {
-		return new FlowLayout(FlowLayout.CENTER,0,0);
+	/** 0 : LEFT,  1: CENTER, 2 : RIGHT */
+	public static LayoutManager flowLayout(int l) {
+		return new FlowLayout(l,0,0);
 	}
 	
 	public static JLabel createLabel(String text, Color fgColor, Font font, int alignment) {
@@ -117,8 +125,27 @@ public final class Gui {
 		return getImage(new File(path));
 	}
 	
+	public static Image getImage(File file) {
+		try {
+			return ImageIO.read(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public static Image scaleDown(String imagePath, int maxWidth, int maxHeight) {
 		return scaleDown(getImage(imagePath), maxWidth, maxHeight);
+	}
+	
+	public static Image getImage(byte[] bytes) {
+		try {
+			return ImageIO.read(new ByteArrayInputStream(bytes));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public static Image scaleDown(Image originalImage, int maxWidth, int maxHeight) {
@@ -136,16 +163,6 @@ public final class Gui {
 	        }
 	    }
 	    return originalImage.getScaledInstance(originalWidth, originalHeight, Image.SCALE_SMOOTH);
-	}
-	
-	public static Image getImage(File file) {
-		try {
-			return ImageIO.read(file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 	public static Image getResizedImage(String path, int width, int height) {
@@ -188,9 +205,9 @@ public final class Gui {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static ListTable createTable(List<?> dataList) {
-		if(dataList == null || dataList.get(0) == null) 
-			return new ListTable();
+	public static <T> ListTable createTable(List<T> dataList) {
+		if(dataList == null || dataList.isEmpty()) 
+			return new DataTable(dataList);
 		
 		if(dataList.get(0) instanceof List) {
 			if(((List<?>)dataList.get(0)).get(0) instanceof String) {
@@ -265,10 +282,15 @@ public final class Gui {
         return new Font(font, Font.PLAIN, size);
     }
     
-    public static JButton createButton(String name, Consumer<?> action) {
+    public static JButton createButton(String name, Font font, Consumer<?> action) {
 		JButton button = new JButton(name);
 		button.addActionListener(e->action.accept(null));
+		if(font != null) button.setFont(font);
 		return button;
+    }
+    
+    public static JButton createButton(String name, Consumer<?> action) {
+    	return createButton(name, null, action);
 	}
     
     public static JButton createButton(ImageIcon icon, Consumer<?> action) {
@@ -277,10 +299,11 @@ public final class Gui {
 		return button;
 	}
     
-    public static JButton createRoundButton(String text, Color bgColor, Color fgColor, int arc, Consumer<?> action) {
-    	JButton button = new RoundButton(text);
+    public static JButton createButton(String text, Color bgColor, Color fgColor, Font font, Consumer<?> action) {
+    	JButton button = new JButton(text);
     	button.setBackground(bgColor);
     	button.setForeground(fgColor);
+    	button.setFont(font);
     	button.addActionListener(b->action.accept(null));
     	return button;
     }
@@ -297,49 +320,6 @@ public final class Gui {
 		return JOptionPane.showConfirmDialog(parent, message) == JOptionPane.OK_OPTION;
 	}
 	
-//-----------------------------------create Simple JFileChooser--------------------------------//
-	public static JFileChooser createFileChooser(File file, String... exts) {
-		JFileChooser fileChooser = new JFileChooser(file);
-		if(exts != null && exts.length > 0) {
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("Files", exts);
-			fileChooser.setFileFilter(filter);
-		}
-		return fileChooser;
-	}
-	
-	public static JFileChooser createFileChooser(String... exts) {
-		return createFileChooser(new File(""), exts);
-	}
-	
-	public static File[] getFiles(Component parent, File current, String... exts) {
-        JFileChooser fileChooser = createFileChooser(exts);
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setMultiSelectionEnabled(true);
-        if (fileChooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
-            return fileChooser.getSelectedFiles();
-        } else {
-            return new File[0];
-        }
-    }
-	
-	public static File getFile(Component parent, File current, String... exts) {
-        JFileChooser fileChooser = createFileChooser(current, exts);
-        if (fileChooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION) {
-            return fileChooser.getSelectedFile();
-        } else {
-            return null;
-        }
-    }
-	
-	public static File[] getFiles(String... exts) {
-		return getFiles(null, null, exts);
-	}
-	
-	public static File getFile(String... exts) {
-		return getFile(null, null, exts);
-	}
-//-------------------------------------------End JFileChooser----------------------------------//
-
 	public static Font font(int size) {
 		return new Font("맑은 고딕", Font.PLAIN, size);
 	}

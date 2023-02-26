@@ -8,6 +8,7 @@ import app.login.LoginApp;
 import app.reserv.Reservation;
 import app.schedule.Schedule;
 import app.travel.Travel;
+import entity.MemberDTO;
 import gui.Gui;
 import test.Debug;
 
@@ -26,7 +27,8 @@ public class ArApplication {
 		long start = System.currentTimeMillis();
 		Debug.sysout(getClass() +" start...");
 		
-		AppService service = AppService.getInstance();
+		AppService service = AppService.instance();
+		service.setAttr("Member", new MemberDTO());
 		service.addSubApp(new Reservation());
 		service.addSubApp(new DashBoard());
 		service.addSubApp(new LoginApp());

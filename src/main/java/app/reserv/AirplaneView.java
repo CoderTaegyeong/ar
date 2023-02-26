@@ -24,7 +24,7 @@ import gui.table.StringTable;
 public class AirplaneView extends AppView {
 	
 	JLabel airPlanLbl;
-	StringTable jtable = new StringTable();
+	StringTable jtable;
 	JFrame frame;
 	JScrollPane sp;
 	JButton confirmBtn;
@@ -49,8 +49,9 @@ public class AirplaneView extends AppView {
 		rootPanel.add(airPlanLbl);
 	
 		// 데이터 표
-		jtable.setColumns("출발지", "도착지", "출발시간", "도착시간", "시작날짜", "종료날짜", "항공편명");
-		jtable.setList(DAO.sql.select("select DEPPLACE, ARRPLACE, DEPTIME, ARRTIME, STARTDATE, ENDDATE, AIRNUM from airplan", false));
+		jtable = new StringTable();
+		jtable.setColumnNames("출발지", "도착지", "출발시간", "도착시간", "시작날짜", "종료날짜", "항공편명");
+		jtable.setList(DAO.sql.select("select DEPPLACE, ARRPLACE, DEPTIME, ARRTIME, STARTDATE, ENDDATE, AIRNUM from airplan"));
 		
 		sp = new JScrollPane(jtable);
 		sp.setBounds(140, 93, 568, 436);

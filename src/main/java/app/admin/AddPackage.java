@@ -1,11 +1,12 @@
 package app.admin;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.io.File;
-
-import javax.swing.JPanel;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import app.AppView;
 import entity.PackageDTO;
@@ -13,19 +14,12 @@ import gui.Gui;
 import gui.InputForm;
 import gui.panel.ImagePanel;
 import gui.panel.button.ButtonPanel;
-import gui.panel.button.input.CheckBoxPanel;
 import gui.panel.input.InputComponent;
+import gui.panel.input.TextAreaPanel;
 import gui.panel.input.TextFieldPanel;
 import gui.panel.layout.BorderLayoutPanel;
 import gui.panel.layout.GridBagPanel;
-
-public class AddPackage extends AppView{
-	private AdminApp adminApp;
-	
-	public AddPackage(AdminApp adminApp) {
-		this.adminApp = adminApp;
-		initRootPanel();
-	}
+import util.FileUtil;
 //	private int id;
 //	private String imagePath;
 //	private String title;
@@ -34,34 +28,45 @@ public class AddPackage extends AppView{
 //	private int price;
 //	private String detailText;
 	
+public class AddPackage extends AppView {
 	private InputForm<PackageDTO> packageInput = new InputForm<>();
 	private GridBagPanel formPanel;
 	private ImagePanel imagePanel;
-		
+	private AdminApp adminApp;
+	
+	public AddPackage(AdminApp adminApp) {
+		this.adminApp = adminApp;
+		initRootPanel();
+	}
+	
 	public void initRootPanel() {
 		BorderLayoutPanel blPanel = new BorderLayoutPanel();
 		rootPanel = blPanel.getPanel();
 		imagePanel = new ImagePanel();
 		imagePanel.setFont(Gui.font(20));
-		JPanel panel = blPanel.newPanel(BorderLayout.EAST, 350, 600);
-		panel.add(imagePanel.getPanel());
+		imagePanel.setBackground(Color.cyan);
+		blPanel.newPanel(BorderLayout.CENTER, 400, 300).add(imagePanel.getPanel());
 		
-		formPanel = new GridBagPanel(600, 400);
-		blPanel.addCenter(formPanel);
+		formPanel = new GridBagPanel(280, 600);
+		formPanel.setBackground(Color.yellow);
+		Gui.setMargin(formPanel, 0, 10, 0, 0);
+		blPanel.addWest(formPanel.getPanel());
 		
-		addComponent(new TextFieldPanel("id","패키지 번호"));
-		addComponent(new TextFieldPanel("imagePath","이미지 경로"));
+		addComponent(new TextFieldPanel("id","번호"));
+		addComponent(new TextFieldPanel("title","제목"));
+		addComponent(new TextFieldPanel("imagePath","이미지 경로") {{
+			getTextField().setEditable(false);
+			getPanel().add(Gui.createButton("Load",b->loadImage()),BorderLayout.EAST);
+		}});
+		
+		addComponent(new TextFieldPanel("travelLoc","여행지"));
+		addComponent(new TextFieldPanel("travelDays","여행일정"));
+		addComponent(new TextFieldPanel("price","가격"));
+		addComponent(new TextAreaPanel("detailText", 15, 15, "상세정보"));
 	
-		CheckBoxPanel cbPanel = new CheckBoxPanel();
-		cbPanel.setName("title");
-		cbPanel.addButton("check1");
-		cbPanel.addButton("check2");
-		addComponent(cbPanel);
-		
 		ButtonPanel buttonPanel = new ButtonPanel();
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-		buttonPanel.addButton("이미지로드",b->loadImage());
-		buttonPanel.addButton("패키지등록",b->uploadPackage());
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		buttonPanel.addButton("패키지 등록",b->uploadPackage());
 		buttonPanel.addButton("리셋",b->reset());
 		formPanel.addNextRow(buttonPanel);
 	}
@@ -72,27 +77,37 @@ public class AddPackage extends AppView{
 	}
 
 	private void loadImage() {
-		File file = Gui.getFile(null,new File("C:/Users/GGG/Desktop"),"png","jpg");
+		File file = FileUtil.getFile(formPanel,new File("C:"),"png","jpg");
 		if(file == null) return;
 		Image image = Gui.getImage(file);
 		System.out.println(file + " image:" + image);
 		if(image != null) {
 			imagePanel.setText(file.getName());
 			imagePanel.setImage(Gui.scaleDown(image, 400, 300));
+			packageInput.set("imagePath", file.getAbsolutePath());
 		}
 	}
 
-	public void addComponent(InputComponent comp) {
+	public InputComponent addComponent(InputComponent comp) {
 		packageInput.addInputComp(comp);
 		formPanel.addNextRow(comp.getPanel());
+		return comp;
 	}
 	
 	public void uploadPackage() {
-		adminApp.addPackage(packageInput.saveTo(new PackageDTO()));
-		System.out.println(packageInput.saveTo(new PackageDTO()));
+		PackageDTO pack = new PackageDTO();
+		pack = packageInput.saveTo(pack);
+		File file = new File(packageInput.getString("imagePath"));
+        try {
+			pack.setImage(Files.readAllBytes(file.toPath()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        System.out.println(pack);
+        adminApp.addPackage(pack);
 	}
 	
 	public static void main(String[] args) {
-		Gui.createFrame(new AddPackage(null).rootPanel);
+		Gui.createFrame(new AddPackage(new AdminApp()).rootPanel);
 	}
 }

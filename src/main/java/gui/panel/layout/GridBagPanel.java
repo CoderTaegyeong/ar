@@ -12,13 +12,17 @@ public class GridBagPanel extends CustomPanel{
 	private GridBagConstraints gbc = new GridBagConstraints();
 	private int maxgridx;
 	
-	{ rootPanel.setLayout(new GridBagLayout()); }
+	{ rootPanel.setLayout(new GridBagLayout()); alignLeft(); }
 
 	public GridBagPanel() {}
 	
 	public GridBagPanel(int width, int height) {
 		setSize(width, height);
 	}
+	
+	public void alignLeft() { gbc.anchor = GridBagConstraints.WEST; }
+	public void alignCenter() { gbc.anchor = GridBagConstraints.CENTER; }
+	public void alignRight() { gbc.anchor = GridBagConstraints.EAST; }
 	
 	public void add(CustomPanel panel, int gridx, int gridy, int weightx, int weighty) {
 		add(panel.getPanel(), gridx, gridy, weightx, weighty);

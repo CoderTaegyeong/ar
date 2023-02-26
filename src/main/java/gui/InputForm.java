@@ -16,10 +16,19 @@ public class InputForm<T> {
 		return inputComp;
 	}
 	
+	public void set(String name, Object value) {
+		if(compMap.containsKey(name))
+			compMap.get(name).setValue(value);
+	}
+	
 	public void resetForm() {
 		compMap.forEach((name,comp)->comp.reset());
 	}
 
+	public boolean validate() {
+		return true;
+	}
+	
 	public void setData(T dto) {
 		for(Field field : dto.getClass().getDeclaredFields()) {
 			if(compMap.containsKey(field.getName())) {
@@ -36,22 +45,24 @@ public class InputForm<T> {
 		if(t == null) return null;
 		for(Field field : t.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
+			String fieldName = field.getName();
+			if(!compMap.containsKey(fieldName)) continue;
+			Class<?> type = field.getType();
 			try {
-				if(field.getType().equals(int.class)) {
-					field.set(t, getInt(field.getName()));
-				}else if(field.getType().equals(long.class)) {
-					field.setLong(t, getLong(field.getName()));
-				}else if(field.getType().equals(double.class)) {
-					field.setDouble(t, getDouble(field.getName()));
-				}else if(field.getType().equals(float.class)) {
-					field.setFloat(t, getFloat(field.getName()));
-				}else if(field.getType().equals(String.class)){
-					field.set(t, getValue(field.getName()));
-				}else {
-					field.set(t, null);
+				if(type.equals(int.class) || type.equals(Integer.class)) {
+					field.set(t, getInt(fieldName));
+				}else if(type.equals(long.class) || type.equals(Long.class)) {
+					field.setLong(t, getLong(fieldName));
+				}else if(type.equals(double.class) || type.equals(Double.class)) {
+					field.setDouble(t, getDouble(fieldName));
+				}else if(type.equals(float.class) || type.equals(Float.class)) {
+					field.setFloat(t, getFloat(fieldName));
+				}else if(type.equals(String.class)){
+					field.set(t, getValue(fieldName));
 				}
 			} catch (Exception e) {
 				System.out.println(e);
+				return null;
 			}
 		}
 		return t;

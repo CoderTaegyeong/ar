@@ -10,7 +10,6 @@ import javax.swing.JScrollPane;
 
 import app.AppService;
 import app.AppView;
-import app.ArApplication;
 import entity.PackageDTO;
 import gui.Gui;
 import gui.WrapFrame;
@@ -18,14 +17,13 @@ import gui.panel.ImagePanel;
 import gui.panel.button.ButtonPanel;
 import gui.panel.layout.BorderLayoutPanel;
 import util.StrUtil;
+import util.Style;
 
 public class TravelPackage extends AppView {
 	private Travel travel;
-	
-	private JPanel center = new JPanel();
-
 	private BorderLayoutPanel blPanel = new BorderLayoutPanel();
-	private JScrollPane scroll = blPanel.newScroll(center, BorderLayout.CENTER);
+	private JPanel centerPanel = new JPanel();
+	private JScrollPane scroll = blPanel.newScroll(centerPanel, BorderLayout.CENTER);
 
 	public TravelPackage(Travel travel) {
 		this.travel = travel;
@@ -49,28 +47,29 @@ public class TravelPackage extends AppView {
 
 	public void showPackageList() {
 		List<PackageDTO> packageList = travel.getPackageList();
-		int rows = Math.max(2, packageList.size()/2);
+		int rows = packageList.size();
 		int cols = 2;
-		center.removeAll();
-		center.setLayout(new GridLayout(rows, cols, 5, 5));
+		centerPanel.removeAll();
+		centerPanel.setLayout(new GridLayout(rows, cols, 5, 5));
 		
-		int width = (AppService.getInstance().getContainer().style.width - 100) / 2;
-		int height = (AppService.getInstance().getContainer().style.height - 250) / 2;
-		for(int i=0; i < rows * cols; i++) {
-			if(i >= packageList.size()) return;
-				PackageDTO pack = packageList.get(i);
-				ImagePanel imagePanel = new ImagePanel();
-				imagePanel.setImage(Gui.scaleDown(ArApplication.IMG_PATH+"packImages/"+pack.getImagePath(), width, height));
-				imagePanel.setText(pack.getTitle());
-				imagePanel.setFont(Gui.font(17));
-				imagePanel.setAlignment(JLabel.CENTER);
-				center.add(imagePanel.getPanel());
-				Gui.addBorderOnEnterMouse(imagePanel.getPanel(), b->travel.openDetail(pack));
-				WrapFrame.mouseTooltip(imagePanel.getPanel(), StrUtil.addBr(
-						"패키지명: " + pack.getTitle(),
-						"여행지: " + pack.getTravelLoc(),
-						"가격: " + String.format("%,d 원", pack.getPrice()),
-						"상세정보: " + StrUtil.shorten(pack.getDetailText(), 20)) , 150, 100, Gui.font(12));
+		Style style = AppService.instance().getContainer().style; 
+		int width = (style.width - 100) / 2;
+		int height = (style.height - 250) / 2;
+		for(int i=0; i < packageList.size(); i++) {
+			PackageDTO pack = packageList.get(i);
+			ImagePanel imagePanel = new ImagePanel();
+			imagePanel.setImage(Gui.scaleDown(Gui.getImage(pack.getImage()), width, height));
+			imagePanel.setText(pack.getTitle());
+			imagePanel.setFont(Gui.font(17));
+			imagePanel.setAlignment(JLabel.CENTER);
+			centerPanel.add(imagePanel.getPanel());
+			Gui.addBorderOnEnterMouse(imagePanel.getPanel(), b->travel.openDetail(pack));
+			WrapFrame.mouseTooltip(imagePanel.getPanel(), StrUtil.addBr(
+					"패키지명: " 	+ pack.getTitle(),
+					"여행지: "	+ pack.getTravelLoc(),
+					"여행기간: " 	+ pack.getTravelDays(),
+					"가격: " 		+ String.format("%,d 원", pack.getPrice()),
+					"상세정보: " 	+ StrUtil.shorten(pack.getDetailText(), 20)) , 150, 100, Gui.font(12));
 		}
 	}
 }

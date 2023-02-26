@@ -26,7 +26,7 @@ public class Test {
 		MemberDTO member = new MemberDTO();
 		member.setId("123");
 		member.setName("aa123");
-		s.insert("members", member);
+		s.simpleInsert("members", member);
 		
 		Gui.createFrame(Gui.createTable(null));
 	}

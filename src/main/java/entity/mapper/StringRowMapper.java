@@ -8,7 +8,7 @@ import java.util.Vector;
 
 import org.springframework.jdbc.core.RowMapper;
 
-public class StringListRowMapper implements RowMapper<List<String>> {
+public class StringRowMapper implements RowMapper<List<String>> {
 	private List<String> columnNames = new Vector<>();
 	
 	@Override
@@ -20,14 +20,12 @@ public class StringListRowMapper implements RowMapper<List<String>> {
 	        if (rowNum == 0) {
 	            columnNames.add(rs.getMetaData().getColumnName(i));
 	        }
-	        
 	        int columnType = rs.getMetaData().getColumnType(i);
 	        String data = rs.getString(i);
 	        if(data == null) {
 	        	rowData.add("null");
 	        	continue;
 	        }
-	        
 	        switch (columnType) {
 	        	case Types.NUMERIC:
 	            case Types.INTEGER:

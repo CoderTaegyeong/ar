@@ -23,10 +23,14 @@ public class ImagePanel extends CustomPanel{
 	public void setImage(Image image) {
 		setImage(image, -1, -1);
 	}
+	
+	public Image getImage() {
+		return image;
+	}
 
 	public void removeImage() {
-		imageLabel.setIcon(null);
-		label.setText(null);
+		if(imageLabel != null) imageLabel.setIcon(null);
+		if(label != null) label.setText(null);
 		rootPanel.revalidate();
 	}
 	
@@ -35,11 +39,10 @@ public class ImagePanel extends CustomPanel{
 		if(imageWidth > 0 && imageHeight > 0) {
 			this.imageWidth = imageWidth;
 			this.imageHeight = imageHeight;
-			image = Gui.getResizedImage(image, this.imageWidth, this.imageHeight);
 		}
 		this.image = image;
 		if(imageLabel != null) rootPanel.remove(imageLabel);
-		imageLabel = new JLabel(new ImageIcon(image));
+		imageLabel = new JLabel(new ImageIcon(Gui.getResizedImage(image, this.imageWidth, this.imageHeight)));
 		rootPanel.add(imageLabel, BorderLayout.CENTER);
 		rootPanel.revalidate();
 	}

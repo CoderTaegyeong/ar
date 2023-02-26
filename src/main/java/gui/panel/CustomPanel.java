@@ -41,7 +41,7 @@ public abstract class CustomPanel {
 	}
 	
 	public void setBorder(Border border) {
-		rootPanel.setBorder(null);
+		rootPanel.setBorder(border);
 	}
 	
 	public void add(JComponent comp, Object constraints) {

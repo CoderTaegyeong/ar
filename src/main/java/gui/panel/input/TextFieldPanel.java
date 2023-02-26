@@ -1,6 +1,7 @@
 package gui.panel.input;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -9,21 +10,31 @@ import gui.panel.InputPanel;
 
 public class TextFieldPanel extends InputPanel{
 	private JLabel label;
-	private JTextField textField = new JTextField(10);
+	private JTextField textField = new JTextField();
 	
 	{ rootPanel.setLayout(new BorderLayout()) ;}
 
 	public TextFieldPanel(String name) {
-		this(name, name);
+		this(name, 10, null, null);
+	}
+	
+	public TextFieldPanel(String name, int columns) {
+		this(name, columns, null, null);
 	}
 	
 	public TextFieldPanel(String name, String labelText) {
-		this(name, labelText, BorderLayout.WEST);
+		this(name, 10, labelText, BorderLayout.WEST);
 	}
 	
-	public TextFieldPanel(String name, String labelText, String labelDirection) {
+	public TextFieldPanel(String name, int columns, String labelText) {
+		this(name, columns, labelText, BorderLayout.WEST);
+	}
+	
+	public TextFieldPanel(String name, int columns, String labelText, String labelDirection) {
 		setName(name);
 		label = new JLabel(labelText);
+		textField.setColumns(columns);
+		label.setPreferredSize(new Dimension(80, 25));
 		rootPanel.add(label, labelDirection);
 		rootPanel.add(textField, BorderLayout.CENTER);
 	}

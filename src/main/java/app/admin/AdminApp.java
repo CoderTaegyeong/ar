@@ -17,10 +17,11 @@ public class AdminApp extends SubApp{
 	}
 
 	public void openPackage() {
-		AppService.getInstance().openView(addPackage);
+		AppService.instance().openView(addPackage);
 	}
 
-	public void addPackage(PackageDTO packDTO) {
-		DAO.sql.insert("Travel_Package", packDTO);
+	public void addPackage(PackageDTO pack) {
+		System.out.println(pack);
+		DAO.sql.insert("Travel_Package", pack);
 	}
 }

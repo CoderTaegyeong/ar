@@ -215,7 +215,7 @@ public class ReservView extends AppView{
 				ticketDTO.setKidCnt(kidCnt);
 				ticketDTO.setHumanCnt(humanCnt);
 				// DB 테이블 "TICKET"에 추가
-				DAO.sql.insert("Ticket",ticketDTO);
+				DAO.sql.simpleInsert("Ticket",ticketDTO);
 				
 				// 알림 메시지 - 메시지 출력 / 내용이 같으면 출력 후 선택 값 초기화
 				if(depPlace.equals(arrPlace)) {

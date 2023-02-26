@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -182,7 +183,7 @@ public class WrapFrame implements Runnable {
 		WrapFrame frame = new WrapFrame(parent);
 		Color outColor = new Color(245, 255, 240);
 		frame.getFrame().getContentPane().setLayout(null);
-		JPanel inPanel = new JPanel();
+		JPanel inPanel = new JPanel(new FlowLayout(1,7,7));
 		inPanel.setBackground(new Color(220, 255, 220));
 		Dimension size = parent.getSize();
 		if(inWidth == -1) inWidth = msg.getBytes().length * 20;
@@ -203,7 +204,7 @@ public class WrapFrame implements Runnable {
 			inWidth = 70;
 			inPanel.setBackground(outColor);
 		}
-		inPanel.setBounds(size.width/2-inWidth/2, size.height/2 - (inHeight/2) - 10 , inWidth, inHeight);
+		inPanel.setBounds(size.width/2-inWidth/2, size.height/2 - inHeight/2 , inWidth, inHeight);
 		frame.getFrame().getContentPane().add(inPanel, BorderLayout.CENTER);
 		frame.setPanelColor(outColor);
 		frame.setProperties(0, 0.16f, 0.9f, 230);
