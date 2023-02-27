@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -51,6 +52,7 @@ public class AdminPage extends AppView{
 		botBtnPanel.setLayout(Gui.flowLayout(FlowLayout.LEFT));
 		botBtnPanel.add(searchType);
 		botBtnPanel.add(searchWord);
+		Gui.addKey(searchWord, KeyEvent.VK_ENTER, b->action(1));
 		botBtnPanel.addButton("Search", b->action(1));
 		bottomPanel.addWest(botBtnPanel);
 		bottomPanel.newPanel(BorderLayout.EAST, 2).add(Gui.createButton("여행 패키지 등록", b->action(2)));
@@ -69,31 +71,42 @@ public class AdminPage extends AppView{
 		createTable(i, "", "");
 	}
 	
+	private String makeQuery(String tableName, String[] columns) {
+		return "select " + String.join(",", columns) + " from " + tableName;
+	}
+	
 	public void createTable(int i, String ColumnName, String word) {
 		final int tableCount = 3;
 		tableIndex += i;
 		if(tableIndex <= 0) tableIndex = tableCount;
 		if(tableIndex > tableCount) tableIndex = 1;
-		String query = "", title = "# ";
+		String title = "# ";
+		String tableName = "";
+		String[] columns = null;
 		switch (tableIndex) {
-			case 1: title += "회원 목록"; 
-					query = "select * from members"; 
+			case 1: title += "회원 목록";
+					tableName = "members";
+					columns = new String[] {"id","password"};
 					break;
-			case 2: title += "보드 이름 제목"; 
-					query = "select id, name from members"; 
+			case 2: title += "보드 이름 제목";
+					tableName = "members";
+					columns = new String[] {"id","password","name"};
 					break;
-			case 3: title += "회원 아이디 패스워드"; 
-					query = "select id, password from members"; 
+			case 3: title += "회원 아이디 패스워드";
+					tableName = "members";
+					columns = new String[] {"id","password","phone","name"};
 					break;
 		}
+		String query = makeQuery(tableName, columns); 
+		
 		titleLabel.setText(title);
 		
 		StringTable table;
 		if(!ColumnName.isBlank() && !word.isBlank()) {
 			query += " WHERE " + ColumnName + " LIKE ?";
-			table = new StringTable(DAO.sql.selectWithColumnName(query, "%"+word+"%"));
+			table = new StringTable(DAO.sql.select(query, "%"+word+"%"), columns);
 		}else {
-			table = new StringTable(DAO.sql.selectWithColumnName(query));
+			table = new StringTable(DAO.sql.select(query), columns);
 		}
 		
 		searchType.removeAllItems();

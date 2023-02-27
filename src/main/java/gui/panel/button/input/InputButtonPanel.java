@@ -29,4 +29,9 @@ public abstract class InputButtonPanel extends AbstractButtonPanel implements In
 				buttonList.get(i).setSelected(true);
         }
 	}
+	
+	@Override
+	public void setEditable(boolean editable) {
+		buttonList.forEach(b->b.setEnabled(editable));
+	}
 }

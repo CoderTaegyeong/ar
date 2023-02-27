@@ -26,6 +26,7 @@ public class TravelPackage extends AppView {
 	private JScrollPane scroll = blPanel.newScroll(centerPanel, BorderLayout.CENTER);
 
 	public TravelPackage(Travel travel) {
+		super("여행 패키지 상품", travel);
 		this.travel = travel;
 		initRootPanel();
 	}
@@ -47,7 +48,7 @@ public class TravelPackage extends AppView {
 
 	public void showPackageList() {
 		List<PackageDTO> packageList = travel.getPackageList();
-		int rows = packageList.size();
+		int rows = packageList.size() / 2;
 		int cols = 2;
 		centerPanel.removeAll();
 		centerPanel.setLayout(new GridLayout(rows, cols, 5, 5));
@@ -57,6 +58,7 @@ public class TravelPackage extends AppView {
 		int height = (style.height - 250) / 2;
 		for(int i=0; i < packageList.size(); i++) {
 			PackageDTO pack = packageList.get(i);
+			if(pack == null) continue;
 			ImagePanel imagePanel = new ImagePanel();
 			imagePanel.setImage(Gui.scaleDown(Gui.getImage(pack.getImage()), width, height));
 			imagePanel.setText(pack.getTitle());

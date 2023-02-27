@@ -6,7 +6,6 @@ import app.admin.AdminApp;
 import app.dash.DashBoard;
 import app.login.LoginApp;
 import app.reserv.Reservation;
-import app.schedule.Schedule;
 import app.travel.Travel;
 import entity.MemberDTO;
 import gui.Gui;
@@ -15,7 +14,6 @@ import test.Debug;
 public class ArApplication {
 	public static final String RES_PATH = "src/main/resources/";
 	public static final String IMG_PATH = RES_PATH + "images/";
-	
 	
 	public static void main(String[] args) {
 		Gui.setLookAndFeel(Gui.NIMBUS);
@@ -29,10 +27,9 @@ public class ArApplication {
 		
 		AppService service = AppService.instance();
 		service.setAttr("Member", new MemberDTO());
+		service.addSubApp(new LoginApp());
 		service.addSubApp(new Reservation());
 		service.addSubApp(new DashBoard());
-		service.addSubApp(new LoginApp());
-		service.addSubApp(new Schedule());
 		service.addSubApp(new AdminApp());
 		service.addSubApp(new Travel());
 		service.start();

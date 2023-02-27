@@ -9,4 +9,5 @@ public interface InputComponent {
 	String getName();
 	void setName(String name);
 	JPanel getPanel();
+	void setEditable(boolean editable);
 }

@@ -66,8 +66,7 @@ public class StringTable extends ListTable{
 
 		@Override
 		public int getColumnCount() {
-			if(stringList == null) return 1;
-			return stringList.get(0).size();
+			return columnNames.size();
 		}
 
 		@Override

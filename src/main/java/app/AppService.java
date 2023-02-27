@@ -41,12 +41,8 @@ public class AppService {
 		appContainer.addView(appView);
 	}
 	
-	public void closeView(AppView appView) {
-		appContainer.removeView(appView);
-	}
-	
-	public void closeViews(AppView... appViews) {
-		for(AppView view : appViews) closeView(view);
+	public void closeView(AppView... appViews) {
+		for(AppView view : appViews) appContainer.removeView(view);
 	}
 	
 	public <T extends SubApp> T getSubApp(Class<T> subAppClass) {
@@ -87,10 +83,20 @@ public class AppService {
 	}
 	
 	public Object getAttribute(String key) {
-		return appInfoMap.get(key);
+		if(appInfoMap.containsKey(key))
+			return appInfoMap.get(key);
+		else
+			return null;
 	}
 	
 	public String getAttr(String key) {
-		return getAttribute(key).toString();
+		if(appInfoMap.containsKey(key))
+			return getAttribute(key).toString();
+		else
+			return "is Null";
+	}
+	
+	public void remove(String key) {
+		appInfoMap.remove(key);
 	}
 }

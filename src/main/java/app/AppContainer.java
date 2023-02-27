@@ -63,7 +63,7 @@ public class AppContainer {
 	//+++++++++++++++++++++++++++++++++++Style+++++++++++++++++++++++++++++++
 	public Style style;
 	private String timeFormat = "YYYY-MM-dd EEE HH:mm:ss";
-	private Dimension botBothSide = new Dimension(200,50);
+	private Dimension botBothSide = new Dimension(200,51);
 	private ImageIcon contIcon = new ImageIcon(IMG_PATH+"conticon.png");
 	private Font subAppTitleFont = createFont("맑은 고딕", 28);
 	private List<ImagePanel> iconPanelList;
@@ -79,9 +79,8 @@ public class AppContainer {
 		topPanel.setBackgrounds(style.getColor("topBotColor"));
 		botPanel.setBackgrounds(style.getColor("topBotColor"));
 		container.setBackground(style.getColor("contBg"));
-		iconPanelList.forEach(ip->{ if(ip.getLabel() != null) 
-			ip.getLabel().setForeground(style.getColor("subTitle"));
-			ip.getPanel().setBackground(style.getColor("contBg")); 
+		iconPanelList.forEach(ip->{ ip.getPanel().setBackground(style.getColor("contBg")); 
+			if(ip.getLabel() != null) ip.getLabel().setForeground(style.getColor("subTitle"));
 		});
 	}
 	//-----------------------------------Style---------------------------------
@@ -100,13 +99,14 @@ public class AppContainer {
 		container.setPreferredSize(cardPanel.getPreferredSize());
 
 		topPanel = new BorderLayoutPanel();
-		JPanel topLeftPan = topPanel.newPanel(BorderLayout.WEST, 300, 40);
+		JPanel topLeftPan = topPanel.newPanel(BorderLayout.WEST, 400, 40);
 		topLeftPan.setLayout(new FlowLayout(FlowLayout.LEFT));
 		topLeftPan.add(viewIconLabel);
 		topLeftPan.add(viewTitleLabel);
 		
 		ButtonPanel topBtnPanel = new ButtonPanel();
 		topBtnPanel .setLayout(new FlowLayout(FlowLayout.LEFT));
+		topBtnPanel.setButtonSize(22, 22);
 		for(int i=1; i<=8; i++) {
 			final int a = i;
 			topBtnPanel.addButton(new ImageIcon(IMG_PATH+"n"+i+".PNG"), b->action(a));
@@ -319,9 +319,7 @@ public class AppContainer {
 		}
 		
 		if(i == 5) {
-//			initRootPanel();
-//			sysout("initRootPanel()");
-			addView(AppService.instance().getSubApp(LoginApp.class).requestView());
+			sysout(AppService.instance().getAttr("Member"));
 		}
 		if( i == 6) {
 			WrapFrame.greenAlert("Success !", iconPanelList.get(0).getPanel(), font(25));

@@ -3,21 +3,25 @@ package app.login.db;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AirLineLoginDAO extends DBConn {
+import entity.MemberDTO;
 
-	public AirLineLoginDAO() {}
+public class LoginDAO extends DBConn {
 
-	public ArrayList<AirLineLoginVO> LoginAllSelect() {
+	public LoginDAO() {}
+
+	public ArrayList<MemberDTO> LoginAllSelect() {
 		
-		ArrayList<AirLineLoginVO> AVO = new ArrayList<AirLineLoginVO>();
+		ArrayList<MemberDTO> AVO = new ArrayList<MemberDTO>();
 		try {
 			getConn();
-			sql = "select userid, userpwd from AIRLINE ";
+			sql = "select id, password from Members";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
 			while (rs.next()) {
-				AirLineLoginVO vo = new AirLineLoginVO(rs.getString(0), rs.getString(1));
+				MemberDTO vo = new MemberDTO();
+				vo.setId(rs.getString("id"));
+				vo.setPassword("password");
 				AVO.add(vo);
 			}
 		} catch (Exception e) {
@@ -29,12 +33,12 @@ public class AirLineLoginDAO extends DBConn {
 	}
 
 	public int getLogin(String userid, String userpwd) {
-		List<AirLineLoginVO> AVO = new ArrayList<AirLineLoginVO>();
+		List<MemberDTO> AVO = new ArrayList<MemberDTO>();
 
 		int state = 0;
 		try {
 			getConn();
-			sql = "select userid, userpwd from AIRLINE where userid = ? and userpwd = ?";
+			sql = "select id, password from members where id = ? and password = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, userid);
 			pstmt.setString(2, userpwd);

@@ -4,39 +4,39 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 
 import gui.panel.InputPanel;
 
-public class TextFieldPanel extends InputPanel{
+public class PasswordPanel extends InputPanel{
 	private JLabel label;
-	private JTextField textField = new JTextField();
+	private JPasswordField passwordField = new JPasswordField();
 	
 	{ rootPanel.setLayout(new BorderLayout()) ;}
 
-	public TextFieldPanel(String name) {
+	public PasswordPanel(String name) {
 		this(name, 10, null, null);
 	}
 	
-	public TextFieldPanel(String name, int columns) {
+	public PasswordPanel(String name, int columns) {
 		this(name, columns, null, null);
 	}
 	
-	public TextFieldPanel(String name, String labelText) {
+	public PasswordPanel(String name, String labelText) {
 		this(name, 10, labelText, BorderLayout.WEST);
 	}
 	
-	public TextFieldPanel(String name, int columns, String labelText) {
+	public PasswordPanel(String name, int columns, String labelText) {
 		this(name, columns, labelText, BorderLayout.WEST);
 	}
 	
-	public TextFieldPanel(String name, int columns, String labelText, String labelDirection) {
+	public PasswordPanel(String name, int columns, String labelText, String labelDirection) {
 		setName(name);
 		label = new JLabel(labelText);
-		textField.setColumns(columns);
+		passwordField.setColumns(columns);
 		label.setPreferredSize(new Dimension(80, 25));
 		rootPanel.add(label, labelDirection);
-		rootPanel.add(textField, BorderLayout.CENTER);
+		rootPanel.add(passwordField, BorderLayout.CENTER);
 	}
 	
 	public void setLabelText(String text) {
@@ -47,25 +47,25 @@ public class TextFieldPanel extends InputPanel{
 		return label;
 	}
 	
-	public JTextField getTextField() {
-		return textField;
+	public JPasswordField getPasswordField() {
+		return passwordField;
 	}
 
 	@Override
 	public String getValue() {
-		return textField.getText();
+		return new String(passwordField.getPassword());
 	}
 
 	@Override
 	public void setValue(Object value) {
-		textField.setText(value.toString());
+		passwordField.setText(value.toString());
 	}
 	
 	public void reset() {
-		textField.setText("");
+		passwordField.setText("");
 	}
 	
 	public void setEditable(boolean editable) {
-		textField.setEditable(editable);
+		passwordField.setEditable(editable);
 	};
 }

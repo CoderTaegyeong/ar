@@ -15,12 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import app.AppService;
 import app.AppView;
-import app.login.db.AirLineSignUpDAO;
-import app.login.db.AirLineSignUpVO;
+import app.login.db.SignUpDAO;
+import entity.MemberDTO;
 
 
-public class AirLineSignUp extends AppView implements ActionListener {
+public class SignUp extends AppView implements ActionListener {
 	
 	Font   fnt      = new Font("고딕체", Font.BOLD, 15);
 	JLabel titleLbl = new JLabel("회 원 가 입");
@@ -50,11 +51,11 @@ public class AirLineSignUp extends AppView implements ActionListener {
 	JComboBox<String> genderCombo = new JComboBox<String>(model);
 	JButton signUpBtn = new JButton("회원가입");
 	JButton cancelBtn = new JButton("취소");
-	AirLineSignUpDAO dao = new AirLineSignUpDAO();
+	SignUpDAO dao = new SignUpDAO();
 	
 	private LoginApp loginApp;
 	
-	public AirLineSignUp(LoginApp loginApp) {
+	public SignUp(LoginApp loginApp) {
 		super(loginApp);
 		this.loginApp = loginApp;
 		initRootPanel();
@@ -162,9 +163,12 @@ public class AirLineSignUp extends AppView implements ActionListener {
 					JOptionPane.showMessageDialog(rootPanel, "잘못된 이메일을 입력하셨습니다");
 				} else {
 					
-					AirLineSignUpVO vo = new AirLineSignUpVO(idField.getText(), pwdField.getText(),
-							Knamefield.getText(), Enamefield.getText().toUpperCase(), telField.getText(),
-							emailField.getText(), (String) genderCombo.getSelectedItem());
+					MemberDTO vo = new MemberDTO();
+					vo.setId(idField.getText());
+					vo.setPassword(pwdField.getText());
+					vo.setName(Knamefield.getText());
+					vo.setPhone(telField.getText());
+					vo.setEmail(emailField.getText());
 
 					int result = dao.SignUpInsert(vo);
 					if (result > 0) { // 회원등록 성공함
@@ -172,12 +176,10 @@ public class AirLineSignUp extends AppView implements ActionListener {
 					} else { // 회원등록 실패함
 						JOptionPane.showMessageDialog(rootPanel, "회원가입에 실패하였습니다\n 관리자에게 문의해 주시기 바랍니다");
 					}
-//					dispose();
-					loginApp.openMain();
 				}
 			} else if (btn.equals("취소")) {
 //				dispose();
-				loginApp.openMain();
+				AppService.instance().openView(loginApp.requestView());
 			} else if (btn.equals("중복 확인")) {
 				String idSearch = idField.getText();
 				System.out.println(idSearch.length());
@@ -189,7 +191,7 @@ public class AirLineSignUp extends AppView implements ActionListener {
 				} else if (checkIDMethod(idSearch) == 1) {
 					JOptionPane.showMessageDialog(rootPanel, "아이디는 특수문자 포함이 불가능합니다");
 				} else {
-					List<AirLineSignUpVO> result = dao.getidCheck(idSearch);
+					List<MemberDTO> result = dao.getidCheck(idSearch);
 					if (result.size() == 0) {
 						JOptionPane.showMessageDialog(rootPanel, "사용 가능한 아이디 입니다");
 						signUpBtn.setEnabled(true);

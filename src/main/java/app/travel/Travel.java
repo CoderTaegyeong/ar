@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
+import app.AppService;
 import app.AppView;
 import app.SubApp;
 import dao.DAO;
@@ -11,10 +12,11 @@ import entity.PackageDTO;
 
 public class Travel extends SubApp{
 	private TravelPackage travelPackage = new TravelPackage(this);
+	private DetailView detailView = new DetailView(this);
 	
 	@Override
 	public AppView requestView() {
-		travelPackage.showPackageList();
+		openList();
 		return travelPackage;
 	}
 
@@ -24,6 +26,15 @@ public class Travel extends SubApp{
 	}
 
 	public void openDetail(PackageDTO pack) {
-		
+		detailView.setPackage(pack);
+		AppService.instance().openView(detailView);
+	}
+
+	public void openList() {
+		travelPackage.showPackageList();
+	}
+	
+	public String getTitle() {
+		return "여행 패키지";
 	}
 }
