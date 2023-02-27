@@ -29,5 +29,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/ws/java/ar/src/main/resources/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="src/main/resources/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
