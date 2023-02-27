@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariDataSource;
 //import oracle.jdbc.pool.OracleDataSource;
 
 public class DAO {
-	private static final String url = "jdbc:oracle:thin:@//localhost:1521/xe";
+	private static final String url = "jdbc:oracle:thin:@//192.168.0.213:1521/xe";
 	private static final String user = "ar";
 	private static final String password = "1234";
 	

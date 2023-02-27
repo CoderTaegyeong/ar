@@ -21,13 +21,15 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import app.AppService;
 import app.AppView;
 import app.ArApplication;
-import app.login.db.AirLineLoginDAO;
+import app.login.db.LoginDAO;
 import gui.Gui;
+import gui.WrapFrame;
 
-public class AirLineMain extends AppView implements ActionListener {
-	  
+public class LoginView extends AppView implements ActionListener {
+	
 	//사진
 	JLabel           lbl = Gui.createIconLabel(ArApplication.IMG_PATH+"loginplane.jpg");
 
@@ -50,7 +52,7 @@ public class AirLineMain extends AppView implements ActionListener {
   
 	LoginApp loginApp;
 	
-	public AirLineMain(LoginApp loginApp) {
+	public LoginView(LoginApp loginApp) {
 		super(loginApp);
 		this.loginApp = loginApp;
 		initRootPanel();
@@ -68,42 +70,41 @@ public class AirLineMain extends AppView implements ActionListener {
 
 	//login DB
 	public void getLoginData() {
-		String user_id = idfield.getText();
-		String user_pwd = pwdfield.getText();
+		String id = idfield.getText();
+		String password = pwdfield.getText();
 		String admin[] = { "cjswo" };
-		AirLineLoginDAO dao = new AirLineLoginDAO();
+		LoginDAO dao = new LoginDAO();
 		
 		int customLogin = 0;
 		for (int i = 0; i < admin.length; i++) {
-			if (user_id.equals(admin[i])) {
-				int loginCheck = dao.getLogin(user_id, user_pwd);
+			if (id.equals(admin[i])) {
+				int loginCheck = dao.getLogin(id, password);
 				if (loginCheck == 0)
 					JOptionPane.showMessageDialog(rootPanel, "아이디 또는 비밀번호가 틀렸습니다.");
 				else if (loginCheck == 1) {
 					customLogin = 1;
-					System.out.println("dispose()");
 					break;
 				}
 			}
 		}
 		
-		if (user_id.equals("")) {
+		if (id.equals("")) {
 			JOptionPane.showMessageDialog(rootPanel, "아이디를 입력하세요.");
-		} else if (user_pwd.equals("")) {
+		} else if (password.equals("")) {
 			JOptionPane.showMessageDialog(rootPanel, "비밀번호를 입력하세요.");
 		} else {
-			int loginCheck = dao.getLogin(user_id, user_pwd);
+			int loginCheck = dao.getLogin(id, password);
 			if (loginCheck == 0)
 				JOptionPane.showMessageDialog(rootPanel, "아이디 또는 비밀번호가 틀렸습니다.");
 			else if (loginCheck == 1) {
-//				dispose();
-				System.out.println("dispose()");
+				WrapFrame.greenAlert("로그인 되었습니다.", lbl);
+				loginApp.login(id);
 			}
 		}
 	}
 
 	public static void main(String[] args) {
-		new AirLineMain(null);
+		new LoginView(null);
 	}
 
 	@Override
@@ -181,5 +182,10 @@ public class AirLineMain extends AppView implements ActionListener {
 				}
 			}
 		});
+	}
+
+	public void reset() {
+		idfield.setText("");
+		pwdfield.setText("");
 	}
 }

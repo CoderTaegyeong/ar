@@ -16,6 +16,10 @@ public class InputForm<T> {
 		return inputComp;
 	}
 	
+	public void setEditable(boolean editable) {
+		compMap.forEach((name,comp)->comp.setEditable(editable));
+	}
+	
 	public void set(String name, Object value) {
 		if(compMap.containsKey(name))
 			compMap.get(name).setValue(value);
@@ -31,6 +35,7 @@ public class InputForm<T> {
 	
 	public void setData(T dto) {
 		for(Field field : dto.getClass().getDeclaredFields()) {
+			field.setAccessible(true);
 			if(compMap.containsKey(field.getName())) {
 				try {
 					compMap.get(field.getName()).setValue(field.get(dto));

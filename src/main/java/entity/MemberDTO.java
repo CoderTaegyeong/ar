@@ -1,17 +1,7 @@
 package entity;
 
 public class MemberDTO {
-	private String id, password, name;
-	
-	public MemberDTO() {
-		this("unknownid","1234","noname");
-	}
-	
-	public MemberDTO(String id, String password, String name) {
-		this.id = id;
-		this.password = password;
-		this.name = name;
-	}
+	private String id, password, name, phone, email;
 
 	public String getId() {
 		return id;
@@ -37,8 +27,25 @@ public class MemberDTO {
 		this.name = name;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
-		return "Member [id=" + id + ", password=" + password + ", name=" + name + "]";
+		return "MemberDTO [id=" + id + ", password=" + password + ", name=" + name + ", phone=" + phone + ", email="
+				+ email + "]";
 	}
 }

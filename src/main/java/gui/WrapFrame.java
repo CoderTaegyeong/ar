@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
 public class WrapFrame implements Runnable {
@@ -145,9 +146,19 @@ public class WrapFrame implements Runnable {
 	}
 	
 	public static void mouseTooltip(JComponent parent, String text, int width, int height, Font font) {
-		parent.addMouseListener(new MouseAdapter() {
+		MouseAdapter adapter = new MouseAdapter() {
+			Timer timer;
 			WrapFrame frame = new WrapFrame(parent);
+			MouseEvent me;
 			{
+		        timer = new Timer(1000, e->{
+		        	if(frame.getFrame().isVisible()) return;
+					frame.setProperties(0, 0.1f, 1f, 1200);
+					frame.start(me.getLocationOnScreen().x, me.getLocationOnScreen().y + 50,
+						width < 0 ? parent.getWidth() : width, height < 0 ? parent.getHeight() : height);
+		        });
+		        timer.setRepeats(false);
+		        
 				JPanel panel = new JPanel(new BorderLayout());
 				frame.getFrame().setContentPane(panel);
 				JLabel label = new JLabel(text);
@@ -158,13 +169,12 @@ public class WrapFrame implements Runnable {
 				panel.setBorder(new LineBorder(Color.DARK_GRAY, 1));
 				frame.getFrame().pack();
 			}
-			public void mouseEntered(MouseEvent e) {
-				if(frame.getFrame().isVisible()) return;
-				frame.setProperties(0, 0.1f, 1f, 1200);
-				frame.start(e.getLocationOnScreen().x, e.getLocationOnScreen().y + 50,
-						width < 0 ? parent.getWidth() : width, height < 0 ? parent.getHeight() : height);
-			}
-		});
+			public void mouseEntered(MouseEvent e) { timer.start(); }
+			public void mouseExited(MouseEvent e) { timer.stop(); }
+			public void mouseMoved(MouseEvent e) { me = e; }
+		};
+		parent.addMouseListener(adapter);
+		parent.addMouseMotionListener(adapter);
 	}
 	
 	public static void greenAlert(JComponent parent) {

@@ -16,6 +16,8 @@ public class MemberRowMapper implements RowMapper<MemberDTO>{
 		member.setId(rs.getString("ID"));
 		member.setName(rs.getString("NAME"));
 		member.setPassword(rs.getString("PASSWORD"));
+		member.setPhone(rs.getString("PHONE"));
+		member.setEmail(rs.getString("EMAIL"));
 		return member; 
 	}
 }

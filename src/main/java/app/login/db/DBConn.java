@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class DBConn {
 	private static String driver = "oracl.jdbc.OracleDriver";
-	private static String dburl  = "jdbc:oracle:thin:@localhost:1521:xe";
+	private static String dburl  = "jdbc:oracle:thin:@192.168.0.213:1521:xe";
 	private static String dbid   = "ar";
 	private static String dbpwd  = "1234";
 	String sql              = null;

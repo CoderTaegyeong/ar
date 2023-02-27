@@ -9,6 +9,9 @@ import java.awt.Image;
 import java.awt.LayoutManager;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.ByteArrayInputStream;
@@ -25,6 +28,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
@@ -322,5 +326,28 @@ public final class Gui {
 	
 	public static Font font(int size) {
 		return new Font("맑은 고딕", Font.PLAIN, size);
+	}
+
+	public static void onClick(CustomPanel customPanel, Consumer<?> action) {
+		onClick(customPanel.getPanel(), action);
+	}
+
+	
+	public static void onClick(JComponent comp, Consumer<?> action) {
+		comp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				action.accept(null);
+			}
+		});
+	}
+	
+	public static void addKey(JComponent comp, int keyCode, Consumer<?> action) {
+		comp.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == keyCode)
+					action.accept(null);
+			}
+		});
 	}
 }	

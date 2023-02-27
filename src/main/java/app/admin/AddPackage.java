@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import app.AppView;
+import app.ArApplication;
 import entity.PackageDTO;
 import gui.Gui;
 import gui.InputForm;
@@ -48,21 +49,19 @@ public class AddPackage extends AppView {
 		blPanel.newPanel(BorderLayout.CENTER, 400, 300).add(imagePanel.getPanel());
 		
 		formPanel = new GridBagPanel(280, 600);
-		formPanel.setBackground(Color.yellow);
 		Gui.setMargin(formPanel, 0, 10, 0, 0);
 		blPanel.addWest(formPanel.getPanel());
 		
-		addComponent(new TextFieldPanel("id","번호"));
-		addComponent(new TextFieldPanel("title","제목"));
-		addComponent(new TextFieldPanel("imagePath","이미지 경로") {{
+		addInputComp(new TextFieldPanel("title","제목"));
+		addInputComp(new TextFieldPanel("imagePath","이미지 경로") {{
 			getTextField().setEditable(false);
 			getPanel().add(Gui.createButton("Load",b->loadImage()),BorderLayout.EAST);
 		}});
 		
-		addComponent(new TextFieldPanel("travelLoc","여행지"));
-		addComponent(new TextFieldPanel("travelDays","여행일정"));
-		addComponent(new TextFieldPanel("price","가격"));
-		addComponent(new TextAreaPanel("detailText", 15, 15, "상세정보"));
+		addInputComp(new TextFieldPanel("travelLoc","여행지"));
+		addInputComp(new TextFieldPanel("travelDays","여행일정"));
+		addInputComp(new TextFieldPanel("price","가격"));
+		addInputComp(new TextAreaPanel("detailText", 15, 15, "상세정보"));
 	
 		ButtonPanel buttonPanel = new ButtonPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -77,7 +76,7 @@ public class AddPackage extends AppView {
 	}
 
 	private void loadImage() {
-		File file = FileUtil.getFile(formPanel,new File("C:"),"png","jpg");
+		File file = FileUtil.getFile(formPanel,new File(ArApplication.IMG_PATH + "/packImages"),"png","jpg");
 		if(file == null) return;
 		Image image = Gui.getImage(file);
 		System.out.println(file + " image:" + image);
@@ -88,7 +87,7 @@ public class AddPackage extends AppView {
 		}
 	}
 
-	public InputComponent addComponent(InputComponent comp) {
+	public InputComponent addInputComp(InputComponent comp) {
 		packageInput.addInputComp(comp);
 		formPanel.addNextRow(comp.getPanel());
 		return comp;

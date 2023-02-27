@@ -20,8 +20,12 @@ public class TextAreaPanel extends InputPanel{
 		return scroll;
 	}
 
+	public TextAreaPanel() {
+		this("", 10, 10, null, null);
+	}
+	
 	public TextAreaPanel(String name) {
-		this(name, 10, 10, null, null);
+		this(null, 10, 10, null, null);
 	}
 	
 	public TextAreaPanel(String name, int columns, int rows) {
@@ -77,4 +81,8 @@ public class TextAreaPanel extends InputPanel{
 	public void reset() {
 		textArea.setText("");
 	}
+	
+	public void setEditable(boolean editable) {
+		textArea.setEditable(editable);
+	};
 }

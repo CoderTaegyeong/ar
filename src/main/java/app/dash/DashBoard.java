@@ -24,7 +24,7 @@ public class DashBoard extends SubApp {
 	}
 	
 	public void openList(List<BoardVO> voList) {
-		AppService.instance().closeViews(boardInsert, boardUpdate);
+		AppService.instance().closeView(boardInsert, boardUpdate);
 		boardList.createTable(voList);
 		AppService.instance().openView(boardList);
 	}
