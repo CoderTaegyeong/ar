@@ -4,21 +4,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import app.AppView;
 import dao.DAO;
-import gui.Gui;
-import gui.table.ListTable;
 import gui.table.StringTable;
 
 public class AirplaneView extends AppView {
@@ -51,8 +46,9 @@ public class AirplaneView extends AppView {
 		rootPanel.add(airPlanLbl);
 	
 		// 데이터 표
-		jtable.setColumnNames("출발지", "도착지", "출발시간", "도착시간", "시작날짜", "종료날짜", "항공편명");
-		jtable.setList(DAO.sql.select("select DEPPLACE, ARRPLACE, DEPTIME, ARRTIME, STARTDATE, ENDDATE, AIRNUM from airplan", false));
+//        jtable.setColumnNames("출발지", "도착지", "출발시간", "도착시간", "시작날짜", "종료날짜", "항공편명");
+		jtable = new StringTable(DAO.sql.select("select DEPPLACE, ARRPLACE, DEPTIME, ARRTIME, STARTDATE, ENDDATE, AIRNUM from airplan"),
+				"출발지", "도착지", "출발시간", "도착시간", "시작날짜", "종료날짜", "항공편명");
 		
 		sp = new JScrollPane(jtable);
 		sp.setBounds(79, 93, 568, 436);
