@@ -18,8 +18,9 @@ import com.toedter.calendar.JDateChooser;
 
 import app.AppView;
 import dao.DAO;
-import dao.TicketDAO;
 import entity.TicketDTO;
+
+// 작성자: 김태경(CoderTaegyeong)
 
 public class ReservView extends AppView{
 	private Reservation reserv;
@@ -137,18 +138,18 @@ public class ReservView extends AppView{
 		kidCombo.setBounds(467, 411, 54, 23);
 		rootPanel.add(kidCombo);
 		
-		// 예약취소: 예약하기 전 페이지로 돌아감
-		JButton cancelBtn = new JButton("예약취소");
-		cancelBtn.addActionListener(new ActionListener() {
+		// 뒤로 가기: 예약하기 전 페이지로 돌아감
+		JButton backBtn = new JButton("뒤로 가기");
+		backBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				reserv.requestView();
 			}
 		});
-		cancelBtn.setForeground(new Color(255, 0, 0));
-		cancelBtn.setBackground(new Color(224, 255, 255));
-		cancelBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		cancelBtn.setBounds(113, 472, 132, 40);
-		rootPanel.add(cancelBtn);
+		backBtn.setForeground(new Color(255, 0, 0));
+		backBtn.setBackground(new Color(224, 255, 255));
+		backBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		backBtn.setBounds(113, 472, 132, 40);
+		rootPanel.add(backBtn);
 		
 		//초기화: 모든 선택 값을 초기 상태로 되돌림
 		JButton resetBtn = new JButton("초기화");
@@ -172,7 +173,7 @@ public class ReservView extends AppView{
 		//--------------------------------------------------------------------------
 		
 		// 다음 단계: 누르면 선택한 값들이 DTO로 전달되고 좌석 선택 페이지로 이동
-		JButton nextBtn = new JButton("다음단계");
+		JButton nextBtn = new JButton("다음 단계");
 		
 		nextBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -215,7 +216,7 @@ public class ReservView extends AppView{
 				ticketDTO.setKidCnt(kidCnt);
 				ticketDTO.setHumanCnt(humanCnt);
 				// DB 테이블 "TICKET"에 추가
-				DAO.sql.simpleInsert("Ticket",ticketDTO);
+				DAO.sql.insert("Ticket",ticketDTO);
 				
 				// 알림 메시지 - 메시지 출력 / 내용이 같으면 출력 후 선택 값 초기화
 				if(depPlace.equals(arrPlace)) {
