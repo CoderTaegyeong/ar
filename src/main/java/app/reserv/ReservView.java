@@ -19,6 +19,8 @@ import com.toedter.calendar.JDateChooser;
 import app.AppView;
 import dao.DAO;
 import entity.TicketDTO;
+import gui.WrapFrame;
+import test.Debug;
 
 // 작성자: 김태경(CoderTaegyeong)
 
@@ -93,8 +95,8 @@ public class ReservView extends AppView{
 		depDateLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
 		depDateLbl.setBounds(136, 296, 76, 24);
 		rootPanel.add(depDateLbl);
-		// DateChooser로 출발 날짜 선택
-		JDateChooser depDateChooser = new JDateChooser();
+		// DateChooser로 출발 날짜 선택 기본 값을 오늘로 설정
+		JDateChooser depDateChooser = new JDateChooser(new Date());
 		depDateChooser.setMinSelectableDate(new Date()); //오늘 이전 날은 선택 금지함
 		depDateChooser.setBounds(307, 299, 138, 21);
 		rootPanel.add(depDateChooser);
@@ -104,8 +106,10 @@ public class ReservView extends AppView{
 		arrDateLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
 		arrDateLbl.setBounds(136, 350, 76, 24);
 		rootPanel.add(arrDateLbl);
-		// DateChooser로 도착 날짜 선택
-		JDateChooser arrDateChooser = new JDateChooser();
+		// DateChooser로 도착 날짜 선택 기본값을 2일후로 설정 
+		JDateChooser arrDateChooser = new JDateChooser
+				(new Date(System.currentTimeMillis()+(86400 * 2 * 1000) ));
+		
 		arrDateChooser.setMinSelectableDate(new Date()); //오늘 이전 날은 선택 금지함
 		arrDateChooser.setBounds(307, 353, 138, 21);
 		rootPanel.add(arrDateChooser);
@@ -142,7 +146,7 @@ public class ReservView extends AppView{
 		JButton backBtn = new JButton("뒤로 가기");
 		backBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				reserv.requestView();
+				reserv.openAirplaneView();
 			}
 		});
 		backBtn.setForeground(new Color(255, 0, 0));
@@ -190,8 +194,13 @@ public class ReservView extends AppView{
 				System.out.println(arrPlace);
 				
 				// 출발 날짜 선택 값 가져오기
+				Date startDate = depDateChooser.getDate();
+				if(startDate == null) {
+					WrapFrame.alert(null);
+					return;
+				}
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String depDate  = sdf.format(depDateChooser.getDate());
+				String depDate  = sdf.format(startDate);
 				System.out.println(depDate);
 				
 				// 도착 날짜 선택 값 가져오기
@@ -214,9 +223,7 @@ public class ReservView extends AppView{
 				ticketDTO.setArrDate(arrDate);
 				ticketDTO.setAdultCnt(adultCnt);
 				ticketDTO.setKidCnt(kidCnt);
-				ticketDTO.setHumanCnt(humanCnt);
 				// DB 테이블 "TICKET"에 추가
-				DAO.sql.simpleInsert("Ticket",ticketDTO);
 				
 				// 알림 메시지 - 메시지 출력 / 내용이 같으면 출력 후 선택 값 초기화
 				if(depPlace.equals(arrPlace)) {
@@ -243,7 +250,6 @@ public class ReservView extends AppView{
 		nextBtn.setBounds(447, 472, 132, 40);
 		rootPanel.add(nextBtn);
 	}
-
 	
 	public boolean validate() {
 		return false;

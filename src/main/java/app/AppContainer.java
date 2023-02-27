@@ -29,10 +29,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import app.admin.AdminApp;
-import app.login.LoginApp;
-import app.reserv.SelectSeat;
 import app.view.TextView;
-import entity.TicketDTO;
+import entity.MemberDTO;
 import gui.WrapFrame;
 import gui.panel.ImagePanel;
 import gui.panel.button.ButtonPanel;
@@ -70,8 +68,7 @@ public class AppContainer {
 	
 	public void setStyle() {
 		timeLabel.setFont(createFont(17));
-		timeLabel.setFont(createFont(17));
-		viewTitleLabel.setFont(createFont(28));
+		viewTitleLabel.setFont(createFont("맑은 고딕", 28));
 		cardPanel.setBorder(BorderFactory.createLineBorder(style.getColor("contBorder"), 20));
 		viewTitleLabel.setForeground(style.getColor("fontColor"));
 		viewInfoLabel.setForeground(style.getColor("fontColor"));
@@ -99,13 +96,13 @@ public class AppContainer {
 		container.setPreferredSize(cardPanel.getPreferredSize());
 
 		topPanel = new BorderLayoutPanel();
-		JPanel topLeftPan = topPanel.newPanel(BorderLayout.WEST, 400, 40);
+		JPanel topLeftPan = topPanel.newPanel(BorderLayout.WEST, 450, 45);
 		topLeftPan.setLayout(new FlowLayout(FlowLayout.LEFT));
 		topLeftPan.add(viewIconLabel);
 		topLeftPan.add(viewTitleLabel);
-		
+
 		ButtonPanel topBtnPanel = new ButtonPanel();
-		topBtnPanel .setLayout(new FlowLayout(FlowLayout.LEFT));
+		topBtnPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
 		topBtnPanel.setButtonSize(22, 22);
 		for(int i=1; i<=8; i++) {
 			final int a = i;
@@ -122,10 +119,10 @@ public class AppContainer {
 		viewInfoLabel.setPreferredSize(new Dimension(botBothSide.width - 20, botBothSide.height));
 		
 		ButtonPanel botBtnPan = new ButtonPanel();
-		botBtnPan.addButton(new ImageIcon(IMG_PATH+"leftarrow.png"), b->move(-1));
-		botBtnPan.addButton(new ImageIcon(IMG_PATH+"home.png"), b->move(-100));
-		botBtnPan.addButton(new ImageIcon(IMG_PATH+"rightarrow.png"), b->move(1));
-		botBtnPan.addButton(new ImageIcon(IMG_PATH+"close.png"), b->move(-200));
+		botBtnPan.addButton(new ImageIcon(IMG_PATH+"leftarrow.png"), b->moveClick(-1));
+		botBtnPan.addButton(new ImageIcon(IMG_PATH+"home.png"), b->moveClick(-100));
+		botBtnPan.addButton(new ImageIcon(IMG_PATH+"rightarrow.png"), b->moveClick(1));
+		botBtnPan.addButton(new ImageIcon(IMG_PATH+"close.png"), b->moveClick(-200));
 		
 		timeLabel.setHorizontalAlignment(JLabel.CENTER);
 		timeLabel.setPreferredSize(botBothSide);
@@ -147,16 +144,21 @@ public class AppContainer {
 		setStyle();
 	}
     
+    public void moveClick(int d) {
+    	if(AppService.instance().getAttribute("Member") == null) {
+    		WrapFrame.alert("로그인 해주세요.", cardPanel);
+    	}else {
+    		move(d);
+    	}
+    }
+    
     /**
-     * d == -100 : "Home",<br>
-     * d == -200 : removeView()
+     * @param d == -100 : "Home",<br>
+     * @param d == -200 : removeView()
      */
 	public void move(int d) {
-		if(AppService.instance().getAttribute("Member") == null) return;
-		
 		currentView = null;
 		if(d == -100 || viewList.isEmpty()) {
-			System.out.println(d);
 			cardLayout.show(cardPanel, container.getName());
 			viewTitleLabel.setText("Home");
 			viewIconLabel.setIcon(contIcon);
@@ -176,8 +178,8 @@ public class AppContainer {
     	int viewCount = viewList.size();
     	viewList.removeIf(view -> subApp != null && view.parentApp() != null && view.parentApp().equals(subApp));
     	int removeCount = viewCount - viewList.size();
-    	sysout("Remove Views -- View Count : "+ viewCount, "removeCount : "+ removeCount);
     	if(cardIndex != -1) move(-removeCount);
+    	sysout("Remove Views -- View Count : "+ viewCount, "removeCount : "+ removeCount);
     }
     
 	public void removeView(AppView appView) {
@@ -269,7 +271,7 @@ public class AppContainer {
 	//___________________________________________DEBUG_________________________________________________
 	public void updateViewCount() {
 		viewInfoLabel.setText(StrUtil.addBr("View Count : "+ viewList.size(), "Card Index : "+ cardIndex
-					,"Current View :"+ (currentView == null ? "Home" : 
+					,"Current View : "+ (currentView == null ? "Home" : 
 					currentView.getClass().getSimpleName().isEmpty() ? "Anonymous" : 
 					currentView.getClass().getSimpleName())
 					));
@@ -277,7 +279,7 @@ public class AppContainer {
 	
 	public void action(int i) {
 		sysout("Debug Button :", i);
-
+		
 		if(i==1) {
 			AppService.instance().addSubApp(new AdminApp());
 			AppService.instance().updateSubAppIcons();
@@ -288,8 +290,8 @@ public class AppContainer {
 		}
 		
 		if(i==3) {
-			SelectSeat s = new SelectSeat(null, new TicketDTO());
-			addView(s);
+//			SelectSeat s = new SelectSeat(null, new TicketDTO());
+//			addView(s);
 		}
 		
 		if(i==4) {
@@ -319,7 +321,8 @@ public class AppContainer {
 		}
 		
 		if(i == 5) {
-			sysout(AppService.instance().getAttr("Member"));
+//			sysout(AppService.instance().getAttr("Member"));
+			topPanel.setBackgrounds(Color.red);
 		}
 		if( i == 6) {
 			WrapFrame.greenAlert("Success !", iconPanelList.get(0).getPanel(), font(25));
@@ -328,6 +331,11 @@ public class AppContainer {
 		
 		if(i == 7) {
 			addView(new TextView("title1", "seececesfaefsazc4216542365874463q23743q23684732q86437q2683214563f", b->action(2)));
+		}
+		if(i == 8) {
+			MemberDTO member = new MemberDTO("dummy","1234","name","010-0100-1211","ggg@gmail.com");
+			AppService.instance().setAttr("Member", member);
+			sysout("로그인 : " + member);
 		}
 	}
 	//___________________________________________DEBUG_________________________________________________

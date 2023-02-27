@@ -3,6 +3,18 @@ package entity;
 public class MemberDTO {
 	private String id, password, name, phone, email;
 
+	public MemberDTO() {
+
+	}
+	
+	public MemberDTO(String id, String password, String name, String phone, String email) {
+		this.id = id;
+		this.password = password;
+		this.name = name;
+		this.phone = phone;
+		this.email = email;
+	}
+
 	public String getId() {
 		return id;
 	}

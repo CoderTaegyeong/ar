@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -19,6 +22,7 @@ import app.AppService;
 import app.AppView;
 import app.login.db.SignUpDAO;
 import entity.MemberDTO;
+import gui.Gui;
 
 
 public class SignUp extends AppView implements ActionListener {
@@ -38,7 +42,7 @@ public class SignUp extends AppView implements ActionListener {
 	JTextField Knamefield = new JTextField(30);
 	JLabel     Enamelbl   = new JLabel("이름(영문)");
 	JTextField Enamefield = new JTextField(30);
-	
+ 
 	JLabel     telLbl     = new JLabel("연락처");
 	JTextField telField   = new JTextField(30);
 	JLabel     emailLbl   = new JLabel("이메일");
@@ -53,6 +57,8 @@ public class SignUp extends AppView implements ActionListener {
 	JButton cancelBtn = new JButton("취소");
 	SignUpDAO dao = new SignUpDAO();
 	
+	boolean isIdCheck = false;
+	
 	private LoginApp loginApp;
 	
 	public SignUp(LoginApp loginApp) {
@@ -63,12 +69,15 @@ public class SignUp extends AppView implements ActionListener {
 
 	@Override
 	public void initRootPanel() {
-		rootPanel = new JPanel(null);
+		rootPanel.removeAll();
+		rootPanel.setLayout(null);
+		
 		int x1 = 300;
 		int x2 = 410;
 		rootPanel.add(titleLbl).setBounds(400, 50, 200, 30);
-		titleLbl.setFont(fnt);
+		titleLbl.setFont(Gui.font(30));
 
+		idField.addKeyListener(new KeyAdapter() { public void keyTyped(KeyEvent e) { isIdCheck = false; } });
 		rootPanel.add(idLbl).setBounds(x1, 120, 100, 30);
 		rootPanel.add(idField).setBounds(x2, 120, 250, 30);
 		rootPanel.add(check).setBounds(410, 155, 100, 30);
@@ -76,7 +85,7 @@ public class SignUp extends AppView implements ActionListener {
 		idField.setFont(fnt);
 		check.setFont(fnt);
 		check.setBackground(new Color(200, 200, 200));
-		check.setForeground(Color.white);
+//		check.setForeground(Color.white);
 
 		rootPanel.add(pwdLbl).setBounds(x1, 190, 100, 30);
 		rootPanel.add(pwdField).setBounds(x2, 190, 250, 30);
@@ -112,17 +121,16 @@ public class SignUp extends AppView implements ActionListener {
 		rootPanel.add(genderCombo).setBounds(x2, 490, 250, 30);
 		genderLbl.setFont(fnt);
 		genderCombo.setFont(fnt);
-		genderCombo.setBackground(Color.white);
+//		genderCombo.setBackground(Color.white);
 
 		rootPanel.add(signUpBtn).setBounds(400, 570, 100, 30);
 		rootPanel.add(cancelBtn).setBounds(530, 570, 100, 30);
 		signUpBtn.setFont(fnt);
 		signUpBtn.setBackground(new Color(200, 200, 200));
-		signUpBtn.setForeground(Color.white);
-		signUpBtn.setEnabled(false);
+//		signUpBtn.setForeground(Color.white);
 		cancelBtn.setFont(fnt);
 		cancelBtn.setBackground(new Color(200, 200, 200));
-		cancelBtn.setForeground(Color.white);
+//		cancelBtn.setForeground(Color.white);
 
 		rootPanel.setBackground(Color.white);
 //		setSize(900, 700);
@@ -143,10 +151,12 @@ public class SignUp extends AppView implements ActionListener {
 				String pwdCheck = pwdcheckField.getText();
 				if (id.equals("")) {
 					JOptionPane.showMessageDialog(rootPanel, "아이디를 입력하셔야 합니다");
+				} else if(!isIdCheck) {
+						JOptionPane.showMessageDialog(rootPanel, "아이디 중복 검사를 하세요");
 				} else if (password.equals("")) {
 					JOptionPane.showMessageDialog(rootPanel, "비밀번호를 입력하셔야 합니다");
-				} else if (password.length() < 6 || password.length() > 20) {
-					JOptionPane.showMessageDialog(rootPanel, "비밀번호는 6자리 이상, 20자리 이하만 가능 합니다.");
+				} else if (password.length() < 3 || password.length() > 10) {
+					JOptionPane.showMessageDialog(rootPanel, "비밀번호는 3자리 이상, 10자리 이하만 가능 합니다.");
 				} else if (pwdCheck.equals("")) {
 					JOptionPane.showMessageDialog(rootPanel, "비교할 비밀번호를 입력해 주시기 바랍니다");
 				} else if (!password.equals(pwdCheck)) {
@@ -173,12 +183,13 @@ public class SignUp extends AppView implements ActionListener {
 					int result = dao.SignUpInsert(vo);
 					if (result > 0) { // 회원등록 성공함
 						JOptionPane.showMessageDialog(rootPanel, "회원가입에 성공하였습니다\n원활한 이용을 위하여\n로그인 해주시기 바랍니다");
+						loginApp.openLoginView();
+						Arrays.asList(new JTextField[]{idField, pwdField, pwdcheckField, Knamefield, Enamefield, telField, emailField}).forEach(t->t.setText(""));
 					} else { // 회원등록 실패함
 						JOptionPane.showMessageDialog(rootPanel, "회원가입에 실패하였습니다\n 관리자에게 문의해 주시기 바랍니다");
 					}
 				}
 			} else if (btn.equals("취소")) {
-//				dispose();
 				AppService.instance().openView(loginApp.requestView());
 			} else if (btn.equals("중복 확인")) {
 				String idSearch = idField.getText();
@@ -186,20 +197,18 @@ public class SignUp extends AppView implements ActionListener {
 				if (idSearch.equals("")) {
 					JOptionPane.showMessageDialog(rootPanel, "아이디를 입력하셔야 합니다");
 					// id 특수문자 포함 확인
-				} else if (idSearch.length() < 6 || idSearch.length() > 15) {
-					JOptionPane.showMessageDialog(rootPanel, "아이디는 6자리 이상, 15자리 이하만 가능 합니다.");
+				} else if (idSearch.length() < 3 || idSearch.length() > 15) {
+					JOptionPane.showMessageDialog(rootPanel, "아이디는 3자리 이상, 15자리 이하만 가능 합니다.");
 				} else if (checkIDMethod(idSearch) == 1) {
 					JOptionPane.showMessageDialog(rootPanel, "아이디는 특수문자 포함이 불가능합니다");
 				} else {
 					List<MemberDTO> result = dao.getidCheck(idSearch);
 					if (result.size() == 0) {
+						isIdCheck = true;
 						JOptionPane.showMessageDialog(rootPanel, "사용 가능한 아이디 입니다");
-						signUpBtn.setEnabled(true);
-						idField.setEnabled(false);
 					} else {
 						JOptionPane.showMessageDialog(rootPanel, "등록되어 있는 아이디 입니다");
 					}
-
 				}
 			}
 		}

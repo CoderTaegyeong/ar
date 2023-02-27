@@ -16,33 +16,27 @@ import java.util.Arrays;
 //
 
 public class PackageDTO {
-	private int id;
+	private Integer id;
 	private byte[] image;
 	private String title;
 	private String travelLoc;
 	private String travelDays; 
-	private int price;
+	private Integer price;
 	private String detailText;
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public String getTravelDays() {
-		return travelDays;
-	}
-	public void setTravelDays(String travelDays) {
-		this.travelDays = travelDays;
-	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
-	}
-	public String getTitle() {
-		return title;
 	}
 	public byte[] getImage() {
 		return image;
 	}
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+	public String getTitle() {
+		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
@@ -53,10 +47,16 @@ public class PackageDTO {
 	public void setTravelLoc(String travelLoc) {
 		this.travelLoc = travelLoc;
 	}
-	public int getPrice() {
+	public String getTravelDays() {
+		return travelDays;
+	}
+	public void setTravelDays(String travelDays) {
+		this.travelDays = travelDays;
+	}
+	public Integer getPrice() {
 		return price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 	public String getDetailText() {
@@ -67,7 +67,8 @@ public class PackageDTO {
 	}
 	@Override
 	public String toString() {
-		return "PackageDTO [id=" + id + ", image=" + image + ", title=" + title + ", travelLoc="
-				+ travelLoc + ", travelDays=" + travelDays + ", price=" + price + ", detailText=" + detailText + "]";
+		return "PackageDTO [id=" + id + ", image=" + image + ", title=" + title + ", travelLoc=" + travelLoc
+				+ ", travelDays=" + travelDays + ", price=" + price + ", detailText=" + detailText + "]";
 	}
+	
 }

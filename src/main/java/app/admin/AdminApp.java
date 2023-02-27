@@ -12,7 +12,6 @@ public class AdminApp extends SubApp{
 	
 	@Override
 	public AppView requestView() {
-		// TODO Auto-generated method stub
 		return adminPage;
 	}
 

@@ -50,12 +50,20 @@ public final class Gui {
     public static final Color DARK_BLUE = new Color(20, 20, 70);
     
 	private Gui() {}
+
+	public static JComponent border(JComponent comp, Color color, int t) {
+		comp.setBorder(BorderFactory.createLineBorder(color, t));
+		return comp;
+	}
+	
+	public static JComponent redBorder(JComponent comp, int t) {
+		return border(comp, Color.RED, t);
+	}
 	
 	public static CustomPanel setMargin(CustomPanel customPanel, int top, int left, int bottom, int right) {
 		customPanel.getPanel().setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
 		return customPanel;
 	}
-
 	
 	public static JComponent setMargin(JComponent comp, int top, int left, int bottom, int right) {
 		comp.setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
@@ -286,15 +294,15 @@ public final class Gui {
         return new Font(font, Font.PLAIN, size);
     }
     
-    public static JButton createButton(String name, Font font, Consumer<?> action) {
-		JButton button = new JButton(name);
+    public static JButton createButton(String buttonText, Font font, Consumer<?> action) {
+		JButton button = new JButton(buttonText);
 		button.addActionListener(e->action.accept(null));
 		if(font != null) button.setFont(font);
 		return button;
     }
     
-    public static JButton createButton(String name, Consumer<?> action) {
-    	return createButton(name, null, action);
+    public static JButton createButton(String buttonText, Consumer<?> action) {
+    	return createButton(buttonText, null, action);
 	}
     
     public static JButton createButton(ImageIcon icon, Consumer<?> action) {

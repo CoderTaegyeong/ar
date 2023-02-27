@@ -31,7 +31,7 @@ public class SeatDAO {
 		
 		String sql = "";
 		sql += "SELECT S.SEATNUMBER, S.DEPDATE ";
-		sql += " FROM SEAT S JOIN A.AIRPLANE  ON S.AIRNUM = A.AIRNUM"	;
+		sql += " FROM SEAT S JOIN AIRPLAN A ON S.AIRNUM = A.AIRNUM"	;
 		sql += " WHERE S.AIRNUM = ? AND S.DEPDATE = ? AND S.RESERVED = 'Y'";
 		ArrayList<String> list = new ArrayList<>();
 		
@@ -56,10 +56,8 @@ public class SeatDAO {
 			}catch(SQLException e) {
 			}
 		}
-		
 		return list;
 	}
-
 
 	public void setSeatReserved(SeatDTO seatDTO) {
 		String airnum = seatDTO.getAirnum();

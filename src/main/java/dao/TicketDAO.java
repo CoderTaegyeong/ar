@@ -34,14 +34,13 @@ public class TicketDAO {
 		int cost              = ticket.getCost();
 		int kidCnt            = ticket.getKidCnt();
 		int adultCnt          = ticket.getAdultCnt();
-		int HumanCnt          = ticket.getHumanCnt();
 		
 		SimpleDateFormat f = new SimpleDateFormat("yyyy년 MM월dd일 HH시mm분ss초");
 		Calendar c = Calendar.getInstance();
 		String reserveDate = f.format(c.getTime()); // 현재날짜를 전달.
 		ticket.setReserveDate(reserveDate);
 		
-		String sql = "INSERT INTO TICKET VALUES(?,?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO TICKET VALUES(?,?,?,?,?,?,?,?,?)";
 		PreparedStatement pstmt = null;
 		
 		try {
@@ -55,7 +54,6 @@ public class TicketDAO {
 			pstmt.setInt(7, cost);
 			pstmt.setInt(8, kidCnt);
 			pstmt.setInt(9, adultCnt);
-			pstmt.setInt(10, HumanCnt);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {

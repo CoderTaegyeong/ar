@@ -38,7 +38,8 @@ public class SqlUtil {
 	}
 	
 	/**
-	 * @return 첫 행은 칼럼 이름으로 사용된다.
+	 * @return 첫 행은 칼럼 이름으로 사용된다.<br>
+	 * **가저올 데이터가 없을시 칼럼명을 읽지못한다. 테스트으로 사용** 
 	 */
 	public List<List<String>> selectWithColumnName(String query, Object... args) {
 		StringRowMapper rowMapper = new StringRowMapper();
@@ -50,7 +51,7 @@ public class SqlUtil {
 	public List<List<String>> selectTable(String tableName) {
 		return select("SELECT * FROM " + tableName);
 	}
-
+	
 	public <T> List<T> select(String query, RowMapper<T> rowMapper, Object... args) {
 		return jdbcTemplate.query(query, rowMapper, args);
 	}

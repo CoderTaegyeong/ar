@@ -14,11 +14,10 @@ public class TicketDTO {
 	private int cost; // 티켓 가격
 	private int kidCnt;
 	private int adultCnt;
-	private int humanCnt; // 인원 수
 	public TicketDTO() {}
 	public TicketDTO(String customerName, String customerId, String seatNumber, String seatGrade, String airNum, String reserveTime,
 			String depPlace, String arrPlace,
-			String reserveDate, String depDate, String arrDate, int cost, int kidCnt, int adultCnt, int humanCnt) {
+			String reserveDate, String depDate, String arrDate, int cost, int kidCnt, int adultCnt) {
 		this.customerName = customerName;
 		this.customerId = customerId;
 		this.seatNumber = seatNumber;
@@ -32,7 +31,6 @@ public class TicketDTO {
 		this.cost = cost;
 		this.kidCnt = kidCnt;
 		this.adultCnt = adultCnt;
-		this.humanCnt = humanCnt;
 	}
 	public String getCustomerName() {
 		return customerName;
@@ -112,20 +110,13 @@ public class TicketDTO {
 	public void setAdultCnt(int adultCnt) {
 		this.adultCnt = adultCnt;
 	}
-	public int getHumanCnt() {
-		humanCnt = adultCnt + kidCnt;
-		return humanCnt;
-	}
-	public void setHumanCnt(int humanCnt) {
-		this.humanCnt = humanCnt;
-	}
 	@Override
 	public String toString() {
 		return "TicketDTO [customerName=" + customerName + ", customerId=" + customerId + ", seatNumber=" + seatNumber
 				+ ", seatGrade=" + seatGrade
 				+ ", airNum=" + airNum + ", depPlace=" + depPlace + ", arrPlace=" + arrPlace + ", depDate=" + depDate
 				+ ", arrDate=" + arrDate + ", reserveDate=" + reserveDate + ", cost=" + cost + ", kidCnt=" + kidCnt
-				+ ", adultCnt=" + adultCnt + ", humanCnt=" + humanCnt + "]";
+				+ ", adultCnt=" + adultCnt + "]";
 	}
 	
 	

@@ -58,7 +58,7 @@ public class TravelPackage extends AppView {
 		int height = (style.height - 250) / 2;
 		for(int i=0; i < packageList.size(); i++) {
 			PackageDTO pack = packageList.get(i);
-			if(pack == null) continue;
+			if(pack.getImage() == null) continue;
 			ImagePanel imagePanel = new ImagePanel();
 			imagePanel.setImage(Gui.scaleDown(Gui.getImage(pack.getImage()), width, height));
 			imagePanel.setText(pack.getTitle());

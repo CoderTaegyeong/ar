@@ -73,7 +73,6 @@ public class ConfigDialog {
 		botBtnPanel.addButton("Cancel", b->cancel());
 		gbPanel.addNextRow(botBtnPanel);
 		
-
 		controlVolume(volumnSlider.getGain());
 		volumnBar.addMouseMotionListener(new MouseAdapter() { 
 		    public void mouseDragged(MouseEvent e) { 

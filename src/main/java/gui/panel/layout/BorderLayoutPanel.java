@@ -77,6 +77,10 @@ public class BorderLayoutPanel extends CustomPanel{
 		return panel;
 	}
 	
+	public JScrollPane newScroll(CustomPanel customPanel, String direction) {
+		return newScroll(customPanel.getPanel(), direction);
+	}
+	
 	public JScrollPane newScroll(JComponent comp, String direction) {
 		JScrollPane scrollPane = new JScrollPane(comp);
 		rootPanel.add(scrollPane, direction);

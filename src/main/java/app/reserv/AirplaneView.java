@@ -52,7 +52,7 @@ public class AirplaneView extends AppView {
 	
 		// 데이터 표
 		jtable.setColumnNames("출발지", "도착지", "출발시간", "도착시간", "시작날짜", "종료날짜", "항공편명");
-		jtable.setList(DAO.sql.select("select DEPPLACE, ARRPLACE, DEPTIME, ARRTIME, STARTDATE, ENDDATE, AIRNUM from airplan", false));
+		jtable.setList(DAO.sql.select("select DEPPLACE, ARRPLACE, DEPTIME, ARRTIME, STARTDATE, ENDDATE, AIRNUM from airplan"));
 		
 		sp = new JScrollPane(jtable);
 		sp.setBounds(79, 93, 568, 436);

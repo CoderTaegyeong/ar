@@ -7,10 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import app.ArApplication;
 import gui.panel.CustomPanel;
 
 public class FileUtil {
@@ -36,6 +38,15 @@ public class FileUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public static String readString(String path) {
+    	try {
+			return Files.readString(new File(path).toPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return null;
     }
     
   //-----------------------------------create Simple JFileChooser--------------------------------//

@@ -18,7 +18,7 @@ public class SignUpDAO extends DBConn{
 			sql += "INSERT INTO Members";
 			sql += "  ( ID, NAME, PASSWORD, PHONE, EMAIL)";
 			sql += " VALUES ";
-			sql += "  ( ?, ?, ?, ?, ?, ?, ?)";
+			sql += "  ( ?, ?, ?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getId());
 			pstmt.setString(2, vo.getName());

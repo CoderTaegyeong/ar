@@ -5,6 +5,7 @@ import javax.swing.Timer;
 import app.admin.AdminApp;
 import app.dash.DashBoard;
 import app.login.LoginApp;
+import app.membership.MemberShip;
 import app.reserv.Reservation;
 import app.travel.Travel;
 import entity.MemberDTO;
@@ -32,6 +33,7 @@ public class ArApplication {
 		service.addSubApp(new DashBoard());
 		service.addSubApp(new AdminApp());
 		service.addSubApp(new Travel());
+		service.addSubApp(new MemberShip());
 		service.start();
 
 		//앱 시작시 로그인 창을 띄운다

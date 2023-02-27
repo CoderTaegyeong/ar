@@ -50,7 +50,7 @@ public class LoginApp extends SubApp{
 		AppService.instance().setAttr("Member",
 			DAO.sql.selectOne("select id, password, name, email, phone from members where id = ?", 
 			new MemberRowMapper(), id).get());
-		AppService.instance().closeView(loginView);
+		AppService.instance().closeView(loginView, signUp);
 	}
 	
 	public void logout() {
