@@ -7,11 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import dao.DAO;
 import entity.BoardVO;
+import entity.CommentVO;
 
 public class BoardDao {
+	
+	BoardVO bvo;
+	
 	public int insert( int num, String title, String content, 
 			String writer, Date regDate) {
 		
@@ -89,7 +94,23 @@ public class BoardDao {
 		return 0;
 	}
 	
-	
+	public int commentDelete(CommentVO vo) {
+		
+		String  sql = "";
+		sql += " DELETE FROM BOARD_COMMENT ";
+		sql += "  WHERE NUM = ? ";
+		
+		int aftcnt = 0;
+		try(Connection  conn = DAO.getConnection();
+				PreparedStatement pstmt  = conn.prepareStatement(sql);) {
+			pstmt.setInt(1, vo.getNum());
+			return pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
 	public List<BoardVO> select() { 
 		List<BoardVO> list = new ArrayList<BoardVO>();
 	
@@ -150,4 +171,67 @@ public class BoardDao {
 		return list;
 	}
 	
+	public Vector<Vector> getCommentList(int num) {
+		
+		Vector<Vector> list = new Vector<Vector>();
+		
+		String sql = "";
+		sql   +=   "SELECT BC.NUM, BC.CONTENT, BC.WRITER, BC.REGDATE ";
+		sql   +=   " FROM  BOARD_COMMENT BC, BOARD B ";
+		sql   +=   " WHERE B.NUM = BC.NUM";
+		sql   +=   " AND B.NUM = ? ";
+		sql   +=   " ORDER BY NUM ASC ";
+        
+		try(Connection  conn = DAO.getConnection();
+			PreparedStatement pstmt  = conn.prepareStatement(sql); ) {
+				
+			pstmt.setInt(1, num);
+			ResultSet rs = pstmt.executeQuery();
+			while( rs.next() ) {
+				int    ComNum      = rs.getInt("num");
+				String ComContent  = rs.getString("content");  
+				String ComWrite    = rs.getString("writer");      
+				String ComRegdate  = rs.getString("regdate");   
+				
+				Vector v        = new Vector();  // 안쪽 Vector : 한 줄 Row 를 의미
+				v.add(ComNum);
+				v.add(ComContent);
+				v.add(ComWrite);
+				v.add(ComRegdate);
+				
+				list.add( v );  // 전체 목록에 추가
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	
+	public void insertComment(CommentVO vo) {
+		String sql = " INSERT INTO BOARD_COMMENT ";
+		sql		+= " (NUM, CONTENT, WRITER, REGDATE) ";
+		sql		+= " VALUES ";
+		sql		+= " (  ?,        ?,      ?, SYSDATE )";
+        
+		try(Connection  conn = DAO.getConnection();
+			PreparedStatement pstmt  = conn.prepareStatement(sql);) {
+			
+			pstmt.setInt(1, vo.getNum());
+            pstmt.setString(2, vo.getContent());
+            pstmt.setString(3, vo.getWriter());
+ 
+            pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/*
+	public void insertComment(CommentVO vo) {
+		
+		DAO.sql.insert("board_Comment", vo,  "num", "seq_comment");
+	}
+	*/
 }

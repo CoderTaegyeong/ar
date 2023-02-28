@@ -132,8 +132,8 @@ public class BoardList extends AppView {
             public void mouseClicked(MouseEvent e) {
                 int rowNum = jTable.getSelectedRow();
                 BoardVO vo = new BoardVO();
+              //  System.out.println(voList.get(rowNum));
                 vo = voList.get(rowNum);
-               
                 dash.openUpdate(vo);
             }
         });

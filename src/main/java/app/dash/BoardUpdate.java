@@ -1,27 +1,38 @@
 package app.dash;
 
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
-import app.AppService;
 import app.AppView;
 import entity.BoardVO;
+import entity.CommentVO;
 import gui.Gui;
 
 public class BoardUpdate extends AppView {
 	private JTextField title;
     private JTextField writer;
-    JTextArea content = new JTextArea();
-
+    private JTextField commentWriter;
+    JTextArea   content = new JTextArea();
+    JTextArea   comment = new JTextArea();
+    JScrollPane pane;
+    JTable      commentTable = new JTable();
     DashBoard dash;
     BoardVO vo;
+    CommentVO cvo;
+    
+    List<BoardVO> voList;
+    
     public BoardUpdate(DashBoard dash) {
     	super(dash);
         this.dash = dash;
@@ -35,6 +46,7 @@ public class BoardUpdate extends AppView {
     	title.setText(vo.getTitle());
     	writer.setText(vo.writer);
     	content.setText(vo.getContent());
+    	createComment();
     }
     
     public void getFormData() {
@@ -47,12 +59,12 @@ public class BoardUpdate extends AppView {
 	public void initRootPanel() {
 		rootPanel.setLayout(null);
 		 
-        JLabel lblNewLabel = new JLabel("글제목");
+		JLabel lblNewLabel = new JLabel("글제목");
         lblNewLabel.setBounds(12, 25, 57, 15);
         rootPanel.add(lblNewLabel);
  
         title = new JTextField();
-        title.setBounds(81, 22, 340, 21);
+        title.setBounds(81, 22, 600, 25);
         rootPanel.add(title);
         title.setColumns(10);
  
@@ -62,20 +74,20 @@ public class BoardUpdate extends AppView {
  
         content.setLineWrap(true);
         content.setRows(5);
-        content.setBounds(81, 53, 440, 200);
+        content.setBounds(81, 53, 600, 250);
         rootPanel.add(content);
  
         JLabel lblNewLabel_2 = new JLabel("작성자");
-        lblNewLabel_2.setBounds(12, 140, 57, 15);
+        lblNewLabel_2.setBounds(12, 320, 57, 15);
         rootPanel.add(lblNewLabel_2);
  
         writer = new JTextField();
-        writer.setBounds(81, 137, 116, 21);
+        writer.setBounds(81, 315, 116, 25);
         rootPanel.add(writer);
         writer.setColumns(10);
  
         JButton btnWrite = new JButton("글수정");
-        btnWrite.setBounds(81, 180, 97, 23);
+        btnWrite.setBounds(380, 320, 97, 23);
         btnWrite.addActionListener(new ActionListener() {
  
             @Override
@@ -88,7 +100,7 @@ public class BoardUpdate extends AppView {
         rootPanel.add(btnWrite);
  
         JButton btnDel = new JButton("글삭제");
-        btnDel.setBounds(190, 180, 97, 23);
+        btnDel.setBounds(480, 320, 97, 23);
         btnDel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -99,31 +111,118 @@ public class BoardUpdate extends AppView {
         rootPanel.add(btnDel);
  
         JButton btnClose = Gui.createButton("닫기", b->dash.openList());
-        btnClose.setBounds(299, 180, 97, 23);
+        btnClose.setBounds(580, 320, 97, 23);
         rootPanel.add(btnClose);
-        
-        JButton open = new JButton("OPEN");
-        open.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//s
-				System.out.println(123213);
-			}
-		});
-        
-        JButton open2 = Gui.createButton("닫기", b->System.out.println(123214));
-        JButton open3 = Gui.createButton("닫기2", b->System.out.println(123214));
-        JButton open4 = Gui.createButton("닫기3", b->System.out.println(123214));
+        //------------------------------------------------------------------------------
+        //------------------- 댓글 부분 ------------------------------------------------
+        //------------------------------------------------------------------------------
 
-        rootPanel.add(open);
-        rootPanel.add(open2);
-        rootPanel.add(open3);
-        rootPanel.add(open4);
-        
-        open.setBounds(299, 380, 97, 23);
-        open2.setBounds(299, 480, 97, 23);
-        open3.setBounds(299, 520, 97, 23);
-        open4.setBounds(299, 580, 97, 23);
+        commentWriter = new JTextField("작성자");
+        commentWriter.setBounds(81, 580, 116, 25);
+        rootPanel.add(commentWriter);
+        commentWriter.setColumns(10);
 
+        comment.setLineWrap(true);
+        comment.setEnabled(false);
+        comment.setRows(5);
+        comment.setBounds(81, 520, 600, 50);
+        rootPanel.add(comment);
+
+        JButton btnComWri = new JButton("댓글 쓰기");
+        btnComWri.addActionListener(new ActionListener() {
+
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		System.out.println("댓글 쓰기");
+        		comment.setText("댓글을 입력하세요");
+        		comment.setEnabled(true);
+        	}
+        });
+        rootPanel.add(btnComWri);
+
+        JButton btnComSave = new JButton("댓글 저장");
+
+        btnComSave.addActionListener(new ActionListener() {
+
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		System.out.println("댓글 저장 클릭");
+        		BoardDao dao = new BoardDao();
+        		CommentVO vo = new CommentVO();
+        		BoardVO bvo = new BoardVO();
+
+        		String txtarea = comment.getText();
+        		String name = commentWriter.getText();
+
+        		vo.setNum(bvo.getNum());
+        		vo.setContent(txtarea);
+        		vo.setWriter(name);
+        		vo.setRegdate(new Date());
+
+        		dao.insertComment(vo);
+
+        		// 댓글 저장 새로고침
+        		//	dash.openCommentList(voList);
+        	}
+        });
+        rootPanel.add(btnComSave);
+
+        JButton btnComDel = new JButton("댓글 삭제");
+        btnComDel.addActionListener(new ActionListener() {
+
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		System.out.println("댓글삭제");
+        		dash.dao().commentDelete(cvo);
+        		dash.openList();
+        	}
+        });
+        rootPanel.add(btnComDel);
+
+        btnComWri.setBounds(580, 490, 100, 25);   // 댓글쓰기
+        btnComSave.setBounds(580, 580, 100, 25);  // 댓글저장
+        btnComDel.setBounds(460, 490, 100, 25);   // 댓글삭제
+
+        //------------------------------------------------------------------------------
+        //----------------댓글 테이블---------------------------------------------------
+        //------------------------------------------------------------------------------
+//        createComment();
+	}
+
+	void createComment(){
+       commentTable = new JTable();
+       commentTable.setModel(
+        		new DefaultTableModel( getCommentList() , getColumnList() ) {            
+        			@Override
+        			public boolean isCellEditable(int row, int column) {
+        				return false;   // 모든 cell 편집불가능
+        			}            
+        		}   
+        	);
+       if(pane!=null)rootPanel.remove(pane);
+       pane = new JScrollPane(commentTable);
+       pane.setBounds(81, 360, 600, 120);
+       rootPanel.add(pane);
+	}
+	
+	
+	// 테이블 입력되야됨
+	private Vector< Vector> getCommentList() {
+		BoardDao       dao   =  new BoardDao();
+		Vector<Vector>  list =  dao.getCommentList(vo.num);
+		return  list;
+	}
+
+	private Vector<String> getColumnList() {
+		Vector<String>  cols = new Vector<>();  // 문자배열 대신 사용
+		cols.add("번호");
+		cols.add("내용");
+		cols.add("작성자");
+		cols.add("작성일");
+		return  cols;
+	}
+	
+	public static void main(String[] args) {
+		Gui.createFrame(new BoardUpdate(new DashBoard()).rootPanel).setSize(1000, 700);;
 	}
 }

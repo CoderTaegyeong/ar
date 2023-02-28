@@ -14,7 +14,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import app.AppService;
 import app.AppView;
 import dao.AirplaneDAO;
 import dao.SeatDAO;
