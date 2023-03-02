@@ -194,17 +194,20 @@ public class ReservView extends AppView{
 				System.out.println(arrPlace);
 				
 				// 출발 날짜 선택 값 가져오기
-				Date startDate = depDateChooser.getDate();
-				if(startDate == null) {
-					WrapFrame.alert(null);
-					return;
-				}
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String depDate  = sdf.format(startDate);
+				String depDate = sdf.format(depDateChooser.getDate());
+				// 출발일이 비어있는 경우
+				if(depDate == null) {
+					JOptionPane.showMessageDialog(null, "출발일을 선택하지 않으셨습니다.");
+				}
 				System.out.println(depDate);
 				
 				// 도착 날짜 선택 값 가져오기
 				String arrDate = sdf.format(arrDateChooser.getDate());
+				// 도착일이 비어있는 경우
+				if(arrDate == null) {
+					JOptionPane.showMessageDialog(null, "도착일을 선택하지 않으셨습니다.");
+				}
 				System.out.println(arrDate);
 				
 				// 인원 수 값 가져오기(int로 변환 후)
