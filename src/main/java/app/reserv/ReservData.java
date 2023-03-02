@@ -99,8 +99,8 @@ public class ReservData extends AppView {
 		rootPanel.add(sp);
 	}
 	
-	public static void main(String[] args) {
-		Gui.createFrame(new ReservData(null).rootPanel).setSize(700,700);
-	}
+// 	public static void main(String[] args) {
+// 		Gui.createFrame(new ReservData(null).rootPanel).setSize(700,700);
+// 	}
 
 }
