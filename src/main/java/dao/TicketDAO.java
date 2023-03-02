@@ -40,8 +40,23 @@ public class TicketDAO {
 		String reserveDate = f.format(c.getTime()); // 현재날짜를 전달.
 		ticket.setReserveDate(reserveDate);
 		
-		String sql = "INSERT INTO TICKET VALUES(?,?,?,?,?,?,?,?,?)";
+		String sql = "INSERT INTO TICKET "
+				+ "CUSTOMERNAME,"
+				+ "CUSTOMERID,"
+				+ "SEATNUMBER,"
+				+ "SEATGRADE,"
+				+ "AIRNUM,"
+				+ "DEPPLACE,"
+				+ "ARRPLACE,"
+				+ "DEPDATE,"
+				+ "ARRDATE,"
+				+ "RESERVEDATE,"
+				+ "COST,"
+				+ "KIDCNT,"
+				+ "ADULTCNT TICKET VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		PreparedStatement pstmt = null;
+		
+		System.out.println("sql : " + sql + "asadfdaf"  + ticket);
 		
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -54,6 +69,8 @@ public class TicketDAO {
 			pstmt.setInt(7, cost);
 			pstmt.setInt(8, kidCnt);
 			pstmt.setInt(9, adultCnt);
+			pstmt.executeUpdate();
+			System.out.println(pstmt);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {

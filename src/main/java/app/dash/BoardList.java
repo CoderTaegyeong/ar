@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import app.AppView;
+import app.ArApplication;
 import entity.BoardVO;
 import gui.Gui;
 
@@ -33,6 +34,8 @@ public class BoardList extends AppView {
 	BoardInsert  bInsert = null;
 	BoardList   bList   = null;
 	
+	JLabel menuLabel = Gui.createIconLabel(ArApplication.IMG_PATH+"boardmenu.png");
+	
 	DashBoard dash;
 	
 	List<BoardVO> voList;
@@ -47,6 +50,10 @@ public class BoardList extends AppView {
 	public void initRootPanel() {
 		rootPanel.removeAll();
 		rootPanel.setLayout(null);
+		
+		rootPanel.add(menuLabel);
+		menuLabel.setBounds(18,4,218,48);
+		
 		
 		lbl      = new JLabel("검색조건");
 		lbl.setBounds(300, 20, 56, 15);

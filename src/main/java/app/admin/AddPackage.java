@@ -70,7 +70,7 @@ public class AddPackage extends AppView {
 		formPanel.addNextRow(buttonPanel);
 	}
 	
-	private void reset() {
+	public void reset() {
 		packageInput.resetForm();
 		imagePanel.removeImage();
 	}

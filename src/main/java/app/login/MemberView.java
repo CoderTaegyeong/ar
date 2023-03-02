@@ -28,8 +28,8 @@ public class MemberView extends AppView{
 	private InputForm<MemberDTO> memberForm = new InputForm<>();
 	private InputForm<MembershipDTO> shipForm = new InputForm<>();
 	private BorderLayoutPanel blPanel = new BorderLayoutPanel();
-	private GridBagPanel gbPanel = new GridBagPanel(330,400);
-	private GridBagPanel shipPanel = new GridBagPanel();
+	private GridBagPanel gbPanel = new GridBagPanel(350,350);
+	private GridBagPanel shipPanel = new GridBagPanel(330,300);
 	private LoginApp loginApp;
 	private JButton updateBtn = Gui.createButton("완료", b->updateBtnAction());
 	public MemberView(LoginApp loginApp) {
@@ -44,7 +44,7 @@ public class MemberView extends AppView{
 		memberForm.font = Gui.font(15);
 		blPanel.removeAll();
 		blPanel.addCenter(gbPanel);
-		gbPanel.addNextRow(Gui.createLabel("회원 정보 보기", Color.BLACK, Gui.font(30), JLabel.LEFT));
+		gbPanel.addNextRow(Gui.createLabel("회원 정보", Color.BLACK, Gui.font(30), JLabel.LEFT));
 		TextFieldPanel idPanel = memberForm.createTFP("id", "아이디");
 		idPanel.setEditable(false);
 		gbPanel.addNextRow(idPanel);
@@ -58,8 +58,8 @@ public class MemberView extends AppView{
 		gbPanel.addNextRow(Gui.createPanel(updateBtn, logoutBtn,payinfoBtn));
 		
 		blPanel.newPanel(BorderLayout.EAST).add(shipPanel.getPanel());
-		Gui.setMargin(shipPanel,50,0,0,50);
 		Gui.setMargin(gbPanel,0,50,100,0);
+		Gui.setMargin(shipPanel,0,0,0,50);
 	}
 
 	public void showMemberInfo() {
@@ -74,6 +74,7 @@ public class MemberView extends AppView{
 		
 		shipPanel.removeAll();
 		shipForm.resetForm();
+		shipForm.font = Gui.font(15);
 		Membership membership = AppService.instance().getSubApp(Membership.class);
 		Optional<MembershipDTO> membershipDTO = membership.getMembership(memberForm.getString("id"));
 		Debug.sysout(membershipDTO);
@@ -105,8 +106,7 @@ public class MemberView extends AppView{
 		}
 		memberForm.setEditable(editable);
 	}
-	
-	public static void main(String[] args) {
-		Gui.createFrame(new MemberView(null).rootPanel);
-	}
+//	public static void main(String[] args) {
+//		Gui.createFrame(new MemberView(null).rootPanel);
+//	}
 }

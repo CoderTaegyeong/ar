@@ -1,5 +1,6 @@
 package app.reserv;
 
+import java.util.Arrays;
 import java.util.Vector;
 
 import app.AppService;
@@ -32,8 +33,8 @@ public class Reservation extends SubApp {
 		AppService.instance().openView(selectSeat);
 	}
 	
-	public void openCompletePay(TicketDTO ticketDTO, Vector<String> seatsNumber , int price ) {
-		completepay.completep(ticketDTO,seatsNumber,price);
+	public void openCompletePay(TicketDTO ticketDTO, String seatsNumber , int price ) {
+		completepay.completep(ticketDTO,new Vector<String>(Arrays.asList(seatsNumber.split("/"))),price);
 		AppService.instance().openView(completepay);
 	}
 	

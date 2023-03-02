@@ -20,7 +20,7 @@ public class AdminApp extends SubApp{
 	}
 
 	public void addPackage(PackageDTO pack) {
-		System.out.println(pack);
-		DAO.sql.insert("Travel_Package", pack, "id", "package_seq");
+		DAO.sql.insert("Travel_Package", pack, "num", "package_seq");
+		addPackage.reset();
 	}
 }
