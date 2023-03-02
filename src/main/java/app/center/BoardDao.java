@@ -24,7 +24,7 @@ public class BoardDao {
 		String sql = " INSERT INTO CustomerCenter ";
 		sql		+= " (NUM, TITLE, CONTENT, WRITER, REGDATE) ";
 		sql		+= " VALUES ";
-		sql		+= " (CustomerCenter_SEQ. NEXTVAL,     ?,       ?,      ?, SYSDATE )";
+		sql		+= " (CUSTOMERSERVICE_SEQ.NEXTVAL,     ?,       ?,      ?, SYSDATE )";
         
 		try(Connection  conn = DAO.getConnection();
 			PreparedStatement pstmt  = conn.prepareStatement(sql);) {
@@ -117,7 +117,7 @@ public class BoardDao {
 	
 		String sql = "SELECT NUM, TITLE, CONTENT,";
 		sql		+= " WRITER, REGDATE ";
-		sql		+= " FROM CustomerCenter where id = ?";
+		sql		+= " FROM CustomerCenter where writer = ?";
 		sql		+= " ORDER BY NUM DESC";
 		
 		try (Connection  conn = DAO.getConnection();
