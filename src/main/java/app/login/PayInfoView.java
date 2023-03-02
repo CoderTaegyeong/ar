@@ -1,4 +1,4 @@
-package app.membership;
+package app.login;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -18,13 +18,11 @@ import gui.panel.layout.BorderLayoutPanel;
 import gui.table.StringTable;
 import util.StrUtil;
 
-public class InfoView extends AppView{
-	private int tableIndex = 1;
+public class PayInfoView extends AppView{
 	private JLabel titleLabel = Gui.createLabel(Color.darkGray, new Font("맑은 고딕", Font.BOLD, 20), JLabel.CENTER);
 	private JPanel tablePanel = new JPanel(new BorderLayout());
-	
-	public InfoView(Membership membership) {
-		super("멤버십 정보", membership);
+	public PayInfoView(LoginApp loginApp) {
+		super("결제 정보", loginApp);
 		initRootPanel();
 	}
 	
@@ -37,8 +35,6 @@ public class InfoView extends AppView{
 		rootblPanel.addNorth(northPanel);
 		northPanel.setBackground(Color.LIGHT_GRAY);
 		northPanel.addCenter(titleLabel);
-		northPanel.addWest(Gui.createButton("◀◀ ", b->createTable(-1)));
-		northPanel.addEast(Gui.createButton(" ▶▶", b->createTable(+1)));
 		rootblPanel.addCenter(tablePanel);
 		
 		BorderLayoutPanel bottomPanel = new BorderLayoutPanel();
@@ -49,23 +45,17 @@ public class InfoView extends AppView{
 		rootblPanel.addSouth(bottomPanel);
 	}
 	
-	public void createTable(int i) {
-		final int tableCount = 2;
-		tableIndex += i;
-		System.out.println(tableIndex);
-		if(tableIndex <= 0) tableIndex = tableCount;
-		if(tableIndex > tableCount) tableIndex = 1;
-		
-		String title = "# 마일리지 " + (tableIndex != 1 ? "사용 내역" : "적립 내역") ;
-		String tableName = "MILEAGE";
-		String[] columns = {"NUM","TIMESTAMP","ID","MILECHANGE","DETAIL"};
-		String query = StrUtil.selectQuery(tableName, columns, "WHERE ID = ? AND MILECHANGE " + (tableIndex != 1 ? "< 0" : " > 0")); 
+	public void createTable() {
+		String title = "# 결제 내역 보기 ";
+		String tableName = "PAYMENT";
+		String[] columns = {"NUM","ID","PAYDATE","ITEM","PRICE","PAY","MILE","PAYWITH","STATUS"};
+		String query = StrUtil.selectQuery(tableName, columns, "WHERE ID = ?"); 
 		
 		titleLabel.setText(title);
 		StringTable table = new StringTable(DAO.sql.select(query, AppService.instance().getAttr("id")), columns);
 		
 		tablePanel.removeAll();
-		table.setColumnsSize(50,130,100,100,300);
+		table.setColumnsSize(50,50,100,100,50,50,50,50);
 		tablePanel.add(new JScrollPane(table));
 	}
 }

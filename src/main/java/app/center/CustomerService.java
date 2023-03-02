@@ -1,4 +1,4 @@
-package app.dash;
+package app.center;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import app.AppView;
 import app.SubApp;
 import entity.BoardVO;
 
-public class DashBoard extends SubApp {
+public class CustomerService extends SubApp {
 	private BoardDao dao = new BoardDao();
 	private BoardList boardList = new BoardList(this);
 	private BoardInsert boardInsert = new BoardInsert(this);
@@ -42,8 +42,7 @@ public class DashBoard extends SubApp {
 		return boardList;
 	}
 	
-	@Override
 	public String getTitle() {
-		return "여행 후기";
+		return "고객센터";
 	}
 }

@@ -1,4 +1,4 @@
-package app.dash;
+package app.center;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,12 +33,12 @@ public class BoardList extends AppView {
 	BoardInsert  bInsert = null;
 	BoardList   bList   = null;
 	
-	DashBoard dash;
+	CustomerService dash;
 	
 	List<BoardVO> voList;
 	
-	public BoardList(DashBoard dash) {
-		super("여행 후기",dash);
+	public BoardList(CustomerService dash) {
+		super("고객센터 문의하기",dash);
 		this.dash = dash;
 		initRootPanel();
 	}

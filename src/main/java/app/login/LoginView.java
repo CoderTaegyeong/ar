@@ -41,10 +41,10 @@ public class LoginView extends AppView implements ActionListener {
 	
 	JPanel     idpane  = new JPanel();
 	JLabel     idlbl   = new JLabel("Login ID  : ");
-	JTextField idfield = new JTextField(20);
+	JTextField idfield = new JTextField("dummy", 20);
 	JPanel     pwdpane = new JPanel();
 	JLabel     pwdlbl  = new JLabel(" PW         : ");
-	JPasswordField pwdfield = new JPasswordField(20);
+	JPasswordField pwdfield = new JPasswordField("123", 20);
 	
 	JPanel  btnp     = new JPanel();
 	JButton joinbtn  = new JButton("Join");
@@ -53,7 +53,7 @@ public class LoginView extends AppView implements ActionListener {
 	LoginApp loginApp;
 	
 	public LoginView(LoginApp loginApp) {
-		super(loginApp);
+		super("로그인",loginApp);
 		this.loginApp = loginApp;
 		initRootPanel();
 	}

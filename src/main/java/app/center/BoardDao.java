@@ -1,4 +1,4 @@
-package app.dash;
+package app.center;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
+import app.AppService;
 import dao.DAO;
 import entity.BoardVO;
 import entity.CommentVO;
@@ -20,10 +21,10 @@ public class BoardDao {
 	public int insert( int num, String title, String content, 
 			String writer, Date regDate) {
 		
-		String sql = " INSERT INTO BOARD ";
+		String sql = " INSERT INTO CustomerCenter ";
 		sql		+= " (NUM, TITLE, CONTENT, WRITER, REGDATE) ";
 		sql		+= " VALUES ";
-		sql		+= " (Board_SEQ. NEXTVAL,     ?,       ?,      ?, SYSDATE )";
+		sql		+= " (CustomerCenter_SEQ. NEXTVAL,     ?,       ?,      ?, SYSDATE )";
         
 		try(Connection  conn = DAO.getConnection();
 			PreparedStatement pstmt  = conn.prepareStatement(sql);) {
@@ -52,7 +53,7 @@ public class BoardDao {
 	
 	// 데이터 수정
 	public int update(BoardVO vo) {
-		String sql = " UPDATE BOARD ";
+		String sql = " UPDATE CustomerCenter ";
 		sql		+= "  SET   TITLE=?,";
 		sql		+= "        CONTENT=?,";
 		sql		+= "        WRITER=?, ";
@@ -80,7 +81,7 @@ public class BoardDao {
 	public int delete(BoardVO vo) {
 		
 		String  sql = "";
-		sql += " DELETE FROM BOARD ";
+		sql += " DELETE FROM CustomerCenter ";
 		sql += "  WHERE NUM = ? ";
 		
 		int aftcnt = 0;
@@ -97,7 +98,7 @@ public class BoardDao {
 	public int commentDelete(CommentVO vo) {
 		
 		String  sql = "";
-		sql += " DELETE FROM BOARD_COMMENT ";
+		sql += " DELETE FROM CustomerCenter_COMMENT ";
 		sql += "  WHERE NUM = ? ";
 		
 		int aftcnt = 0;
@@ -116,13 +117,14 @@ public class BoardDao {
 	
 		String sql = "SELECT NUM, TITLE, CONTENT,";
 		sql		+= " WRITER, REGDATE ";
-		sql		+= " FROM BOARD";
+		sql		+= " FROM CustomerCenter where id = ?";
 		sql		+= " ORDER BY NUM DESC";
 		
 		try (Connection  conn = DAO.getConnection();
 				PreparedStatement pstmt  = conn.prepareStatement(sql);
-				ResultSet rs    = pstmt.executeQuery();
 				) {
+			pstmt.setString(1, AppService.instance().getAttr("id"));
+			ResultSet rs    = pstmt.executeQuery();
 
 			while( rs.next() ) {
 				BoardVO vo = new BoardVO();
@@ -144,7 +146,7 @@ public class BoardDao {
 	public List<BoardVO> search(String search, String searchString) {
 		List<BoardVO> list = new ArrayList<BoardVO>();
 		String sql = "SELECT NUM, TITLE, CONTENT, WRITER, REGDATE";
-		sql		+= " FROM BOARD ";
+		sql		+= " FROM CustomerCenter ";
 		sql		+= " WHERE " + search + " LIKE '%";
 		sql     +=  searchString + "%' ORDER BY NUM DESC";
 		
@@ -176,7 +178,7 @@ public class BoardDao {
 		
 		String sql = "";
 		sql   +=   "SELECT BC.NUM, BC.CONTENT, BC.WRITER, BC.REGDATE ";
-		sql   +=   " FROM  BOARD_COMMENT BC, BOARD B ";
+		sql   +=   " FROM  CustomerCenter_COMMENT BC, CustomerCenter B ";
 		sql   +=   " WHERE B.NUM = BC.NUM";
 		sql   +=   " AND B.NUM = ? ";
 		sql   +=   " ORDER BY NUM ASC ";
@@ -208,7 +210,7 @@ public class BoardDao {
 
 	
 	public void insertComment(CommentVO vo) {
-		String sql = " INSERT INTO BOARD_COMMENT ";
+		String sql = " INSERT INTO CustomerCenter_COMMENT ";
 		sql		+= " (NUM, CONTENT, WRITER, REGDATE) ";
 		sql		+= " VALUES ";
 		sql		+= " (  ?,        ?,      ?, SYSDATE )";

@@ -1,4 +1,4 @@
-package app.dash;
+package app.center;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,14 +30,14 @@ public class BoardUpdate extends AppView {
     JTextArea   comment = new JTextArea();
     JScrollPane pane;
     JTable      commentTable = new JTable();
-    DashBoard dash;
+    CustomerService dash;
     BoardVO vo;
     CommentVO cvo;
     
     List<BoardVO> voList;
     
-    public BoardUpdate(DashBoard dash) {
-    	super("후기 보기",dash);
+    public BoardUpdate(CustomerService dash) {
+    	super("고객센터 답변보기",dash);
         this.dash = dash;
         
         // 게시글 수정
@@ -145,7 +145,7 @@ public class BoardUpdate extends AppView {
         		comment.setEnabled(true);
         	}
         });
-        rootPanel.add(btnComWri);
+//        rootPanel.add(btnComWri);
 
         JButton btnComSave = new JButton("댓글 저장");
 
@@ -171,7 +171,7 @@ public class BoardUpdate extends AppView {
         		//	dash.openCommentList(voList);
         	}
         });
-        rootPanel.add(btnComSave);
+//        rootPanel.add(btnComSave);
 
         JButton btnComDel = new JButton("댓글 삭제");
         btnComDel.addActionListener(new ActionListener() {

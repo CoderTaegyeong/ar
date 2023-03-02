@@ -16,7 +16,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import com.google.gson.Gson;

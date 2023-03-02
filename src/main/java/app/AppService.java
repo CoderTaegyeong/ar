@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import entity.PayDTO;
 import test.Debug;
 import util.Style;
 
 public class AppService {
+	private static AppService appService;
 	private List<SubApp> appList = new Vector<>();
 	private AppContainer appContainer = new AppContainer();
-	private static AppService appService;
-
 	private Map<String, Object> appInfoMap = new HashMap<>();
 	
 	private AppService() {}
@@ -21,6 +21,7 @@ public class AppService {
 	public static AppService instance() {
 		return appService == null ? appService = new AppService() : appService;
 	}
+	private PayDialog payDialog = new PayDialog();
 	
 	public void addSubApp(SubApp subApp) {
 		Debug.sysout("addSubApp : " +subApp);
@@ -42,7 +43,11 @@ public class AppService {
 	}
 	
 	public void closeView(AppView... appViews) {
-		for(AppView view : appViews) appContainer.removeView(view);
+		for(AppView view : appViews) appContainer.removeView(view, false);
+	}
+	
+	public void closeAllViews() {
+		appContainer.removeAllViews();
 	}
 	
 	public <T extends SubApp> T getSubApp(Class<T> subAppClass) {
@@ -96,7 +101,12 @@ public class AppService {
 			return "is Null";
 	}
 	
-	public void remove(String key) {
-		appInfoMap.remove(key);
+	public void remove(String... keys) {
+		for(String key : keys)
+			appInfoMap.remove(key);
+	}
+
+	public PayDTO openPayDialog(PayDTO pay) {
+		return payDialog.openPay(pay);
 	}
 }

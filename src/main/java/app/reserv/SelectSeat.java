@@ -14,11 +14,13 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import app.AppService;
 import app.AppView;
 import dao.AirplaneDAO;
 import dao.SeatDAO;
 import dao.TicketDAO;
 import entity.AirplaneDTO;
+import entity.PayDTO;
 import entity.SeatDTO;
 import entity.TicketDTO;
 import gui.Gui;
@@ -48,7 +50,6 @@ import gui.Gui;
 		private Vector<String> seatsNumber = new Vector<String>(); // 여기에 check한 좌석이 저장된다.
 		private Vector<JLabel> seatDetails = new Vector<>();      // 선택된 좌석 check
 
-		private ArrayList<Integer> RowAndCol = new ArrayList<Integer>();
 
 		private JPanel titlePanel = new JPanel();
 		private JPanel leftPanel = new JPanel();
@@ -76,6 +77,7 @@ import gui.Gui;
 
 		
 		public SelectSeat(Reservation reserve) {
+			super("좌석선택",reserve);
 			this.reserve = reserve;
 		}
 
@@ -162,7 +164,7 @@ import gui.Gui;
 			String seatGrade = ticket.getSeatGrade();
 
 			reservedSeat = sDao.getSeatList( airnum, depDate
-					//,seatGrade 
+					,seatGrade 
 					);
 			for (int i = 0; i < reservedSeat.size(); i++) {
 				//System.out.println(reservedSeat.get(i) + " 좌석이 예약되어 있음. ");
@@ -180,20 +182,11 @@ import gui.Gui;
 
 		// 좌석을 완벽히 선택하면 실행되는 메서드
 		public void reserve() {
+			PayDTO pay = new PayDTO();
 			// setReserveDate
 			String seatNumberCheck = "";
 			// set SeatDTO reserved
 			for (int i = 0; i < person; i++) {	
-				// 인원수만큼 티켓 DTO를 만들어준다.
-				// SeatDTO ~ reserved 되게 변경
-				SeatDTO seatDTO = new SeatDTO();
-				seatDTO.setAirnum(ticket.getAirNum());
-				seatDTO.setSeatGrade(ticket.getSeatGrade());
-				seatDTO.setReserved("y");
-				seatDTO.setSeatNumber(seatsNumber.get(i)); // 좌석 번호 넣기
-				//System.out.println(seatDTO.toString());
-				sDao.setSeatReserved(seatDTO);
-				
 				//seatNumber만들기
 				if((person-1) == i ) {
 					seatNumberCheck += seatsNumber.get(i);
@@ -201,8 +194,23 @@ import gui.Gui;
 					seatNumberCheck += (seatsNumber.get(i)+"/");
 				}
 			};
+			
+			
+			AppService.instance().setAttr("id","asdf");
+			pay.setId(AppService.instance().getAttr("id"));
+			pay.setItem(ticket.getAirNum() + " " +
+					ticket.getSeatGrade() + " " + 
+					ticket.getAdultCnt() + " " +
+					ticket.getKidCnt() + " " +
+					ticket.getReserveDate()  + " " + seatNumberCheck);
+			
+			pay.setPrice( ( ticket.getAdultCnt() + ticket.getKidCnt() ) * 100000 );
+			
+			System.out.println(pay);
+			AppService.instance().openPayDialog(pay);
+			System.out.println(pay);
 			// 티켓 도 만들어 줘야함.
-			ticket.setSeatNumber(seatNumberCheck);
+			
 			// ticket insert
 //			ticketDao.insert(ticket); //티켓등록 
 			

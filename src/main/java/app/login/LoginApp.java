@@ -12,6 +12,9 @@ public class LoginApp extends SubApp{
 	private LoginView loginView = new LoginView(this); 
 	private SignUp signUp = new SignUp(this); 
 	private MemberView memberView = new MemberView(this); 
+	private PayInfoView payInfoView = new PayInfoView(this);
+
+	
 	
 	public void openSignUp() {
 		AppService.instance().closeView(loginView, memberView);
@@ -24,10 +27,13 @@ public class LoginApp extends SubApp{
 		AppService.instance().openView(loginView);
 	}
 	
+	public boolean isLogin() {
+		return AppService.instance().getAttribute("member") != null;
+	}
+	
 	@Override
 	public AppView requestView() {
-		boolean isLogin = AppService.instance().getAttribute("Member") != null;
-		if(isLogin) {
+		if(isLogin()) {
 			memberView.showMemberInfo();
 			return memberView;
 		}
@@ -36,7 +42,7 @@ public class LoginApp extends SubApp{
 	}
 	
 	public MemberDTO getMember() {
-		MemberDTO member = (MemberDTO) AppService.instance().getAttribute("Member");
+		MemberDTO member = (MemberDTO) AppService.instance().getAttribute("member");
 		return member;
 	}
 
@@ -47,14 +53,26 @@ public class LoginApp extends SubApp{
 	}
 
 	public void login(String id) {
-		AppService.instance().setAttr("Member",
+		AppService.instance().setAttr("member",
 			DAO.sql.selectOne("select id, password, name, email, phone from members where id = ?", 
 			new MemberRowMapper(), id).get());
+		AppService.instance().setAttr("id", id);
 		AppService.instance().closeView(loginView, signUp);
 	}
 	
 	public void logout() {
-		AppService.instance().remove("Member");
+		AppService.instance().remove("member");
+		AppService.instance().closeAllViews();
 		openLoginView();
+	}
+
+	public void openPayinfo() {
+		payInfoView.createTable();
+		AppService.instance().openView(payInfoView);
+	}
+	
+	@Override
+	public String getTitle() {
+		return "회원 정보";
 	}
 }

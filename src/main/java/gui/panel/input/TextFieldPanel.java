@@ -9,10 +9,12 @@ import javax.swing.JTextField;
 import gui.panel.InputPanel;
 
 public class TextFieldPanel extends InputPanel{
-	private JLabel label;
 	private JTextField textField = new JTextField();
 	
-	{ rootPanel.setLayout(new BorderLayout()) ;}
+	{ 
+		rootPanel.setLayout(new BorderLayout());
+		inputComp = textField;
+	}
 
 	public TextFieldPanel(String name) {
 		this(name, 10, null, null);
@@ -37,14 +39,6 @@ public class TextFieldPanel extends InputPanel{
 		label.setPreferredSize(new Dimension(80, 25));
 		rootPanel.add(label, labelDirection);
 		rootPanel.add(textField, BorderLayout.CENTER);
-	}
-	
-	public void setLabelText(String text) {
-		label.setText(text);
-	}
-
-	public JLabel getLabel() {
-		return label;
 	}
 	
 	public JTextField getTextField() {

@@ -17,9 +17,8 @@ public class DAO {
 	
 	private static DataSource dataSource;
 
-    private static final Object lock = new Object();
-    public static final SqlUtil sql;
-    static { synchronized (lock) { sql = new SqlUtil(getDataSource()); }}	
+//    private static final Object lock = new Object();
+    public static final SqlUtil sql = new SqlUtil(getDataSource());	
 
     private DAO() {}
 

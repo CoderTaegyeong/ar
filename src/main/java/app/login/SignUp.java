@@ -62,7 +62,7 @@ public class SignUp extends AppView implements ActionListener {
 	private LoginApp loginApp;
 	
 	public SignUp(LoginApp loginApp) {
-		super(loginApp);
+		super("회원가입",loginApp);
 		this.loginApp = loginApp;
 		initRootPanel();
 	}

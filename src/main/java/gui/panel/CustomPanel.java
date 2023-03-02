@@ -36,6 +36,10 @@ public abstract class CustomPanel {
 		return this;
 	}
 	
+	public Color getBackground() {
+		return rootPanel.getBackground();
+	}
+	
 	public void removeAll() {
 		rootPanel.removeAll();
 	}

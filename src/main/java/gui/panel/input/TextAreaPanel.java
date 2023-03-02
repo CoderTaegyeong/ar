@@ -2,6 +2,7 @@ package gui.panel.input;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -10,11 +11,13 @@ import javax.swing.JTextArea;
 import gui.panel.InputPanel;
 
 public class TextAreaPanel extends InputPanel{
-	private JLabel label;
 	private JTextArea textArea = new JTextArea();
 	private JScrollPane scroll = new JScrollPane(textArea);
 	
-	{ rootPanel.setLayout(new BorderLayout()) ;}
+	{ 
+		rootPanel.setLayout(new BorderLayout());
+		inputComp = textArea;
+	}
 
 	public JScrollPane getScroll() {
 		return scroll;
@@ -56,11 +59,7 @@ public class TextAreaPanel extends InputPanel{
 		label.setText(text);
 	}
 
-	public JLabel getLabel() {
-		return label;
-	}
-	
-	public JTextArea getTextField() {
+	public JTextArea getTextArea() {
 		return textArea;
 	}
 
@@ -84,5 +83,9 @@ public class TextAreaPanel extends InputPanel{
 	
 	public void setEditable(boolean editable) {
 		textArea.setEditable(editable);
-	};
+	}
+
+	public void setFont(Font font) {
+		textArea.setFont(font);
+	}
 }

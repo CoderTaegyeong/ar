@@ -12,7 +12,10 @@ public class PasswordPanel extends InputPanel{
 	private JLabel label;
 	private JPasswordField passwordField = new JPasswordField();
 	
-	{ rootPanel.setLayout(new BorderLayout()) ;}
+	{ 
+		rootPanel.setLayout(new BorderLayout());
+		inputComp = passwordField;
+	}
 
 	public PasswordPanel(String name) {
 		this(name, 10, null, null);

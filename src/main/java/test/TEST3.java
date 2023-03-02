@@ -1,19 +1,17 @@
 package test;
 
-import app.AppView;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import gui.Gui;
 
 public class TEST3 {
 	public static void main(String[] args) {
-		AppView a = new AppView() {
-			
-			@Override
-			public void initRootPanel() {
-				// TODO Auto-generated method stub
-				
-			}
-		};
-		System.out.println(a.getClass().getName());
-		System.out.println(a.getClass().getSimpleName());
-		System.out.println(a);
+		JFrame f = Gui.createFrame(new JPanel());
+		f.setLocation(540, 440);
+		JFrame f2 = Gui.createFrame(new JPanel());
+		f.setSize(500, 400);
+		f2.setSize(300,200);
+		Gui.placeSubWindow(f, f2, 4);
 	}
 }

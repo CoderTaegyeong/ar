@@ -16,18 +16,18 @@ import java.util.Arrays;
 //
 
 public class PackageDTO {
-	private Integer id;
+	private Integer num;
 	private byte[] image;
 	private String title;
 	private String travelLoc;
 	private String travelDays; 
 	private Integer price;
 	private String detailText;
-	public Integer getId() {
-		return id;
+	public Integer getNum() {
+		return num;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setNum(Integer num) {
+		this.num = num;
 	}
 	public byte[] getImage() {
 		return image;
@@ -67,7 +67,7 @@ public class PackageDTO {
 	}
 	@Override
 	public String toString() {
-		return "PackageDTO [id=" + id + ", image=" + image + ", title=" + title + ", travelLoc=" + travelLoc
+		return "PackageDTO [num=" + num + ", image=" + image + ", title=" + title + ", travelLoc=" + travelLoc
 				+ ", travelDays=" + travelDays + ", price=" + price + ", detailText=" + detailText + "]";
 	}
 	

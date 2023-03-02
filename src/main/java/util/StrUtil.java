@@ -1,5 +1,7 @@
 package util;
 
+import java.util.Date;
+
 public class StrUtil {
 	private StrUtil() {}
 	public static String removeLast(String str, int n) {
@@ -11,6 +13,21 @@ public class StrUtil {
 	
 	public static String removeLast(String str) {
 		return removeLast(str, 1);
+	}
+	
+	public static String selectQuery(String tableName, String[] columns) {
+		return selectQuery(tableName, columns, "");
+	}
+	
+	public static String selectQuery(String tableName, String[] columns, String where) {
+		return "SELECT " + String.join(",", columns) +
+			   " FROM " + tableName +" "+ where;
+	}
+	
+	public static Date now() {
+		long currentTimeSeconds = (System.currentTimeMillis() / 1000) * 1000;
+		Date currentDate = new Date(currentTimeSeconds);
+		return currentDate; 
 	}
 	
 	public static String addBr(String... strings) {

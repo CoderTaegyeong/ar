@@ -83,6 +83,7 @@ public class BorderLayoutPanel extends CustomPanel{
 	
 	public JScrollPane newScroll(JComponent comp, String direction) {
 		JScrollPane scrollPane = new JScrollPane(comp);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		rootPanel.add(scrollPane, direction);
 		return scrollPane;
 	}

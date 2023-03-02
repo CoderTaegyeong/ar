@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import gui.panel.CustomPanel;
 
 public class GridBagPanel extends CustomPanel{
-	private GridBagConstraints gbc = new GridBagConstraints();
+	public GridBagConstraints gbc = new GridBagConstraints();
 	private int maxgridx;
 	
 	{ rootPanel.setLayout(new GridBagLayout()); alignLeft(); }
@@ -44,10 +44,6 @@ public class GridBagPanel extends CustomPanel{
 	
 	public void add(JComponent comp, int gridx, int gridy) {
 		add(comp, gridx, gridy, 1, 1);
-	}
-	
-	public GridBagConstraints getConstraints() {
-		return gbc;
 	}
 	
 	public JPanel newPanel(int row, int weighty) {

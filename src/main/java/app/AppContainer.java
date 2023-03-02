@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import app.admin.AdminApp;
 import app.view.TextView;
 import entity.MemberDTO;
+import entity.PayDTO;
 import gui.WrapFrame;
 import gui.panel.ImagePanel;
 import gui.panel.button.ButtonPanel;
@@ -145,7 +146,7 @@ public class AppContainer {
 	}
     
     public void moveClick(int d) {
-    	if(AppService.instance().getAttribute("Member") == null) {
+    	if(AppService.instance().getAttribute("member") == null) {
     		WrapFrame.alert("로그인 해주세요.", cardPanel);
     	}else {
     		move(d);
@@ -164,7 +165,7 @@ public class AppContainer {
 			viewIconLabel.setIcon(contIcon);
 			cardIndex = -1;
 		} else if(d == -200 && cardIndex >= 0 && cardIndex < viewList.size()) {
-			removeView(viewList.get(cardIndex));
+			removeView(viewList.get(cardIndex), false);
 		} else {
 			cardIndex += d;
 			if(cardIndex < 0) cardIndex = viewList.size() -1;
@@ -182,8 +183,8 @@ public class AppContainer {
     	sysout("Remove Views -- View Count : "+ viewCount, "removeCount : "+ removeCount);
     }
     
-	public void removeView(AppView appView) {
-		if(appView != null && appView.close() && viewList.contains(appView)) {
+	public void removeView(AppView appView, boolean force) {
+		if(appView != null && (appView.close() || force) && viewList.contains(appView)) {
 			cardPanel.remove(appView.getPanel());
 			cardLayout.removeLayoutComponent(appView.getPanel());
 			viewList.remove(appView);
@@ -191,6 +192,11 @@ public class AppContainer {
 		}
 		updateViewCount();
 		sysout("Remove View : " + appView, "View List:" +viewList);
+	}
+	
+	public void removeAllViews() {
+	    new Vector<>(viewList).forEach(view->removeView(view,true));
+	    sysout("Remove All Views...");
 	}
 	
 	public void addView(AppView appView) {
@@ -321,8 +327,11 @@ public class AppContainer {
 		}
 		
 		if(i == 5) {
-//			sysout(AppService.instance().getAttr("Member"));
-			topPanel.setBackgrounds(Color.red);
+			PayDTO p = new PayDTO();
+			p.setId(AppService.instance().getAttr("id"));
+			p.setItem("TEST 324020원의 상품을 구매");
+			p.setPrice(324020);
+			AppService.instance().openPayDialog(p);
 		}
 		if( i == 6) {
 			WrapFrame.greenAlert("Success !", iconPanelList.get(0).getPanel(), font(25));
@@ -334,7 +343,7 @@ public class AppContainer {
 		}
 		if(i == 8) {
 			MemberDTO member = new MemberDTO("dummy","1234","name","010-0100-1211","ggg@gmail.com");
-			AppService.instance().setAttr("Member", member);
+			AppService.instance().setAttr("member", member);
 			sysout("로그인 : " + member);
 		}
 	}

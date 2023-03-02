@@ -1,18 +1,15 @@
 package app.view;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.util.function.Consumer;
 
 import javax.swing.JButton;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import app.AppService;
 import app.AppView;
 import app.SubApp;
 import gui.Gui;
@@ -41,12 +38,15 @@ public class TermsView extends AppView{
 		textArea.setEditable(false);
 		textArea.setFont(font == null ? Gui.font(30) : font);
 		RadioButtonPanel rbPanel = new RadioButtonPanel();
+		Gui.setMargin(rbPanel, 0, 20, 0, 0);
 		rbPanel.setLayout(new GridLayout(2,1));
 		rbPanel.addButton("동의", b->nextButton.setEnabled(true));
 		rbPanel.addButton("동의 안함", b->nextButton.setEnabled(false));
 		rbPanel.setSelected(1);
 		botPanel.addCenter(rbPanel);
-		nextButton = Gui.createButton(buttonText == null ? "Next" : buttonText, b->action.accept(null));
+		nextButton = Gui.createButton(buttonText == null ? "Next" : buttonText, Gui.font(20), b->{
+			AppService.instance().closeView(this); action.accept(null);});
+		nextButton.setPreferredSize(new Dimension(120, 40));
 		nextButton.setEnabled(false);
 		botPanel.addEast(nextButton);
 		scroll.setViewportView(textArea);

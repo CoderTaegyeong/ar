@@ -3,9 +3,10 @@ package app;
 import javax.swing.Timer;
 
 import app.admin.AdminApp;
+import app.center.CustomerService;
 import app.dash.DashBoard;
 import app.login.LoginApp;
-import app.membership.MemberShip;
+import app.membership.Membership;
 import app.reserv.Reservation;
 import app.travel.Travel;
 import entity.MemberDTO;
@@ -27,13 +28,15 @@ public class ArApplication {
 		Debug.sysout(getClass() +" start...");
 		
 		AppService service = AppService.instance();
-		service.setAttr("Member", new MemberDTO());
+		service.setAttr("member", new MemberDTO("dummy","1234","name1","",""));
+		service.setAttr("id", "dummy");
 		service.addSubApp(new LoginApp());
 		service.addSubApp(new Reservation());
 		service.addSubApp(new DashBoard());
 		service.addSubApp(new AdminApp());
 		service.addSubApp(new Travel());
-		service.addSubApp(new MemberShip());
+		service.addSubApp(new Membership());
+		service.addSubApp(new CustomerService());
 		service.start();
 
 		//앱 시작시 로그인 창을 띄운다

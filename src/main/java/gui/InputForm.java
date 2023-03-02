@@ -1,19 +1,96 @@
 package gui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+
+import gui.panel.InputPanel;
 import gui.panel.input.InputComponent;
+import gui.panel.input.PasswordPanel;
+import gui.panel.input.TextAreaPanel;
+import gui.panel.input.TextFieldPanel;
 
 public class InputForm<T> {
 	private Map<String,InputComponent> compMap = new HashMap<>();
 
+	public int columns = 15, rows = 10, labelWidth = 80, labelHeight = 30;
+	public String labelDirection = "West";
+	public Color labelFgColor = Color.BLACK, fgColor = Color.BLACK, 
+			bgColor = Color.WHITE, panelBgColor;
+	public Font font = Gui.font(12);
+	
+	public void setLabelProp(int labelWidth, int labelHeight, Font font, Color labelFgColor, String labelDirection) {
+		this.font = font;
+		this.labelWidth = labelWidth;
+		this.labelHeight = labelHeight;
+		this.labelFgColor = labelFgColor;
+		this.labelDirection = labelDirection;
+	}
+	public void setInputProp(int columns, int rows, Color fgColor, Color bgColor) {
+		this.columns = columns;
+		this.rows = rows;
+		this.fgColor = fgColor;
+		this.bgColor = bgColor;
+	}
+	
+	public InputForm() {}
+		
+	public InputForm(int columns, int labelWidth, Font font) {
+		this.columns = columns;
+		this.labelWidth = labelWidth;
+		this.font = font;
+	}
+
+	public TextAreaPanel createTAP(String name) {
+		return createTAP(name, null);
+	}
+	
+	public TextAreaPanel createTAP(String name, String labelText) {
+		TextAreaPanel taPanel = new TextAreaPanel(name, columns, rows, labelText, labelDirection);
+		setProperties(taPanel);
+		return taPanel;
+	}
+	
+	public TextFieldPanel createTFP(String name) {
+		return createTFP(name, null);
+	}
+	
+	public TextFieldPanel createTFP(String name, String labelText) {
+		TextFieldPanel tfPanel = new TextFieldPanel(name, columns, labelText, labelDirection);
+		setProperties(tfPanel);
+		return tfPanel;
+	}
+	
+	private void setProperties(InputPanel inputPanel) {
+		inputPanel.getInput().setForeground(fgColor);
+		inputPanel.getLabel().setForeground(labelFgColor);
+		inputPanel.getLabel().setFont(font);
+		inputPanel.getLabel().setPreferredSize(new Dimension(labelWidth, labelHeight));
+		if(panelBgColor != null) inputPanel.setBackground(panelBgColor);
+		addInputComp(inputPanel);
+	}
+	
+	public PasswordPanel createPWP(String name, String labelText) {
+		PasswordPanel pwPanel = new PasswordPanel(name, columns, labelText, labelDirection);
+		setProperties(pwPanel);
+		return pwPanel;
+	}
+	
 	public InputComponent addInputComp(InputComponent inputComp) {
 		compMap.put(inputComp.getName(), inputComp);
 		return inputComp;
+	}
+	
+	public InputComponent getInputComp(String name) {
+		return compMap.get(name);
 	}
 	
 	public void setEditable(boolean editable) {

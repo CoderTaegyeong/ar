@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
+import gui.panel.CustomPanel;
+
 public class WrapFrame implements Runnable {
 	private JPanel rootPanel = new JPanel(new BorderLayout());
 	private JFrame rootFrame = new JFrame();
@@ -180,6 +182,15 @@ public class WrapFrame implements Runnable {
 	public static void greenAlert(JComponent parent) {
 		greenAlert(null, parent, null);
 	}
+	
+	public static void greenAlert(CustomPanel customPanel) {
+		greenAlert(null, customPanel.getPanel(), null);
+	}
+	
+	public static void greenAlert(String msg, CustomPanel customPanel) {
+		greenAlert(msg, customPanel.getPanel(), null);
+	}
+
 	
 	public static void greenAlert(String msg, JComponent parent) {
 		greenAlert(msg, parent, null);

@@ -34,12 +34,10 @@ public class TravelPackage extends AppView {
 	@Override
 	public void initRootPanel() {
 		rootPanel = blPanel.getPanel();
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.getVerticalScrollBar().setUnitIncrement(20);
 		
 		ButtonPanel buttonPanel = new ButtonPanel();
 		buttonPanel.addButton("Refresh", b->action(1));
-		blPanel.addSouth(buttonPanel);
 	}
 	
 	private void action(int i) {

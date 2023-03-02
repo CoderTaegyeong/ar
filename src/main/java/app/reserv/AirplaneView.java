@@ -4,21 +4,17 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import app.AppView;
 import dao.DAO;
 import gui.Gui;
-import gui.table.ListTable;
 import gui.table.StringTable;
 
 public class AirplaneView extends AppView {
@@ -34,6 +30,7 @@ public class AirplaneView extends AppView {
 	// 작성자: 김태경(CoderTaegyeong)
 	
 	public AirplaneView(Reservation r) {
+		super("항공 일정",r);
 		this.reserv = r;
 		initRootPanel();
 	}
@@ -62,7 +59,7 @@ public class AirplaneView extends AppView {
 		
 		// 확인 버튼: 출발지, 도착지 고르는 페이지로 이동
 		confirmBtn = new JButton("예약하기");
-		confirmBtn.setBounds(280, 558, 136, 44);
+		confirmBtn.setBounds(200, 558, 136, 44);
 		confirmBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				reserv.openReservView();
@@ -70,7 +67,11 @@ public class AirplaneView extends AppView {
 		});
 		confirmBtn.setFont(new Font("맑은 고딕", Font.BOLD, 15));
 		confirmBtn.setBackground(new Color(175, 238, 238));
+		
+		JButton listBtn = Gui.createButton("예약목록",Color.BLACK, confirmBtn.getBackground(), confirmBtn.getFont(), b->reserv.openReservData());
+		listBtn.setBounds(350, 558, 136, 44);
+		rootPanel.add(listBtn);
+		
 		rootPanel.add(confirmBtn);
 	}
-
 }

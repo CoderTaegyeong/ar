@@ -1,4 +1,4 @@
-package app.dash;
+package app.center;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +16,12 @@ import entity.BoardVO;
 public class BoardInsert extends AppView {
 	private JTextField title;
     private JTextField writer;
-            DashBoard  dash;
+            CustomerService  dash;
             JFrame     frame;
             BoardList  bList = null;
   
-    public BoardInsert(DashBoard dash) {
-    	super("후기 작성",dash);
+    public BoardInsert(CustomerService dash) {
+    	super("고객센터 글작성",dash);
     	this.dash = dash;
     	rootPanel.setLayout(null);
     }

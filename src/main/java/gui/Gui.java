@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.LayoutManager;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.KeyAdapter;
@@ -17,7 +18,9 @@ import java.awt.event.MouseEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 import java.util.function.Consumer;
 
 import javax.imageio.ImageIO;
@@ -28,6 +31,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
@@ -48,9 +52,43 @@ public final class Gui {
 //    public static final String MAC = "com.apple.laf.AquaLookAndFeel";
     
     public static final Color DARK_BLUE = new Color(20, 20, 70);
+	public static final Color DARK_GREEN = new Color(33,88,33);
+	public static final Color DARK_RED = new Color(88,33,33);
     
 	private Gui() {}
 
+	/**
+	 * copy property Background, Foreground, Font
+	 */
+	public static List<JComponent> copyProp(JComponent from, JComponent... to) {
+		Vector<JComponent> comps = new Vector<>();
+		comps.add(from);
+		for(JComponent toComp : to) {
+			toComp.setBackground(from.getBackground());
+			toComp.setForeground(from.getForeground());
+			toComp.setFont(from.getFont());
+			comps.add(toComp);
+		}
+		return comps;
+	}
+	
+	public static JPanel createPanel(List<JComponent> comps) {
+		JComponent[] comp = comps.toArray(new JComponent[comps.size()]);
+		return createPanel(null, null, comp);
+	}
+	
+	public static JPanel createPanel(JComponent... comps) {
+		return createPanel(null, null, comps);
+	}
+	
+	public static JPanel createPanel(Color bgColor, LayoutManager layout, JComponent... comps) {
+		JPanel panel = new JPanel();
+		if(layout != null) panel.setLayout(layout);
+		if(bgColor != null) panel.setBackground(bgColor);
+		for(JComponent comp : comps) panel.add(comp);
+		return panel;
+	}
+	
 	public static JComponent border(JComponent comp, Color color, int t) {
 		comp.setBorder(BorderFactory.createLineBorder(color, t));
 		return comp;
@@ -185,6 +223,10 @@ public final class Gui {
 		return image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 	}
 	
+	public static void addBorderOnEnterMouse(JComponent comp) {
+		addBorderOnEnterMouse(comp, null, Color.RED, Cursor.HAND_CURSOR, 1);
+	}
+	
 	public static void addBorderOnEnterMouse(JComponent comp, Consumer<?> action) {
 		addBorderOnEnterMouse(comp, action, Color.RED, Cursor.HAND_CURSOR, 1);
 	}
@@ -199,7 +241,7 @@ public final class Gui {
 		comp.setCursor(new Cursor(cursor));
 		comp.setBorder(empty);
 		comp.addMouseListener(new MouseAdapter() {
-			public void mouseReleased(MouseEvent e) { action.accept(null); }
+			public void mouseReleased(MouseEvent e) { if(action !=null) action.accept(null); }
 			public void mouseEntered(MouseEvent e) { comp.setBorder(line); }
 			public void mouseExited(MouseEvent e) { comp.setBorder(empty); }
 		});
@@ -238,6 +280,8 @@ public final class Gui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.add(comp);
 		frame.pack();
+		Dimension size = frame.getSize();
+		if(size.width <=100 || size.height <= 50) frame.setSize(700,700);
 		frame.setVisible(true);
 		return frame;
 	}
@@ -245,11 +289,13 @@ public final class Gui {
 	/**
 	 * position 0: Top-left, 1: Top-right, 2: bottom-left, 3: bottom-right, 4: Center
 	 */
-	public static void placeSubWindow(Window parentWindow, Window subWindow, int position) {
-	    int parentX = parentWindow.getX();
-	    int parentY = parentWindow.getY();
-	    int parentWidth = parentWindow.getWidth();
-	    int parentHeight = parentWindow.getHeight();
+	public static void placeSubWindow(Rectangle parentRect, Window subWindow, int position) {
+		if(parentRect == null || subWindow == null) return;
+			
+		int parentX = parentRect.x;
+	    int parentY = parentRect.y;
+	    int parentWidth = parentRect.width;
+	    int parentHeight = parentRect.height;
 	    int subWidth = subWindow.getWidth();
 	    int subHeight = subWindow.getHeight();
 	    
@@ -271,7 +317,11 @@ public final class Gui {
 	            break;
 	        default:
 	            throw new IllegalArgumentException("Invalid position: " + position);
-	    }
+	    }	}
+
+	public static void placeSubWindow(Window parentWindow, Window subWindow, int position) {
+		if(parentWindow != null)
+			placeSubWindow(parentWindow.getBounds(), subWindow, position);
 	}
 	
 	public static void moveToCenter(Window window, int width, int height) {
@@ -311,8 +361,16 @@ public final class Gui {
 		return button;
 	}
     
-    public static JButton createButton(String text, Color bgColor, Color fgColor, Font font, Consumer<?> action) {
-    	JButton button = new JButton(text);
+    public static JButton greenButton(String buttonText, Consumer<?> action) {
+    	return createButton(buttonText, Color.WHITE, DARK_GREEN, Gui.font(14),action);
+    }
+
+    public static JButton redButton(String buttonText, Consumer<?> action) {
+    	return createButton(buttonText, Color.WHITE, DARK_RED, Gui.font(14),action);
+    }
+    
+    public static JButton createButton(String buttonText, Color fgColor, Color bgColor, Font font, Consumer<?> action) {
+    	JButton button = new JButton(buttonText);
     	button.setBackground(bgColor);
     	button.setForeground(fgColor);
     	button.setFont(font);

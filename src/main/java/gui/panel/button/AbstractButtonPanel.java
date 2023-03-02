@@ -120,4 +120,8 @@ public abstract class AbstractButtonPanel extends CustomPanel {
 		super.removeAll();
 		buttonList.clear();
 	}
+	
+	public void setBackgrounds(Color bgColor) {
+		buttonList.forEach(b->b.setBackground(bgColor));
+	}
 }

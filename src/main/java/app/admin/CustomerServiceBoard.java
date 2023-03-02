@@ -2,12 +2,8 @@ package app.admin;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JScrollPane;
-
-import app.AppService;
 import app.AppView;
 import dao.DAO;
-import dao.SqlUtil;
 import gui.Gui;
 import gui.panel.button.ButtonPanel;
 import gui.panel.layout.BorderLayoutPanel;
