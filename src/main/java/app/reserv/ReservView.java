@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -16,11 +17,10 @@ import javax.swing.JPanel;
 
 import com.toedter.calendar.JDateChooser;
 
+import app.AppService;
 import app.AppView;
 import dao.DAO;
 import entity.TicketDTO;
-import gui.WrapFrame;
-import test.Debug;
 
 // 작성자: 김태경(CoderTaegyeong)
 
@@ -58,6 +58,14 @@ public class ReservView extends AppView{
 		seatGrLbl.setBounds(136, 143, 76, 24);
 		rootPanel.add(seatGrLbl);
 		// 좌석 등급 콤보박스
+		
+		JComboBox<String> airNumBox = new JComboBox<String>();
+		List<String> numList = DAO.sql.select("select distinct airnum from seat").get(0);
+		numList.forEach(s->airNumBox.addItem(s));
+		airNumBox.setBounds(307, 114, 138, 23);
+		rootPanel.add(airNumBox);
+		
+		
 		JComboBox seatCombo = new JComboBox();
 		seatCombo.setBackground(new Color(255, 255, 255));
 		seatCombo.setModel(new DefaultComboBoxModel(new String[] {"이코노미", "비즈니스", "퍼스트클래스"}));
@@ -218,7 +226,9 @@ public class ReservView extends AppView{
 				
 				// DTO로 선택 값 전송
 				ticketDTO = new TicketDTO();
-				
+				ticketDTO.setCustomerId(AppService.instance().getAttr("id"));
+				ticketDTO.setCustomerName(AppService.instance().getAttr("name"));
+				ticketDTO.setAirNum(airNumBox.getSelectedItem().toString());
 				ticketDTO.setSeatGrade(seatGrade);
 				ticketDTO.setDepPlace(depPlace);
 				ticketDTO.setArrPlace(arrPlace);

@@ -34,10 +34,11 @@ public class SeatDAO {
 		sql += " FROM SEAT S JOIN AIRPLAN A ON S.AIRNUM = A.AIRNUM";
 		sql += " WHERE S.AIRNUM = ? AND S.DEPDATE = ? AND S.SEATGRADE = ? AND S.RESERVED = 'Y'";
 		ArrayList<String> list = new ArrayList<>();
-
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-
+		
+//		System.out.println(airnum + "   "  + depDate + "   "  + seatGrade );
+		
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, airnum);
@@ -45,7 +46,7 @@ public class SeatDAO {
 			pstmt.setString(3, seatGrade);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				String seatNumber = rs.getString("SEATNUM");
+				String seatNumber = rs.getString("SEATNUMBER");
 				list.add(seatNumber);
 			}
 		} catch (SQLException e) {
@@ -65,26 +66,25 @@ public class SeatDAO {
 //----------------------------- seatDAO.setSeatReserved(); SeatGrade가 없어서수정-----------------------------------
 	public void setSeatReserved(SeatDTO seatDTO) {
 		String airnum = seatDTO.getAirnum();
-		String seatNumber = seatDTO.getSeatNumber();
-		String seatGrade = seatDTO.getSeatGrade();
-		String depdate = seatDTO.getDepDate();
+//		String seatNumber = seatDTO.getSeatNumber();
+//		String seatGrade = seatDTO.getSeatGrade();
+//		String depdate = seatDTO.getDepDate();
 
+		System.out.println(seatDTO);
+		
 		String sql = "";
-		sql += "INSERT INTO SEAT ";
-		sql += " VALUES (?,?,?,?,?) ";
+		sql += "UPDATE SEAT SET RESERVED = ? ";
+		sql += "WHERE AIRNUM = ? AND SEATNUMBER = ?";
 
 		PreparedStatement pstmt = null;
 
 		try {
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, airnum);
-			pstmt.setString(2, seatNumber);
-			pstmt.setString(3, seatGrade);
-			pstmt.setString(4, "Y");
-			pstmt.setString(5, depdate);
+			pstmt.setString(1, "Y");
+			pstmt.setString(2, airnum);
+			pstmt.setString(3, seatDTO.getSeatNumber());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 		}

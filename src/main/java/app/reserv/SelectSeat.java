@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import app.AppService;
 import app.AppView;
 import app.login.LoginApp;
+import app.membership.Membership;
 import dao.DAO;
 import dao.SeatDAO;
 import dao.TicketDAO;
@@ -33,7 +34,7 @@ import util.StrUtil;
       // DTO
       private TicketDTO ticket;
 
-      private ArrayList<String> reservedSeat = new ArrayList<String>();
+      private ArrayList<String> reservedSeat;
       
       // DAO
       private SeatDAO sDao = new SeatDAO();
@@ -84,11 +85,16 @@ import util.StrUtil;
 
       public void setTicket(TicketDTO ticket) {
          this.ticket = ticket;
+         System.out.println(this.ticket);
+         MemberDTO member = AppService.instance().getSubApp(LoginApp.class).getMember();
+         reservedSeat = new ArrayList<String>();
+         ticket.setCustomerName(member.getName());
+         ticket.setCustomerId(member.getId());
          getRowAndCol();
          setInfotoLabel();
-         setPerson();
          buildGUI();
-         setEvent();
+         createLabel();
+         setEvent();//
          checkInfo();
       }
 
@@ -106,7 +112,7 @@ import util.StrUtil;
 
       }
 
-      public void setPerson() {
+      public void createLabel() {
          for (int i = 0; i < 5; i++) {
 //            JLabel jLabel = new JLabel("좌석 " + (i + 1));
             JLabel jLabel = new JLabel();
@@ -158,10 +164,7 @@ import util.StrUtil;
          String airnum    = ticket.getAirNum();
          String depDate   = ticket.getDepDate();
          String seatGrade = ticket.getSeatGrade();
-
-         reservedSeat = sDao.getSeatList( airnum, depDate
-               ,seatGrade 
-               );
+         reservedSeat = sDao.getSeatList(airnum, depDate,seatGrade);
          for (int i = 0; i < reservedSeat.size(); i++) {
             //System.out.println(reservedSeat.get(i) + " 좌석이 예약되어 있음. ");
             String text = reservedSeat.get(i);
@@ -172,6 +175,7 @@ import util.StrUtil;
             seats[row][col].setEnabled(false);
          }
          
+         System.out.println(reservedSeat);
          int leftSeat = (row*col - reservedSeat.size());
          seatInfoDetailLabel.setText(Integer.toString(leftSeat) + " / " + row * col );
       }
@@ -191,7 +195,6 @@ import util.StrUtil;
             }
          }
          
-         AppService.instance().setAttr("id","asdf");
          pay.setId(AppService.instance().getAttr("id"));
          pay.setItem(ticket.getSeatGrade() +" " + 
         		    ticket.getAdultCnt()+" " +
@@ -201,9 +204,7 @@ import util.StrUtil;
          pay.setPrice( ( ticket.getAdultCnt() + ticket.getKidCnt() ) * 1000000);
          price = pay.getPrice();
          
-         System.out.println(pay);
          AppService.instance().openPayDialog(pay); //pay 창 엶.
-         System.out.println(pay);
          
          if(pay.ok()) {
             nextpage();
@@ -224,7 +225,8 @@ import util.StrUtil;
             SeatDTO seatDTO = new SeatDTO();
             seatDTO.setAirnum(ticket.getAirNum());
             seatDTO.setSeatGrade(ticket.getSeatGrade());
-            seatDTO.setReserved("y");
+            seatDTO.setDepDate(ticket.getDepDate());
+            seatDTO.setReserved("Y");
             seatDTO.setSeatNumber(seatsNumber.get(i)); // 좌석 번호 넣기
             //System.out.println(seatDTO.toString());
             sDao.setSeatReserved(seatDTO);
@@ -234,18 +236,10 @@ import util.StrUtil;
          ticket.setSeatNumber(SeatNum);
          
          // ticket insert
-        
-         MemberDTO member = AppService.instance().getSubApp(LoginApp.class).getMember();
-         ticket.setCustomerName(member.getName());
-         ticket.setCustomerId(member.getId());
          SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
          ticket.setReserveDate(sdf.format(StrUtil.now()));
          
-         DAO.sql.insert("TICKET", ticket);
-         
-//         ticketDao.insert(ticket); //티켓등록 
-         
-         System.out.println(ticket);
+         DAO.sql.insert("TICKET", ticket, "num", "ticket_seq");
          
          reserve.openCompletePay(ticket, SeatNum, price );
       }
@@ -277,7 +271,6 @@ import util.StrUtil;
 
                
             seatDetails.forEach(label->label.setText(""));
-            System.out.println(seatDetails);
             seatsNumber.clear();
             int a=0;
             for(int r = 0; r< row; r++) {
@@ -290,7 +283,6 @@ import util.StrUtil;
             }
             for (int i = 0; i < seatsNumber.size(); i++) {                       // seatsDetails에는 5개의 JLabel 이 담겨있다. 104번째줄.
                seatDetails.get(i).setText(seatsNumber.get(i));
-               System.out.println(seatsNumber.get(i));
             }
             
             
@@ -313,11 +305,14 @@ import util.StrUtil;
 
       public void buildGUI() {
          rootPanel.removeAll();
+         panel_2.removeAll();
+         panel_1.removeAll();
+         seatsNumber.clear();
          rootPanel.setLayout(null);
          rootPanel.setBounds(0,0, 1000,1000);
          rootPanel.setBackground(Color.red);
-          seats = new JCheckBox[row][col];
-          rootPanel.setBackground(Color.yellow);
+         seats = new JCheckBox[row][col];
+         rootPanel.setBackground(Color.yellow);
          titlePanel.setBounds(0, 0, 812, 31);
          rootPanel.add(titlePanel);
          titlePanel.setLayout(null);
@@ -407,6 +402,10 @@ import util.StrUtil;
          reCheckSeatButton.setEnabled(false);
          //repaint();
          
+//         JButton test;
+//         rootPanel.add(test = Gui.createButton("test", b->setTicket(new TicketDTO())));
+//         rootPanel.add(test = Gui.createButton("test", b->setTicket(new TicketDTO())));
+//         test.setBounds(500, 500, 50, 50);
          
          // 행   
          for (int i = 0; i < row; i++) {
@@ -438,7 +437,7 @@ import util.StrUtil;
                chkBox.setBounds(61 + (i * 22), 72 + (j * 20), 22, 15);
                seats[j][i] = chkBox; // 좌석을 seats배열에 넣어줌. 2차원배열로 생성.
                char input = (char) (j + 65);
-               chkBox.setText(input + "," + Integer.toString(i + 1)); // 좌석의 값들을 얻을 수 잇음.
+               chkBox.setText(input + "" + Integer.toString(i + 1)); // 좌석의 값들을 얻을 수 잇음.
                panel_2.add(chkBox);
             }
          }
@@ -455,23 +454,28 @@ import util.StrUtil;
             this.row = 10;
             this.col = 2;
          }
-         
       }
+      
       public void initRootPanel() {}
       
       public static void main(String[] args) {
          AppService a = AppService.instance();
          Reservation r=  new Reservation();
+         MemberDTO m = new MemberDTO("aa1","aa2","aa3","aa4","aa5");
+         a.setAttr("member", m);
+         a.setAttr("id", m.getId());
          a.addSubApp(r);
+         a.addSubApp(new LoginApp());
          a.start();
-         a.openView(r.requestView());
-
+         a.addSubApp(new Membership());
+         
          TicketDTO t = new TicketDTO();
+         t.setAirNum("OZ1075");
          t.setAdultCnt(3);
+         t.setDepDate("2023-03-04");
          t.setSeatGrade("이코노미");
-         SelectSeat s = new SelectSeat(r);
-         s.setTicket(t);
-         r.openReservView();
+         r.openSeatView(t);
+//         r.openReservView();
 //         Gui.createFrame(s.getPanel()).setSize(1000,800);
       }
    }   

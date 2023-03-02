@@ -53,10 +53,11 @@ public class LoginApp extends SubApp{
 	}
 
 	public void login(String id) {
-		AppService.instance().setAttr("member",
-			DAO.sql.selectOne("select id, password, name, email, phone from members where id = ?", 
-			new MemberRowMapper(), id).get());
-		AppService.instance().setAttr("id", id);
+		MemberDTO member = DAO.sql.selectOne("select id, password, name, email, phone from members where id = ?", 
+				new MemberRowMapper(), id).get();
+		AppService.instance().setAttr("member", member);
+		AppService.instance().setAttr("id", member.getId());
+		AppService.instance().setAttr("name", member.getName() );
 		AppService.instance().closeView(loginView, signUp);
 	}
 	

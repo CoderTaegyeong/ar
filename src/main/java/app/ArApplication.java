@@ -28,8 +28,8 @@ public class ArApplication {
 		Debug.sysout(getClass() +" start...");
 		
 		AppService service = AppService.instance();
-		service.setAttr("member", new MemberDTO("dummy","1234","name1","",""));
-		service.setAttr("id", "dummy");
+//		service.setAttr("member", new MemberDTO("dummy","1234","name1","",""));
+//		service.setAttr("id", "dummy");
 		service.addSubApp(new LoginApp());
 		service.addSubApp(new Reservation());
 		service.addSubApp(new DashBoard());
@@ -40,7 +40,7 @@ public class ArApplication {
 		service.start();
 
 		//앱 시작시 로그인 창을 띄운다
-//		service.openView(service.getSubApp(LoginApp.class).requestView());
+		service.openView(service.getSubApp(LoginApp.class).requestView());
 		
 		//전체 동작 타이머 시작
 		new Timer(1000, e->service.update()).start();

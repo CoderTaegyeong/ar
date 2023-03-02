@@ -6,6 +6,7 @@ import java.util.Vector;
 import app.AppService;
 import app.AppView;
 import app.SubApp;
+import dao.DAO;
 import entity.TicketDTO;
 
 public class Reservation extends SubApp {
@@ -44,7 +45,14 @@ public class Reservation extends SubApp {
 	}
 
 	public void openReservData() {
+		reservData.makeTable();
 		AppService.instance().openView(reservData);
+	}
+	
+	public void cancel(String airNum, String seatNumber, String seatGrade, String depDate) {
+		DAO.sql.getJdbcTemplate().update(
+				"UPDATE SEAT SET RESERVED = 'N' WHERE AIRNUM = ? and SEATNUMBER = ? and SEATGRADE = ? and DEPDATE = ?" ,
+				airNum , seatNumber, seatGrade, depDate);
 	}
 	
 	@Override

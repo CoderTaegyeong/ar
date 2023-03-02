@@ -47,4 +47,9 @@ public class SeatDTO extends JCheckBox{
 	public void setDepDate(String depDate) {
 		this.depDate = depDate;
 	}
+	@Override
+	public String toString() {
+		return "SeatDTO [airnum=" + airnum + ", seatNumber=" + seatNumber + ", seatGrade=" + seatGrade + ", reserved="
+				+ reserved + ", depDate=" + depDate + "]";
+	}
 }

@@ -1,6 +1,8 @@
 package entity;
 
 public class TicketDTO {
+	private int num;
+
 	private String customerName; // 고객 이름
 	private String customerId; // 고객 아이디
 	private String seatNumber; // seatRow + SeatCol
@@ -31,6 +33,12 @@ public class TicketDTO {
 		this.cost = cost;
 		this.kidCnt = kidCnt;
 		this.adultCnt = adultCnt;
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
 	}
 	public String getCustomerName() {
 		return customerName;

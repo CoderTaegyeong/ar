@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -14,22 +16,26 @@ import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+
 import app.AppService;
 import app.AppView;
 import dao.DAO;
-import gui.table.StringTable;
+import entity.TicketDTO;
+import gui.table.DataTable;
 
 public class ReservData extends AppView {
 
 	JLabel airPlanLbl;
-	StringTable jtable = new StringTable();
+	DataTable jtable;
 	JFrame frame;
 	JScrollPane sp;
 	JButton cancelBtn;
 	DefaultTableModel model;
 	Reservation reserv;
-	List<List<String>> list;
-
+	List<TicketDTO> list;
+	TicketDTO ticket;
+	
 	// 작성자: 김태경(CoderTaegyeong)
 
 	public ReservData(Reservation r) {
@@ -64,9 +70,12 @@ public class ReservData extends AppView {
 						JOptionPane.QUESTION_MESSAGE);
 				if (choice == JOptionPane.YES_OPTION) {
 					if (jtable.getSelectedRow() != -1) {
-						DAO.sql.getJdbcTemplate().update(
-								"UPDATE TICKET SET RESERVEDATE = '예약 취소' WHERE customerID = ? ",
-								AppService.instance().getAttr("id"));
+						DAO.sql.getJdbcTemplate().update("UPDATE TICKET SET RESERVEDATE = '예약 취소' WHERE num = ? ",
+								ticket.getNum());
+						for(String seat : ticket.getSeatNumber().split("/")) {
+							System.out.println(ticket);
+							reserv.cancel(ticket.getAirNum(),seat,ticket.getSeatGrade(),ticket.getDepDate());
+						}
 					}
 					JOptionPane.showMessageDialog(null, "항공권 예약이 취소되었습니다", "항공권 예약 취소",
 							JOptionPane.INFORMATION_MESSAGE);
@@ -87,12 +96,20 @@ public class ReservData extends AppView {
 		if (sp != null)
 			rootPanel.remove(sp);
 		// 테이블 갱신
-		list = DAO.sql
-				.select("select AIRNUM, CUSTOMERNAME, DEPPLACE, ARRPLACE, DEPDATE, ARRDATE, RESERVEDATE from ticket");
-
-		jtable = new StringTable(list, "항공편", "이름", "출발지", "도착지", "출발일", "도착일", "예약일");
+		list = DAO.sql.select
+				("select * from ticket where customerID = ?"
+						,new BeanPropertyRowMapper<>(TicketDTO.class) ,AppService.instance().getAttr("id"));
+		
+		jtable = new DataTable(TicketDTO.class, list);
+		jtable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				ticket = list.get(jtable.getSelectedRow());
+			}
+		});
 		sp = new JScrollPane(jtable);
-		sp.setBounds(79, 93, 568, 436);
+		System.out.println(sp);
+		sp.setBounds(10, 93, 670, 436);
 		jtable.setBackground(new Color(175, 238, 238));
 		jtable.setBorder(new LineBorder(new Color(0, 0, 0)));
 		rootPanel.add(sp);
