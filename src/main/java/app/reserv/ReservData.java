@@ -120,7 +120,7 @@ public class ReservData extends AppView {
 			}
 		});
 		sp = new JScrollPane(jtable);
-		sp.setBounds(10, 93, 700, 436);
+		sp.setBounds(10, 93, 680, 436);
 //		AppService.instance().getContainer().getFrame().setSize(1300, 750);
 		jtable.setBackground(new Color(175, 238, 238));
 		jtable.setBorder(new LineBorder(new Color(0, 0, 0)));
