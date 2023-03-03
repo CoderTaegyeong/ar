@@ -27,7 +27,6 @@ public class AirplaneView extends AppView {
 	DefaultTableModel model;
 	Reservation reserv;
 	
-	// 작성자: 김태경(CoderTaegyeong)
 	
 	public AirplaneView(Reservation r) {
 		super("항공 일정",r);
