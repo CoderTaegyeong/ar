@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,6 +28,10 @@ public class AdminPage extends AppView{
 	private JPanel tablePanel = new JPanel(new BorderLayout());
 	private JComboBox<String> searchType = new JComboBox<String>();
 	private JTextField searchWord = new JTextField(15);
+	private JButton csButton = Gui.createButton("고객센터 답변", b->action(4));
+	private JPanel csPanel = new JPanel(Gui.flowLayout(0));
+	private StringTable table;
+	private List<List<String>> list;
 	
 	public AdminPage(String title, AdminApp adminApp) {
 		super(title, adminApp);
@@ -57,6 +63,7 @@ public class AdminPage extends AppView{
 		bottomPanel.addWest(botBtnPanel);
 		ButtonPanel btnPanel = new ButtonPanel();
 		btnPanel.setLayout(Gui.flowLayout(2));
+		btnPanel.add(csPanel);
 		btnPanel.addButton("여행 패키지 등록", b->action(2));
 		btnPanel.addButton("좌석 정보 등록", b->action(3));
 		bottomPanel.add(btnPanel);
@@ -69,6 +76,11 @@ public class AdminPage extends AppView{
 			case 1: createTable(0, searchType.getSelectedItem().toString(), searchWord.getText()); break;
 			case 2: adminApp.openPackage(); break;
 			case 3: adminApp.openAddAirline(); break;
+			case 4: 
+				int row = table.getSelectedRow();
+				if(row != -1)
+					adminApp.openCS(Integer.parseInt(list.get(row).get(0))); 
+			break;
 		}
 	}
 
@@ -89,31 +101,37 @@ public class AdminPage extends AppView{
 		String tableName = "";
 		String[] columns = null;
 		switch (tableIndex) {
-			case 1: title += "회원 목록";
-					tableName = "members";
-					columns = new String[] {"id","password"};
+			case 1: title += "고객센터 문의글 보기";
+					tableName = "customercenter";
+					columns = new String[] {"NUM","TITLE","CONTENT","WRITER","REGDATE"};
 					break;
-			case 2: title += "보드 이름 제목";
-					tableName = "members";
-					columns = new String[] {"id","password","name"};
+			case 2: title += "멤버십 가입자 조회";
+					tableName = "membership";
+					columns = new String[] {"ID","MILEAGE","INDATE","ENDDATE"};
 					break;
-			case 3: title += "회원 아이디 패스워드";
+			case 3: title += "회원 정보 조회";
 					tableName = "members";
-					columns = new String[] {"id","password","phone","name"};
+					columns = new String[] {"id","phone","name","email"};
 					break;
 		}
 		String query = makeQuery(tableName, columns); 
 		
 		titleLabel.setText(title);
 		
-		StringTable table;
 		if(!ColumnName.isBlank() && !word.isBlank()) {
 			query += " WHERE " + ColumnName + " LIKE ?";
-			table = new StringTable(DAO.sql.select(query, "%"+word+"%"), columns);
+			list = DAO.sql.select(query, "%"+word+"%");
 		}else {
-			table = new StringTable(DAO.sql.select(query), columns);
+			list = DAO.sql.select(query);
 		}
-		
+		table = new StringTable(list, columns);
+	
+		if(tableIndex == 1) {
+			csPanel.add(csButton);
+		}else {
+			csPanel.remove(csButton);
+		}
+		rootPanel.revalidate();
 		searchType.removeAllItems();
 		table.getColumnNames().forEach(s->searchType.addItem(s));;
 //		table.setColumnsSize(200,400,200);

@@ -31,4 +31,9 @@ public class AdminApp extends SubApp{
 	public void openAddAirline() {
 		AppService.instance().openView(addAirline);
 	}
+
+	public void openCS(int num) {
+		csBoard.set(num);
+		AppService.instance().openView(csBoard);
+	}
 }

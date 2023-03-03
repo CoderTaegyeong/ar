@@ -13,10 +13,12 @@ import static test.Debug.sysout;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -29,14 +31,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import app.admin.AdminApp;
-import app.view.TextView;
+import app.view.PayView;
+import app.view.TermsView;
 import entity.MemberDTO;
 import entity.PayDTO;
+import gui.Gui;
 import gui.WrapFrame;
 import gui.panel.ImagePanel;
 import gui.panel.button.ButtonPanel;
 import gui.panel.layout.BorderLayoutPanel;
 import gui.wiget.ZonedClock;
+import util.FileUtil;
 import util.StrUtil;
 import util.Style;
 
@@ -49,7 +54,9 @@ public class AppContainer {
 	private int cardIndex;
 	private JPanel cardPanel, container;
 	private BorderLayoutPanel topPanel, botPanel;
-
+	private ButtonPanel topBtnPanel = new ButtonPanel();
+	private JPanel topLeftPan;
+	
 	private final int rows = 3, cols = 3;
 	private List<AppView> viewList = new Vector<>();
 	private AppView currentView;
@@ -70,6 +77,7 @@ public class AppContainer {
 	public void setStyle() {
 		timeLabel.setFont(createFont(17));
 		viewTitleLabel.setFont(createFont("맑은 고딕", 28));
+		setMargin(viewIconLabel,3,3,3,0);
 		cardPanel.setBorder(BorderFactory.createLineBorder(style.getColor("contBorder"), 20));
 		viewTitleLabel.setForeground(style.getColor("fontColor"));
 		viewInfoLabel.setForeground(style.getColor("fontColor"));
@@ -97,18 +105,11 @@ public class AppContainer {
 		container.setPreferredSize(cardPanel.getPreferredSize());
 
 		topPanel = new BorderLayoutPanel();
-		JPanel topLeftPan = topPanel.newPanel(BorderLayout.WEST, 450, 45);
-		topLeftPan.setLayout(new FlowLayout(FlowLayout.LEFT));
+		topLeftPan = topPanel.newPanel(BorderLayout.WEST, FlowLayout.LEFT);
 		topLeftPan.add(viewIconLabel);
 		topLeftPan.add(viewTitleLabel);
 
-		ButtonPanel topBtnPanel = new ButtonPanel();
-		topBtnPanel.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));
-		topBtnPanel.setButtonSize(22, 22);
-		for(int i=1; i<=8; i++) {
-			final int a = i;
-			topBtnPanel.addButton(new ImageIcon(IMG_PATH+"n"+i+".PNG"), b->action(a));
-		}
+		action(1);
 		topPanel.addCenter(topBtnPanel);
 		
 		topPanel.newPanel(BorderLayout.EAST)
@@ -284,26 +285,31 @@ public class AppContainer {
 	}
 	
 	public void action(int i) {
+		AppService as = AppService.instance();
 		sysout("Debug Button :", i);
-		
-		if(i==1) {
-			AppService.instance().addSubApp(new AdminApp());
-			AppService.instance().updateSubAppIcons();
-		}
-		if(i==2) { 
-			AppService.instance().removeSubApp(AppService.instance().getSubApp(AdminApp.class));
-			AppService.instance().updateSubAppIcons();
+		if(i==1 || i == 2) {
+			topBtnPanel.removeAll();
+			topBtnPanel.setLayout(new GridLayout(2,i==1?1:5));
+			topBtnPanel.setButtonSize(20, 20);
+			for(int j=1; j<=(i==1?2:10); j++) {
+				final int a = j;
+				topBtnPanel.addButton(Gui.getResizedIcon(IMG_PATH+"r"+j+".PNG",20,20), b->action(a));
+			}
+			topBtnPanel.getButtonList().forEach(b->b.setCursor(new Cursor(Cursor.HAND_CURSOR)));
+			topLeftPan.setPreferredSize(new Dimension(i==1?678:583, 40));
+			topBtnPanel.getPanel().revalidate();
 		}
 		
 		if(i==3) {
-//			SelectSeat s = new SelectSeat(null, new TicketDTO());
-//			addView(s);
+			MemberDTO member = new MemberDTO("dummy","1234","name","010-0100-1211","ggg@gmail.com");
+			AppService.instance().setAttr("member", member);
+			sysout("로그인 : " + member);
 		}
 		
 		if(i==4) {
 			addView(
 				new AppView() {
-					ZonedClock clock = new ZonedClock(110);
+					ZonedClock clock = new ZonedClock(210);
 					{initRootPanel();}
 					@Override
 					public void initRootPanel() {
@@ -331,7 +337,11 @@ public class AppContainer {
 			p.setId(AppService.instance().getAttr("id"));
 			p.setItem("TEST 324020원의 상품을 구매");
 			p.setPrice(324020);
-			AppService.instance().openPayDialog(p);
+			as.openPayDialog(p);
+			if(p.ok()) {
+				PayView pv = new PayView("TEST 상품 구매", p);
+				as.openView(pv);
+			}
 		}
 		if( i == 6) {
 			WrapFrame.greenAlert("Success !", iconPanelList.get(0).getPanel(), font(25));
@@ -339,12 +349,23 @@ public class AppContainer {
 		}
 		
 		if(i == 7) {
-			addView(new TextView("title1", "seececesfaefsazc4216542365874463q23743q23684732q86437q2683214563f", b->action(2)));
+			addView(new TermsView("title1", "seececesfaefsazc4216542365874463q23743q23684732q86437q2683214563f"));
 		}
 		if(i == 8) {
-			MemberDTO member = new MemberDTO("dummy","1234","name","010-0100-1211","ggg@gmail.com");
-			AppService.instance().setAttr("member", member);
-			sysout("로그인 : " + member);
+			String className = "app.admin.AdminApp";
+			File file = FileUtil.getFile("jar");
+			if(file == null) return;
+			SubApp app = (SubApp) FileUtil.getObjectFromJar(file.getAbsolutePath(), className);
+			as.addSubApp(app);
+			as.updateSubAppIcons();
+		}
+		
+		if(i == 9) {
+			as.removeSubApp(as.getSubApp(AdminApp.class));
+		}
+		if(i == 10) {
+			as.addSubApp(new AdminApp());
+			as.updateSubAppIcons();
 		}
 	}
 	//___________________________________________DEBUG_________________________________________________

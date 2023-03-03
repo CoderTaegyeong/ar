@@ -22,9 +22,14 @@ public class TermsView extends AppView{
 	private BorderLayoutPanel botPanel = new BorderLayoutPanel();
 	private JButton nextButton;
 	private JScrollPane scroll = new JScrollPane();
+	public TermsView(String title, String text) {
+		this(title, text, null, null, null);
+	}
+	
 	public TermsView(String title, String text, Consumer<?> action) {
 		this(title, text, null, null, action);
 	}
+	
 	
 	public TermsView(String title, String text, String buttonText, Font font, Consumer<?> action) {
 		this(title, text, buttonText, font, action, null);
@@ -45,7 +50,7 @@ public class TermsView extends AppView{
 		rbPanel.setSelected(1);
 		botPanel.addCenter(rbPanel);
 		nextButton = Gui.createButton(buttonText == null ? "Next" : buttonText, Gui.font(20), b->{
-			AppService.instance().closeView(this); action.accept(null);});
+			AppService.instance().closeView(this); if(action!=null) action.accept(null); });
 		nextButton.setPreferredSize(new Dimension(120, 40));
 		nextButton.setEnabled(false);
 		botPanel.addEast(nextButton);

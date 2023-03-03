@@ -35,15 +35,8 @@ public class TravelPackage extends AppView {
 	public void initRootPanel() {
 		rootPanel = blPanel.getPanel();
 		scroll.getVerticalScrollBar().setUnitIncrement(20);
-		
-		ButtonPanel buttonPanel = new ButtonPanel();
-		buttonPanel.addButton("Refresh", b->action(1));
 	}
 	
-	private void action(int i) {
-		showPackageList();
-	}
-
 	public void showPackageList() {
 		List<PackageDTO> packageList = travel.getPackageList();
 		int rows = (int) Math.ceil((double)packageList.size() / 2);

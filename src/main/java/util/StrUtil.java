@@ -38,9 +38,9 @@ public class StrUtil {
 	    return sb.append("</html>").toString();
 	}
 	
-	public static String shorten(String str, int bytes) {
-	    if (str.getBytes().length > bytes) {
-	        return str.substring(0, bytes-1) + "...";
+	public static String shorten(String str, int n) {
+	    if (str.length() > n) {
+	        return str.substring(0, n-1) + "...";
 	    } else {
 	        return str;
 	    }

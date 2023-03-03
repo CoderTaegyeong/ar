@@ -207,6 +207,7 @@ public class WrapFrame implements Runnable {
 		JPanel inPanel = new JPanel(new FlowLayout(1,7,7));
 		inPanel.setBackground(new Color(220, 255, 220));
 		Dimension size = parent.getSize();
+		if(msg == null) msg = "";
 		if(inWidth == -1) inWidth = msg.getBytes().length * 20;
 		if(inHeight == -1) inHeight = 70;
 		JLabel iconLabel = Gui.createIconLabel(Gui.IMG_PATH+"success.png");
