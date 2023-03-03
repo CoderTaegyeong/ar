@@ -55,7 +55,11 @@ public class AdminPage extends AppView{
 		Gui.addKey(searchWord, KeyEvent.VK_ENTER, b->action(1));
 		botBtnPanel.addButton("Search", b->action(1));
 		bottomPanel.addWest(botBtnPanel);
-		bottomPanel.newPanel(BorderLayout.EAST, 2).add(Gui.createButton("여행 패키지 등록", b->action(2)));
+		ButtonPanel btnPanel = new ButtonPanel();
+		btnPanel.setLayout(Gui.flowLayout(2));
+		btnPanel.addButton("여행 패키지 등록", b->action(2));
+		btnPanel.addButton("좌석 정보 등록", b->action(3));
+		bottomPanel.add(btnPanel);
 		rootblPanel.addSouth(bottomPanel);
 		createTable(0);
 	}
@@ -64,6 +68,7 @@ public class AdminPage extends AppView{
 		switch (i) {
 			case 1: createTable(0, searchType.getSelectedItem().toString(), searchWord.getText()); break;
 			case 2: adminApp.openPackage(); break;
+			case 3: adminApp.openAddAirline(); break;
 		}
 	}
 

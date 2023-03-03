@@ -9,6 +9,8 @@ import entity.PackageDTO;
 public class AdminApp extends SubApp{
 	private AdminPage adminPage = new AdminPage("AdminApp", this);
 	private AddPackage addPackage = new AddPackage(this);
+	private CustomerServiceBoard csBoard = new CustomerServiceBoard(this);
+	private AddAirline addAirline = new AddAirline(this);
 	
 	@Override
 	public AppView requestView() {
@@ -22,5 +24,9 @@ public class AdminApp extends SubApp{
 	public void addPackage(PackageDTO pack) {
 		DAO.sql.insert("Travel_Package", pack, "num", "package_seq");
 		addPackage.reset();
+	}
+	
+	public void openAddAirline() {
+		AppService.instance().openView(addAirline);
 	}
 }

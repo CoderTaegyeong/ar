@@ -2,7 +2,7 @@ package entity;
 
 import javax.swing.JCheckBox;
 
-public class SeatDTO extends JCheckBox{
+public class SeatDTO {
 	private String airnum;
 	private String seatNumber;
 	private String seatGrade;

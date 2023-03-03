@@ -39,7 +39,8 @@ public class CustomerService extends SubApp {
 	
 	@Override
 	public AppView requestView() {
-		return boardList;
+		openList(null);
+		return null;
 	}
 	
 	public String getTitle() {

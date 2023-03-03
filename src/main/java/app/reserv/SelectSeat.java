@@ -194,14 +194,16 @@ import util.StrUtil;
                SeatNum += (seatsNumber.get(i)+"/");
             }
          }
+
+         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+         ticket.setReserveDate(sdf.format(StrUtil.now()));
          
          pay.setId(AppService.instance().getAttr("id"));
-         pay.setItem(ticket.getSeatGrade() +" " + 
-        		    ticket.getAdultCnt()+" " +
-        		 	ticket.getKidCnt()+" " +
-        		    ticket.getReserveDate()+" " +
-        		    SeatNum);
-         pay.setPrice( ( ticket.getAdultCnt() + ticket.getKidCnt() ) * 1000000);
+         pay.setItem("좌석 등급 : "+ticket.getSeatGrade() + 
+        		 	"\n좌석번호 : " + SeatNum + 
+        		    "\n성인 : " + ticket.getAdultCnt()+" 명 " +
+        		 	" 소아 : " + ticket.getKidCnt()+" 명 ");
+         pay.setPrice(ticket.getCost());
          price = pay.getPrice();
          
          AppService.instance().openPayDialog(pay); //pay 창 엶.
@@ -236,8 +238,6 @@ import util.StrUtil;
          ticket.setSeatNumber(SeatNum);
          
          // ticket insert
-         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
-         ticket.setReserveDate(sdf.format(StrUtil.now()));
          
          DAO.sql.insert("TICKET", ticket, "num", "ticket_seq");
          
@@ -458,24 +458,24 @@ import util.StrUtil;
       
       public void initRootPanel() {}
       
-      public static void main(String[] args) {
-         AppService a = AppService.instance();
-         Reservation r=  new Reservation();
-         MemberDTO m = new MemberDTO("aa1","aa2","aa3","aa4","aa5");
-         a.setAttr("member", m);
-         a.setAttr("id", m.getId());
-         a.addSubApp(r);
-         a.addSubApp(new LoginApp());
-         a.start();
-         a.addSubApp(new Membership());
-         
-         TicketDTO t = new TicketDTO();
-         t.setAirNum("OZ1075");
-         t.setAdultCnt(3);
-         t.setDepDate("2023-03-04");
-         t.setSeatGrade("이코노미");
-         r.openSeatView(t);
-//         r.openReservView();
-//         Gui.createFrame(s.getPanel()).setSize(1000,800);
-      }
+//      public static void main(String[] args) {
+//         AppService a = AppService.instance();
+//         Reservation r=  new Reservation();
+//         MemberDTO m = new MemberDTO("aa1","aa2","aa3","aa4","aa5");
+//         a.setAttr("member", m);
+//         a.setAttr("id", m.getId());
+//         a.addSubApp(r);
+//         a.addSubApp(new LoginApp());
+//         a.start();
+//         a.addSubApp(new Membership());
+//         
+//         TicketDTO t = new TicketDTO();
+//         t.setAirNum("OZ1075");
+//         t.setAdultCnt(3);
+//         t.setDepDate("2023-03-04");
+//         t.setSeatGrade("이코노미");
+//         r.openSeatView(t);
+////         r.openReservView();
+////         Gui.createFrame(s.getPanel()).setSize(1000,800);
+//      }
    }   

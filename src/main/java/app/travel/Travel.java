@@ -21,7 +21,7 @@ public class Travel extends SubApp{
 	}
 
 	public List<PackageDTO> getPackageList() {
-		String query = "SELECT * FROM ( SELECT * FROM TRAVEL_PACKAGE ORDER BY num DESC ) WHERE ROWNUM <= 20";
+		String query = "SELECT * FROM ( SELECT * FROM TRAVEL_PACKAGE WHERE IMAGE IS NOT NULL ORDER BY num DESC) WHERE ROWNUM <= 20";
 		return DAO.sql.select(query, new BeanPropertyRowMapper<>(PackageDTO.class));
 	}
 

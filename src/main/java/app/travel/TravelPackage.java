@@ -46,7 +46,8 @@ public class TravelPackage extends AppView {
 
 	public void showPackageList() {
 		List<PackageDTO> packageList = travel.getPackageList();
-		int rows = packageList.size() / 2;
+		System.out.println(packageList.size());
+		int rows = (int) Math.ceil((double)packageList.size() / 2);
 		int cols = 2;
 		centerPanel.removeAll();
 		centerPanel.setLayout(new GridLayout(rows, cols, 5, 5));
@@ -56,8 +57,8 @@ public class TravelPackage extends AppView {
 		int height = (style.height - 250) / 2;
 		for(int i=0; i < packageList.size(); i++) {
 			PackageDTO pack = packageList.get(i);
-			if(pack.getImage() == null) continue;
 			ImagePanel imagePanel = new ImagePanel();
+			imagePanel.setSize(width, height);
 			imagePanel.setImage(Gui.scaleDown(Gui.getImage(pack.getImage()), width, height));
 			imagePanel.setText(pack.getTitle());
 			imagePanel.setFont(Gui.font(17));
@@ -69,7 +70,7 @@ public class TravelPackage extends AppView {
 					"여행지: "	+ pack.getTravelLoc(),
 					"여행기간: " 	+ pack.getTravelDays(),
 					"가격: " 		+ String.format("%,d 원", pack.getPrice()),
-					"상세정보: " 	+ StrUtil.shorten(pack.getDetailText(), 20)) , 150, 100, Gui.font(12));
+					"상세정보: " 	+ StrUtil.shorten(pack.getDetailText(), 80)) , 230, 170, Gui.font(12));
 		}
 	}
 }

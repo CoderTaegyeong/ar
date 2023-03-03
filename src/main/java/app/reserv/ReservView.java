@@ -59,9 +59,14 @@ public class ReservView extends AppView{
 		rootPanel.add(seatGrLbl);
 		// 좌석 등급 콤보박스
 		
+		JLabel airNumLbl = new JLabel("항공편");
+		airNumLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
+		airNumLbl.setBounds(136, 123, 76, 24);
+		rootPanel.add(airNumLbl);
+		
 		JComboBox<String> airNumBox = new JComboBox<String>();
-		List<String> numList = DAO.sql.select("select distinct airnum from seat").get(0);
-		numList.forEach(s->airNumBox.addItem(s));
+		List<List<String>> numList = DAO.sql.select("select distinct airnum from seat where depdate > sysdate");
+		numList.forEach(l->airNumBox.addItem(l.get(0)));
 		airNumBox.setBounds(307, 114, 138, 23);
 		rootPanel.add(airNumBox);
 		

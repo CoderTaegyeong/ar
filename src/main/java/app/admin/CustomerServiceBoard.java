@@ -11,8 +11,8 @@ import gui.panel.layout.BorderLayoutPanel;
 public class CustomerServiceBoard extends AppView{
 	private AdminApp adminApp;
 	
-	public CustomerServiceBoard(String title, AdminApp adminApp) {
-		super(title, adminApp);
+	public CustomerServiceBoard(AdminApp adminApp) {
+		super("고객센터 답변하기", adminApp);
 		this.adminApp = adminApp;
 		initRootPanel();
 	}

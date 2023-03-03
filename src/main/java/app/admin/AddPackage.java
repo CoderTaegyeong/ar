@@ -102,7 +102,6 @@ public class AddPackage extends AppView {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        System.out.println(pack);
         adminApp.addPackage(pack);
 	}
 	

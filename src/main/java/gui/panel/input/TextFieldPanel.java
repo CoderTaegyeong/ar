@@ -52,7 +52,10 @@ public class TextFieldPanel extends InputPanel{
 
 	@Override
 	public void setValue(Object value) {
-		textField.setText(value.toString());
+		if(value == null)
+			textField.setText(null);
+		else 
+			textField.setText(value.toString());
 	}
 	
 	public void reset() {

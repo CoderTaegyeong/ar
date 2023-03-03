@@ -47,7 +47,7 @@ public class ReservData extends AppView {
 	@Override
 	public void initRootPanel() {
 		rootPanel.setBackground(new Color(240, 248, 255));
-		rootPanel.setBounds(0, 0, 678, 584);
+		rootPanel.setBounds(0, 0, 1300, 584);
 		rootPanel.setLayout(null);
 
 		// 페이지 제목
@@ -73,7 +73,6 @@ public class ReservData extends AppView {
 						DAO.sql.getJdbcTemplate().update("UPDATE TICKET SET RESERVEDATE = '예약 취소' WHERE num = ? ",
 								ticket.getNum());
 						for(String seat : ticket.getSeatNumber().split("/")) {
-							System.out.println(ticket);
 							reserv.cancel(ticket.getAirNum(),seat,ticket.getSeatGrade(),ticket.getDepDate());
 						}
 					}
@@ -99,7 +98,6 @@ public class ReservData extends AppView {
 		list = DAO.sql.select
 				("select * from ticket where customerID = ?"
 						,new BeanPropertyRowMapper<>(TicketDTO.class) ,AppService.instance().getAttr("id"));
-		
 		jtable = new DataTable(TicketDTO.class, list);
 		jtable.addMouseListener(new MouseAdapter() {
 			@Override
@@ -109,7 +107,8 @@ public class ReservData extends AppView {
 		});
 		sp = new JScrollPane(jtable);
 		System.out.println(sp);
-		sp.setBounds(10, 93, 670, 436);
+		sp.setBounds(10, 93, 1300, 436);
+//		AppService.instance().getContainer().getFrame().setSize(1300, 750);
 		jtable.setBackground(new Color(175, 238, 238));
 		jtable.setBorder(new LineBorder(new Color(0, 0, 0)));
 		rootPanel.add(sp);

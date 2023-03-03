@@ -44,6 +44,6 @@ public class DashBoard extends SubApp {
 	
 	@Override
 	public String getTitle() {
-		return "여행 후기";
+		return "게시판";
 	}
 }
