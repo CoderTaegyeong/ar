@@ -31,12 +31,12 @@ public class ArApplication {
 //		service.setAttr("member", new MemberDTO("dummy","1234","name1","",""));
 //		service.setAttr("id", "dummy");
 		service.addSubApp(new LoginApp());
-		service.addSubApp(new Reservation());
 		service.addSubApp(new DashBoard());
 		service.addSubApp(new AdminApp());
 		service.addSubApp(new Travel());
 		service.addSubApp(new Membership());
 		service.addSubApp(new CustomerService());
+		service.addSubApp(new Reservation());
 		service.start();
 
 		//앱 시작시 로그인 창을 띄운다

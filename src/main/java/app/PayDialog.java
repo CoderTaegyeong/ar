@@ -119,6 +119,7 @@ public class PayDialog {
 		passwordPanel.removeAll();
 		passwordPanel.setBackground(new Color(40,50,100));
 		passwordPanel.setBorder(new LineBorder(Color.BLACK, 2));
+		passwordNum = 0;
 		JPanel panel = passwordPanel.newPanel(BorderLayout.NORTH);
 		panel.setBackground(Color.WHITE);
 		panel.setLayout(new FlowLayout(FlowLayout.RIGHT, 2, 2));
@@ -170,7 +171,7 @@ public class PayDialog {
 			}
 			Debug.sysout("결제 정보(PayDialog.doPay()) : ", pay);
 			JOptionPane.showMessageDialog(dialog, "[" + pay.getItem() + "] 결제 완료");
-			dialog.dispose();	
+			dialog.dispose();
 		} else {
 			Debug.sysout("error : " + pay);
 		}

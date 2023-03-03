@@ -52,107 +52,106 @@ public class ReservView extends AppView{
 		pageLbl.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		panel.add(pageLbl);
 		
-		// 좌석 등급
-		JLabel seatGrLbl = new JLabel("좌석 등급");
-		seatGrLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-		seatGrLbl.setBounds(136, 143, 76, 24);
-		rootPanel.add(seatGrLbl);
-		// 좌석 등급 콤보박스
-		
+		// 항공편
 		JLabel airNumLbl = new JLabel("항공편");
 		airNumLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-		airNumLbl.setBounds(136, 123, 76, 24);
+		airNumLbl.setBounds(136, 147, 76, 24);
 		rootPanel.add(airNumLbl);
-		
+		// 항공편 콤보박스
 		JComboBox<String> airNumBox = new JComboBox<String>();
 		List<List<String>> numList = DAO.sql.select("select distinct airnum from seat where depdate > sysdate");
 		numList.forEach(l->airNumBox.addItem(l.get(0)));
-		airNumBox.setBounds(307, 114, 138, 23);
+		airNumBox.setBounds(307, 151, 138, 23);
 		rootPanel.add(airNumBox);
 		
-		
+		// 좌석 등급
+		JLabel seatGrLbl = new JLabel("좌석 등급");
+		seatGrLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
+		seatGrLbl.setBounds(136, 193, 76, 24);
+		rootPanel.add(seatGrLbl);
+		// 좌석 등급 콤보박스
 		JComboBox seatCombo = new JComboBox();
 		seatCombo.setBackground(new Color(255, 255, 255));
 		seatCombo.setModel(new DefaultComboBoxModel(new String[] {"이코노미", "비즈니스", "퍼스트클래스"}));
 		seatCombo.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-		seatCombo.setBounds(307, 144, 138, 23);
+		seatCombo.setBounds(307, 194, 138, 23);
 		rootPanel.add(seatCombo);
 		
 		// 출발지
 		JLabel depLbl = new JLabel("출발지");
 		depLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-		depLbl.setBounds(136, 195, 76, 24);
+		depLbl.setBounds(136, 239, 76, 24);
 		rootPanel.add(depLbl);
 		// 출발지 콤보박스
 		JComboBox depCombo = new JComboBox();
 		depCombo.setModel(new DefaultComboBoxModel(new String[] {"인천", "부산", "제주", "김포", "런던", "바르셀로나", "다낭", "방콕", "로스앤젤레스", "싱가포르", "파리", "오사카", "도쿄/나리타"}));
 		depCombo.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
 		String depPlace = depCombo.getSelectedItem().toString();
-		depCombo.setBounds(307, 196, 138, 23);
+		depCombo.setBounds(307, 240, 138, 23);
 		rootPanel.add(depCombo);
 		
 		// 도착지
 		JLabel arrLbl = new JLabel("도착지");
 		arrLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-		arrLbl.setBounds(136, 245, 76, 24);
+		arrLbl.setBounds(136, 288, 76, 24);
 		rootPanel.add(arrLbl);
 		// 도착지 콤보박스
 		JComboBox arrCombo = new JComboBox();
 		arrCombo.setModel(new DefaultComboBoxModel(new String[] {"부산", "인천", "제주", "김포", "런던", "바르셀로나", "다낭", "방콕", "로스앤젤레스", "싱가포르", "파리", "오사카", "도쿄/나리타"}));
 		arrCombo.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-		arrCombo.setBounds(307, 246, 138, 23);
+		arrCombo.setBounds(307, 289, 138, 23);
 		rootPanel.add(arrCombo);
 		
 		// 출발 날짜
 		JLabel depDateLbl = new JLabel("출발 날짜");
 		depDateLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-		depDateLbl.setBounds(136, 296, 76, 24);
+		depDateLbl.setBounds(136, 336, 76, 24);
 		rootPanel.add(depDateLbl);
 		// DateChooser로 출발 날짜 선택 기본 값을 오늘로 설정
 		JDateChooser depDateChooser = new JDateChooser(new Date());
 		depDateChooser.setMinSelectableDate(new Date()); //오늘 이전 날은 선택 금지함
-		depDateChooser.setBounds(307, 299, 138, 21);
+		depDateChooser.setBounds(307, 339, 138, 21);
 		rootPanel.add(depDateChooser);
 		
 		// 도착 날짜
 		JLabel arrDateLbl = new JLabel("도착 날짜");
 		arrDateLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-		arrDateLbl.setBounds(136, 350, 76, 24);
+		arrDateLbl.setBounds(136, 390, 76, 24);
 		rootPanel.add(arrDateLbl);
 		// DateChooser로 도착 날짜 선택 기본값을 2일후로 설정 
 		JDateChooser arrDateChooser = new JDateChooser
 				(new Date(System.currentTimeMillis()+(86400 * 2 * 1000) ));
 		
 		arrDateChooser.setMinSelectableDate(new Date()); //오늘 이전 날은 선택 금지함
-		arrDateChooser.setBounds(307, 353, 138, 21);
+		arrDateChooser.setBounds(307, 393, 138, 21);
 		rootPanel.add(arrDateChooser);
 		
 		// 인원 수
 		JLabel humanCntLbl = new JLabel("인원 수");
 		humanCntLbl.setFont(new Font("맑은 고딕", Font.BOLD, 17));
-		humanCntLbl.setBounds(136, 410, 76, 24);
+		humanCntLbl.setBounds(136, 438, 76, 24);
 		rootPanel.add(humanCntLbl);
 		// 성인
 		JLabel adultLbl = new JLabel("성인");
 		adultLbl.setFont(new Font("맑은 고딕 Semilight", Font.BOLD, 17));
-		adultLbl.setBounds(286, 412, 57, 21);
+		adultLbl.setBounds(279, 440, 57, 21);
 		rootPanel.add(adultLbl);
 		//성인 수 선택
 		JComboBox adultCombo = new JComboBox();
 		adultCombo.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5"}));
 		adultCombo.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-		adultCombo.setBounds(339, 411, 54, 23);
+		adultCombo.setBounds(330, 439, 54, 23);
 		rootPanel.add(adultCombo);
 		// 소아
 		JLabel kidLbl = new JLabel("소아");
 		kidLbl.setFont(new Font("맑은 고딕 Semilight", Font.BOLD, 17));
-		kidLbl.setBounds(416, 412, 57, 21);
+		kidLbl.setBounds(405, 440, 57, 21);
 		rootPanel.add(kidLbl);
 		// 소아 수 선택
 		JComboBox kidCombo = new JComboBox();
 		kidCombo.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5"}));
 		kidCombo.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
-		kidCombo.setBounds(467, 411, 54, 23);
+		kidCombo.setBounds(457, 439, 54, 23);
 		rootPanel.add(kidCombo);
 		
 		// 뒤로 가기: 예약하기 전 페이지로 돌아감
@@ -165,7 +164,7 @@ public class ReservView extends AppView{
 		backBtn.setForeground(new Color(255, 0, 0));
 		backBtn.setBackground(new Color(224, 255, 255));
 		backBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		backBtn.setBounds(113, 472, 132, 40);
+		backBtn.setBounds(113, 500, 132, 40);
 		rootPanel.add(backBtn);
 		
 		//초기화: 모든 선택 값을 초기 상태로 되돌림
@@ -184,7 +183,7 @@ public class ReservView extends AppView{
 		resetBtn.setForeground(new Color(0, 0, 0));
 		resetBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		resetBtn.setBackground(new Color(224, 255, 255));
-		resetBtn.setBounds(279, 472, 132, 40);
+		resetBtn.setBounds(279, 500, 132, 40);
 		rootPanel.add(resetBtn);
 		
 		//--------------------------------------------------------------------------
@@ -265,7 +264,7 @@ public class ReservView extends AppView{
 		nextBtn.setForeground(new Color(30, 144, 255));
 		nextBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		nextBtn.setBackground(new Color(224, 255, 255));
-		nextBtn.setBounds(447, 472, 132, 40);
+		nextBtn.setBounds(447, 500, 132, 40);
 		rootPanel.add(nextBtn);
 	}
 	

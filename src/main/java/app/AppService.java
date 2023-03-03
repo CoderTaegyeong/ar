@@ -1,6 +1,7 @@
 package app;
 
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,14 @@ public class AppService {
 		}
 	}
 	
+	public void closeViews(SubApp subApp) {
+		Debug.sysout("closeViews by SubApp : " +subApp);
+		if(subApp != null) {
+			appContainer.removeViews(subApp);
+		}
+	}
+
+	
 	public void openView(AppView appView) {
 		appContainer.addView(appView);
 	}
@@ -61,6 +70,7 @@ public class AppService {
 	}
 	
 	public void updateSubAppIcons() {
+		Collections.sort(appList);
 		appContainer.addAppIcons(appList);
 	}
 	

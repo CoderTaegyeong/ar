@@ -15,8 +15,8 @@ public class Reservation extends SubApp {
 	private SelectSeat selectSeat = new SelectSeat(this); 
 	private CompletePay completepay = new CompletePay(this);
 	private ReservData reservData = new ReservData(this);
-    
 	
+	{ index = 1; }
 //	public void openPayment(TicketDTO ticketDTO) { // 결제페이지 불러오기
 //		AppService.getInstance().openView(payment);
 //		System.out.println(ticketDTO);

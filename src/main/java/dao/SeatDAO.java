@@ -30,7 +30,7 @@ public class SeatDAO {
 	public ArrayList<String> getSeatList(String airnum, String depDate, String seatGrade) {
 
 		String sql = "";
-		sql += "SELECT S.SEATNUMBER, S.DEPDATE ";
+		sql += "SELECT S.SEATNUMBER, S.DEPDATE";
 		sql += " FROM SEAT S JOIN AIRPLAN A ON S.AIRNUM = A.AIRNUM";
 		sql += " WHERE S.AIRNUM = ? AND S.DEPDATE = ? AND S.SEATGRADE = ? AND S.RESERVED = 'Y'";
 		ArrayList<String> list = new ArrayList<>();
@@ -74,7 +74,7 @@ public class SeatDAO {
 		
 		String sql = "";
 		sql += "UPDATE SEAT SET RESERVED = ? ";
-		sql += "WHERE AIRNUM = ? AND SEATNUMBER = ?";
+		sql += "WHERE AIRNUM = ? AND SEATNUMBER = ? AND SEATGRADE = ? AND DEPDATE = ?";
 
 		PreparedStatement pstmt = null;
 
@@ -83,6 +83,8 @@ public class SeatDAO {
 			pstmt.setString(1, "Y");
 			pstmt.setString(2, airnum);
 			pstmt.setString(3, seatDTO.getSeatNumber());
+			pstmt.setString(4, seatDTO.getSeatGrade());
+			pstmt.setString(5, seatDTO.getDepDate());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

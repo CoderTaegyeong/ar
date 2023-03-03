@@ -3,7 +3,7 @@ package app;
 import java.time.LocalDateTime;
 
 public abstract class SubApp implements Comparable<SubApp>{
-	private int index;
+	protected int index;
 	
 	//--------------선택적 Override Methods -----------------
 	public String getTitle() {

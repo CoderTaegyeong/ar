@@ -8,6 +8,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -18,7 +19,6 @@ import javax.swing.JPanel;
 import app.AppService;
 import app.AppView;
 import app.login.LoginApp;
-import app.membership.Membership;
 import dao.DAO;
 import dao.SeatDAO;
 import dao.TicketDAO;
@@ -26,7 +26,6 @@ import entity.MemberDTO;
 import entity.PayDTO;
 import entity.SeatDTO;
 import entity.TicketDTO;
-import gui.Gui;
 import util.StrUtil;
 
    public class SelectSeat extends AppView implements ActionListener{
@@ -80,16 +79,25 @@ import util.StrUtil;
 
       
       public SelectSeat(Reservation reserve) {
+    	 super("티켓 결제 완료",reserve);
          this.reserve = reserve;
       }
 
       public void setTicket(TicketDTO ticket) {
          this.ticket = ticket;
-         System.out.println(this.ticket);
          MemberDTO member = AppService.instance().getSubApp(LoginApp.class).getMember();
          reservedSeat = new ArrayList<String>();
+         
+     	List<String> sl = DAO.sql.selectOne
+			("select Price from seat where seatGrade = ? and airnum = ? and depdate = ?",
+				ticket.getSeatGrade(), ticket.getAirNum(), ticket.getDepDate());
+         price = Integer.parseInt(sl.get(0));
+         
+         ticket.setCost(ticket.getAdultCnt() * price +  (int)(ticket.getKidCnt() * 0.5 * price));
+         
          ticket.setCustomerName(member.getName());
          ticket.setCustomerId(member.getId());
+         
          getRowAndCol();
          setInfotoLabel();
          buildGUI();
@@ -175,7 +183,6 @@ import util.StrUtil;
             seats[row][col].setEnabled(false);
          }
          
-         System.out.println(reservedSeat);
          int leftSeat = (row*col - reservedSeat.size());
          seatInfoDetailLabel.setText(Integer.toString(leftSeat) + " / " + row * col );
       }
@@ -206,6 +213,7 @@ import util.StrUtil;
          pay.setPrice(ticket.getCost());
          price = pay.getPrice();
          
+         System.out.println("결제창 열기");
          AppService.instance().openPayDialog(pay); //pay 창 엶.
          
          if(pay.ok()) {

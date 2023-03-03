@@ -14,7 +14,7 @@ public class LoginApp extends SubApp{
 	private MemberView memberView = new MemberView(this); 
 	private PayInfoView payInfoView = new PayInfoView(this);
 
-	
+	{ index = 10; }
 	
 	public void openSignUp() {
 		AppService.instance().closeView(loginView, memberView);

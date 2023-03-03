@@ -8,15 +8,8 @@ public class SeatDTO {
 	private String seatGrade;
 	private String reserved;
 	private String depDate;
+	private int price;
 	public SeatDTO() {}
-	public SeatDTO(String airnum, String seatNumber, String seatGrade, String reserved, String depDate) {
-		super();
-		this.airnum = airnum;
-		this.seatNumber = seatNumber;
-		this.seatGrade = seatGrade;
-		this.reserved = reserved;
-		this.depDate = depDate;
-	}
 	public String getAirnum() {
 		return airnum;
 	}
@@ -47,9 +40,17 @@ public class SeatDTO {
 	public void setDepDate(String depDate) {
 		this.depDate = depDate;
 	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
 	@Override
 	public String toString() {
 		return "SeatDTO [airnum=" + airnum + ", seatNumber=" + seatNumber + ", seatGrade=" + seatGrade + ", reserved="
-				+ reserved + ", depDate=" + depDate + "]";
+				+ reserved + ", depDate=" + depDate + ", price=" + price + "]";
 	}
+	
+	
 }

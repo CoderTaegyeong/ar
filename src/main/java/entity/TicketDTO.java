@@ -101,15 +101,11 @@ public class TicketDTO {
 		this.arrDate = arrDate;
 	}
 	public int getCost() {
-		int defaultPrice = 40000;
-		int result = 0;
-		result += kidCnt * 0.5 * defaultPrice;
-		result += adultCnt * defaultPrice;
-		return result;
+		return cost;
 	}
 	
 	public void setCost(int cost) {
-//		this.cost = cost;
+		this.cost = cost;
 	}
 	public int getKidCnt() {
 		return kidCnt;
