@@ -13,6 +13,8 @@ public class CustomerService extends SubApp {
 	private BoardInsert boardInsert = new BoardInsert(this);
 	private BoardUpdate boardUpdate = new BoardUpdate(this);
 	
+	{ index = -2; }
+	
 	public void openUpdate(BoardVO vo) {
 		boardUpdate.setData(vo);
 		AppService.instance().openView(boardUpdate);

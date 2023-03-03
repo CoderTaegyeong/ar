@@ -46,7 +46,6 @@ public class TravelPackage extends AppView {
 
 	public void showPackageList() {
 		List<PackageDTO> packageList = travel.getPackageList();
-		System.out.println(packageList.size());
 		int rows = (int) Math.ceil((double)packageList.size() / 2);
 		int cols = 2;
 		centerPanel.removeAll();

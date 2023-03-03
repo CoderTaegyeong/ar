@@ -70,8 +70,6 @@ public class SeatDAO {
 //		String seatGrade = seatDTO.getSeatGrade();
 //		String depdate = seatDTO.getDepDate();
 
-		System.out.println(seatDTO);
-		
 		String sql = "";
 		sql += "UPDATE SEAT SET RESERVED = ? ";
 		sql += "WHERE AIRNUM = ? AND SEATNUMBER = ? AND SEATGRADE = ? AND DEPDATE = ?";

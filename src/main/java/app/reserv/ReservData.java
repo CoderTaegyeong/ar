@@ -47,7 +47,7 @@ public class ReservData extends AppView {
 	@Override
 	public void initRootPanel() {
 		rootPanel.setBackground(new Color(240, 248, 255));
-		rootPanel.setBounds(0, 0, 1300, 584);
+		rootPanel.setBounds(0, 0, 750, 584);
 		rootPanel.setLayout(null);
 
 		// 페이지 제목
@@ -89,16 +89,30 @@ public class ReservData extends AppView {
 		cancelBtn.setBackground(new Color(175, 238, 238));
 		rootPanel.add(cancelBtn);
 	}
-
+//private String customerName; // 고객 이름
+//private String customerId; // 고객 아이디
+//private String seatNumber; // seatRow + SeatCol
+//private String seatGrade; // 좌석등급
+//private String airNum; // 비행기 번호
+//private String depPlace; // 출발지
+//private String arrPlace; // 도착지
+//private String depDate; // 출발날짜
+//private String arrDate; // 도착날짜
+//private String reserveDate; // 예약날짜
+//private int cost; // 티켓 가격
+//private int kidCnt;
+//private int adultCnt;
 	public void makeTable() {
 		// 테이블 삭제 후
 		if (sp != null)
 			rootPanel.remove(sp);
 		// 테이블 갱신
 		list = DAO.sql.select
-				("select * from ticket where customerID = ?"
+				("select num, customerName, customerId, seatNumber, "
+	+ "seatGrade, airNum, depPlace, arrPlace, depDate, arrDate,reserveDate, cost, adultCnt,  kidCnt from ticket where customerID = ?"
 						,new BeanPropertyRowMapper<>(TicketDTO.class) ,AppService.instance().getAttr("id"));
 		jtable = new DataTable(TicketDTO.class, list);
+		jtable.setColumnNames("번호","이름","아이디","좌석번호","좌석등급","항공편","출발지","도착지","출발일","도착일","예약일","금액","성인","소아");
 		jtable.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -106,8 +120,7 @@ public class ReservData extends AppView {
 			}
 		});
 		sp = new JScrollPane(jtable);
-		System.out.println(sp);
-		sp.setBounds(10, 93, 1300, 436);
+		sp.setBounds(10, 93, 700, 436);
 //		AppService.instance().getContainer().getFrame().setSize(1300, 750);
 		jtable.setBackground(new Color(175, 238, 238));
 		jtable.setBorder(new LineBorder(new Color(0, 0, 0)));

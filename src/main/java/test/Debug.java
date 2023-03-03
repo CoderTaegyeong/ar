@@ -16,12 +16,12 @@ public final class Debug {
 //	}
 	
 	public static void sysout(Object... args) {
-//		int i = 0;
-//		System.out.print("-- ");
-//		for(Object o : args) {
-//			System.out.print(i++ == 0 ? "" : "   ");
-//			System.out.print(o);
-//		}
-//		System.out.println();
+		int i = 0;
+		System.out.print("-- ");
+		for(Object o : args) {
+			System.out.print(i++ == 0 ? "" : "   ");
+			System.out.print(o);
+		}
+		System.out.println();
 	}
 }

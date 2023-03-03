@@ -1,8 +1,8 @@
 package entity;
 
 public class TicketDTO {
-	private int num;
 
+	private int num; //티켓 번호
 	private String customerName; // 고객 이름
 	private String customerId; // 고객 아이디
 	private String seatNumber; // seatRow + SeatCol

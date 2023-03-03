@@ -17,6 +17,7 @@ import gui.panel.input.InputComponent;
 import gui.panel.input.PasswordPanel;
 import gui.panel.input.TextAreaPanel;
 import gui.panel.input.TextFieldPanel;
+import test.Debug;
 
 public class InputForm<T> {
 	private Map<String,InputComponent> compMap = new HashMap<>();
@@ -143,7 +144,7 @@ public class InputForm<T> {
 					field.set(t, getValue(fieldName));
 				}
 			} catch (Exception e) {
-				System.out.println(e);
+				Debug.sysout(e);
 				return null;
 			}
 		}

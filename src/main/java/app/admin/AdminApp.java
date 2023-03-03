@@ -12,6 +12,8 @@ public class AdminApp extends SubApp{
 	private CustomerServiceBoard csBoard = new CustomerServiceBoard(this);
 	private AddAirline addAirline = new AddAirline(this);
 	
+	{ index = -10; }
+	
 	@Override
 	public AppView requestView() {
 		return adminPage;

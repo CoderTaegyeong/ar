@@ -26,6 +26,7 @@ import entity.MemberDTO;
 import entity.PayDTO;
 import entity.SeatDTO;
 import entity.TicketDTO;
+import gui.Gui;
 import util.StrUtil;
 
    public class SelectSeat extends AppView implements ActionListener{
@@ -79,7 +80,7 @@ import util.StrUtil;
 
       
       public SelectSeat(Reservation reserve) {
-    	 super("티켓 결제 완료",reserve);
+    	 super("좌석 선택",reserve);
          this.reserve = reserve;
       }
 
@@ -318,9 +319,7 @@ import util.StrUtil;
          seatsNumber.clear();
          rootPanel.setLayout(null);
          rootPanel.setBounds(0,0, 1000,1000);
-         rootPanel.setBackground(Color.red);
          seats = new JCheckBox[row][col];
-         rootPanel.setBackground(Color.yellow);
          titlePanel.setBounds(0, 0, 812, 31);
          rootPanel.add(titlePanel);
          titlePanel.setLayout(null);
