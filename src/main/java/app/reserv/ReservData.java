@@ -36,8 +36,7 @@ public class ReservData extends AppView {
 	List<TicketDTO> list;
 	TicketDTO ticket;
 	
-	// 작성자: 김태경(CoderTaegyeong)
-
+	
 	public ReservData(Reservation r) {
 		super("예약 일정", r);
 		this.reserv = r;
