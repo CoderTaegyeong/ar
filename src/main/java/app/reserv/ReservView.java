@@ -28,7 +28,7 @@ public class ReservView extends AppView{
 	private TicketDTO ticketDTO;
 
 	public ReservView(Reservation reserv) {
-		super("예약 A", reserv);
+		super("예약하기", reserv);
 		this.reserv = reserv;
 		initRootPanel();
 	}
@@ -45,7 +45,7 @@ public class ReservView extends AppView{
 		panel.setBounds(113, 56, 466, 51);
 		rootPanel.add(panel);
 		
-	    // 페이지 제목
+	        // 페이지 제목
 		JLabel pageLbl = new JLabel("예약하기");
 		pageLbl.setBounds(194, 10, 80, 27);
 		pageLbl.setFont(new Font("맑은 고딕", Font.BOLD, 20));
@@ -120,7 +120,6 @@ public class ReservView extends AppView{
 		// DateChooser로 도착 날짜 선택 기본값을 2일후로 설정 
 		JDateChooser arrDateChooser = new JDateChooser
 				(new Date(System.currentTimeMillis()+(86400 * 2 * 1000) ));
-		
 		arrDateChooser.setMinSelectableDate(new Date()); //오늘 이전 날은 선택 금지함
 		arrDateChooser.setBounds(307, 393, 138, 21);
 		rootPanel.add(arrDateChooser);
