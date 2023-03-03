@@ -22,7 +22,6 @@ import app.AppView;
 import dao.DAO;
 import entity.TicketDTO;
 
-// 작성자: 김태경(CoderTaegyeong)
 
 public class ReservView extends AppView{
 	private Reservation reserv;
@@ -223,8 +222,8 @@ public class ReservView extends AppView{
 				System.out.println(arrDate);
 				
 				// 인원 수 값 가져오기(int로 변환 후)
-				int adultCnt = Integer.valueOf((String)adultCombo.getSelectedItem().toString());
-				int kidCnt = Integer.valueOf((String)kidCombo.getSelectedItem().toString());
+				int adultCnt = Integer.valueOf(adultCombo.getSelectedItem().toString());
+				int kidCnt = Integer.valueOf(kidCombo.getSelectedItem().toString());
 				int humanCnt = adultCnt + kidCnt;
 				System.out.println("인원 수: " + humanCnt + " 성인: " + adultCnt + " 소아: " + kidCnt);
 				
