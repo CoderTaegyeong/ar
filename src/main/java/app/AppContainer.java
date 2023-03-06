@@ -19,9 +19,12 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.File;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -287,10 +290,10 @@ public class AppContainer {
 	/**
 	 * B1 : 테스트 버튼 패널 축소 <br>
 	 * B2 : 테스트 버튼 패널 확대 <br>
-	 * B3 : dummy ID로 로그인 <br>
+	 * B3 : Alert Test <br>
 	 * B4 : 익명의 AppView 동적 생성 <br>
 	 * B5 : PayDialog.open() Test <br>
-	 * B6 : Alert Test <br>
+	 * B6 : dummy ID로 로그인 <br>
 	 * B7 : logout -> Restart App Test <br>
 	 * B8 : Jar 파일에서 AdminApp 클래스 로드 <br>
 	 * B9 : add AdminApp
@@ -311,22 +314,24 @@ public class AppContainer {
 					 "# Test Button",
 					 "B1 : 테스트 버튼 패널 축소",
 					 "B2 : 테스트 버튼 패널 확대",
-					 "B3 : dummy ID로 로그인",
+					 "B3 : Alert Test",
 					 "B4 : 익명의 AppView 동적 생성",
 					 "B5 : PayDialog.open() Test",
-					 "B6 : Alert Test",
+					 "B6 : dummy ID로 로그인",
 					 "B7 : logout -> Restart App Test",
 					 "B8 : Jar 파일에서 AdminApp 클래스 로드",
 					 "B9 : Add AdminApp",
-					 "B10 : Remove AdminApp"),250,190,Gui.font(12),3000);
+					 "B10 : Remove AdminApp"),250,190,Gui.font(12),5000);
 			topBtnPanel.getButtonList().forEach(b->b.setCursor(new Cursor(Cursor.HAND_CURSOR)));
 			topLeftPan.setPreferredSize(new Dimension(i==1?677:583, 40));
 			topBtnPanel.getPanel().revalidate();
 		}
 		
 		if(i==3) {
-			as.getSubApp(LoginApp.class).login("dummy");
+			WrapFrame.greenAlert("Success !", iconPanelList.get(0).getPanel(), font(25));
+			WrapFrame.alert("Alert !", iconPanelList.get(1).getPanel());
 		}
+		
 		if(i==4) {
 			addView(
 				new AppView() {
@@ -334,6 +339,10 @@ public class AppContainer {
 					{initRootPanel();}
 					@Override
 					public void initRootPanel() {
+						String[] zoneIds = ZoneId.SHORT_IDS.keySet().toArray(new String[0]);
+						Random rand = new Random();
+						String randomZoneId = zoneIds[rand.nextInt(zoneIds.length)];
+						clock.setZone(randomZoneId);
 						clock.setColor(Color.yellow, Color.BLACK);
 						clock.initRootPanel();
 						JPanel panel = new JPanel(new BorderLayout());
@@ -364,8 +373,7 @@ public class AppContainer {
 			}
 		}
 		if( i == 6) {
-			WrapFrame.greenAlert("Success !", iconPanelList.get(0).getPanel(), font(25));
-			WrapFrame.alert("Alert !", iconPanelList.get(1).getPanel());
+			as.getSubApp(LoginApp.class).login("dummy");
 		}
 		
 		if(i == 7) {

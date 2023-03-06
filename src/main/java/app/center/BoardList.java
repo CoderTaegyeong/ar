@@ -59,7 +59,7 @@ public class BoardList extends AppView {
 		btn1.setBounds(580, 16, 106, 23);
 		
 		searchTxt      = new JTextField();
-		searchTxt.setBounds(440, 17, 133, 21);
+		searchTxt.setBounds(440, 17, 133, 24);
 		searchTxt.setColumns(10);
 		
 		btn2     = Gui.createButton("글작성", b->dash.openInsert());

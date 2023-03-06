@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 
 import app.AppService;
 import app.AppView;
+import app.ArApplication;
 import app.login.db.SignUpDAO;
 import entity.MemberDTO;
 import gui.Gui;
@@ -76,7 +77,10 @@ public class SignUp extends AppView implements ActionListener {
 		int x2 = 410;
 		rootPanel.add(titleLbl).setBounds(400, 50, 200, 30);
 		titleLbl.setFont(Gui.font(30));
-
+		JLabel joinmemberIcon = Gui.createIconLabel(ArApplication.IMG_PATH+"joinmember.png", 260, 437);
+		rootPanel.add(joinmemberIcon);
+		joinmemberIcon.setBounds(20, 70, 260, 437);
+		
 		idField.addKeyListener(new KeyAdapter() { public void keyTyped(KeyEvent e) { isIdCheck = false; } });
 		rootPanel.add(idLbl).setBounds(x1, 120, 100, 30);
 		rootPanel.add(idField).setBounds(x2, 120, 250, 30);

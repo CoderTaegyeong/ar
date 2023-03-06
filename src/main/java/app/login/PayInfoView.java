@@ -49,13 +49,13 @@ public class PayInfoView extends AppView{
 		String title = "# 결제 내역 보기 ";
 		String tableName = "PAYMENT";
 		String[] columns = {"NUM","ID","PAYDATE","ITEM","PRICE","PAY","MILE","PAYWITH","STATUS"};
-		String query = StrUtil.selectQuery(tableName, columns, "WHERE ID = ?"); 
+		String query = StrUtil.selectQuery(tableName, columns, "WHERE ID = ? ORDER BY PAYDATE DESC"); 
 		
 		titleLabel.setText(title);
 		StringTable table = new StringTable(DAO.sql.select(query, AppService.instance().getAttr("id")), columns);
 		
 		tablePanel.removeAll();
-		table.setColumnsSize(50,50,100,100,50,50,50,50);
+		table.setColumnsSize(50,50,50,300,50,50,50,50);
 		tablePanel.add(new JScrollPane(table));
 	}
 }

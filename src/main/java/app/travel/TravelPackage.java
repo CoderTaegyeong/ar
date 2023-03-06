@@ -62,7 +62,7 @@ public class TravelPackage extends AppView {
 					"여행지: "	+ pack.getTravelLoc(),
 					"여행기간: " 	+ pack.getTravelDays(),
 					"가격: " 		+ String.format("%,d 원", pack.getPrice()),
-					"상세정보: " 	+ StrUtil.shorten(pack.getDetailText(), 80)) , 230, 170, Gui.font(12), -1);
+					"상세정보: " 	+ StrUtil.shorten(pack.getDetailText(), 80)) , 230, 170, Gui.font(12), 2000);
 		}
 	}
 }

@@ -171,7 +171,7 @@ public class ZonedClock {
 			ZoneId timeZone = ZoneId.of(zoneId);
 			zonedTime = ZonedDateTime.of(time, timeZone);
 		}
-			timeLabel.setText(StrUtil.addBr("["+zoneId+"]", zonedTime.format(DateTimeFormatter.ofPattern(format))));
+			timeLabel.setText(StrUtil.addBr(StrUtil.shorten(zoneId, 12), zonedTime.format(DateTimeFormatter.ofPattern(format))));
 		if(analogClock != null)
 			analogClock.repaint();
 	}
@@ -189,6 +189,7 @@ public class ZonedClock {
 			zoneId = ZoneId.SHORT_IDS.get(zoneId);
 		}
 		this.zoneId = zoneId;
+		setTime(time);
 	}
 
 	public String getZoneId() {

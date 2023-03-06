@@ -109,7 +109,7 @@ public class ReservView extends AppView{
 		// DateChooser로 출발 날짜 선택 기본 값을 오늘로 설정
 		JDateChooser depDateChooser = new JDateChooser(new Date());
 		depDateChooser.setMinSelectableDate(new Date()); //오늘 이전 날은 선택 금지함
-		depDateChooser.setBounds(307, 339, 138, 21);
+		depDateChooser.setBounds(307, 339, 138, 24);
 		rootPanel.add(depDateChooser);
 		
 		// 도착 날짜
@@ -121,7 +121,7 @@ public class ReservView extends AppView{
 		JDateChooser arrDateChooser = new JDateChooser
 				(new Date(System.currentTimeMillis()+(86400 * 2 * 1000) ));
 		arrDateChooser.setMinSelectableDate(new Date()); //오늘 이전 날은 선택 금지함
-		arrDateChooser.setBounds(307, 393, 138, 21);
+		arrDateChooser.setBounds(307, 393, 138, 24);
 		rootPanel.add(arrDateChooser);
 		
 		// 인원 수

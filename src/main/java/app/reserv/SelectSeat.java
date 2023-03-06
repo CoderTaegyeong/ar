@@ -337,7 +337,7 @@ import util.StrUtil;
          panel_2.setBounds(12, 10, 447, 480);
          seatPanel.add(panel_2);
          panel_2.setLayout(null);
-         JLabel screenLabel = new JLabel("\t\t\t\t\t\t\t\tScreen");
+         JLabel screenLabel = new JLabel("\t\t\t\t\t\t\t\t좌석");
          screenLabel.setBackground(Color.WHITE);
          screenLabel.setForeground(Color.BLACK);
          screenLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
