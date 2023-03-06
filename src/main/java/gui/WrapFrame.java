@@ -143,11 +143,15 @@ public class WrapFrame implements Runnable {
 		}
 	}
 	
-	public static void mouseTooltip(JComponent parent, String text) {
-		mouseTooltip(parent, text, -1, -1, null);
+	public static void mouseTooltip(CustomPanel customPanel, String text) {
+		mouseTooltip(customPanel.getPanel(), text, -1, -1, null, -1);
 	}
 	
-	public static void mouseTooltip(JComponent parent, String text, int width, int height, Font font) {
+	public static void mouseTooltip(JComponent parent, String text) {
+		mouseTooltip(parent, text, -1, -1, null, -1);
+	}
+	
+	public static void mouseTooltip(JComponent parent, String text, int width, int height, Font font, int waitMS) {
 		MouseAdapter adapter = new MouseAdapter() {
 			Timer timer;
 			WrapFrame frame = new WrapFrame(parent);
@@ -155,8 +159,8 @@ public class WrapFrame implements Runnable {
 			{
 		        timer = new Timer(1000, e->{
 		        	if(frame.getFrame().isVisible()) return;
-					frame.setProperties(0, 0.1f, 1f, 1200);
-					frame.start(me.getLocationOnScreen().x, me.getLocationOnScreen().y + 50,
+					frame.setProperties(0, 0.1f, 1f, waitMS < 0 ? 1200 : waitMS);
+					frame.start(me.getLocationOnScreen().x, me.getLocationOnScreen().y + 30,
 						width < 0 ? parent.getWidth() : width, height < 0 ? parent.getHeight() : height);
 		        });
 		        timer.setRepeats(false);

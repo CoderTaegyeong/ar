@@ -31,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import app.admin.AdminApp;
+import app.login.LoginApp;
 import app.view.PayView;
 import app.view.TermsView;
 import entity.MemberDTO;
@@ -111,7 +112,6 @@ public class AppContainer {
 
 		action(1);
 		topPanel.addCenter(topBtnPanel);
-		
 		topPanel.newPanel(BorderLayout.EAST)
 		.add(setMargin(createIconLabel(IMG_PATH+"config.png", 33, 33, b->config.open()), 5, 0, 0, 5));
 		
@@ -284,6 +284,18 @@ public class AppContainer {
 					));
 	}
 	
+	/**
+	 * B1 : 테스트 버튼 패널 축소 <br>
+	 * B2 : 테스트 버튼 패널 확대 <br>
+	 * B3 : dummy ID로 로그인 <br>
+	 * B4 : 익명의 AppView 동적 생성 <br>
+	 * B5 : PayDialog.open() Test <br>
+	 * B6 : Alert Test <br>
+	 * B7 : logout -> Restart App Test <br>
+	 * B8 : Jar 파일에서 AdminApp 클래스 로드 <br>
+	 * B9 : remove AdminApp <br>
+	 * B10 : add AdminApp
+	 */
 	public void action(int i) {
 		AppService as = AppService.instance();
 		sysout("Debug Button :", i);
@@ -295,15 +307,30 @@ public class AppContainer {
 				final int a = j;
 				topBtnPanel.addButton(Gui.getResizedIcon(IMG_PATH+"r"+j+".PNG",20,20), b->action(a));
 			}
+			WrapFrame.mouseTooltip(topBtnPanel.getButton(0),StrUtil.addBr(
+					 "# Test Button",
+					 "B1 : 테스트 버튼 패널 축소",
+					 "B2 : 테스트 버튼 패널 확대",
+					 "B3 : dummy ID로 로그인",
+					 "B4 : 익명의 AppView 동적 생성",
+					 "B5 : PayDialog.open() Test",
+					 "B6 : Alert Test",
+					 "B7 : logout -> Restart App Test",
+					 "B8 : Jar 파일에서 AdminApp 클래스 로드",
+					 "B9 : remove AdminApp",
+					 "B10 : add AdminApp"),250,190,Gui.font(12),3000);
 			topBtnPanel.getButtonList().forEach(b->b.setCursor(new Cursor(Cursor.HAND_CURSOR)));
-			topLeftPan.setPreferredSize(new Dimension(i==1?678:583, 40));
+			topLeftPan.setPreferredSize(new Dimension(i==1?677:583, 40));
 			topBtnPanel.getPanel().revalidate();
 		}
 		
 		if(i==3) {
-			MemberDTO member = new MemberDTO("dummy","1234","name","010-0100-1211","ggg@gmail.com");
-			AppService.instance().setAttr("member", member);
-			sysout("로그인 : " + member);
+			as.getSubApp(LoginApp.class).login("dummy");
+//			MemberDTO member = new MemberDTO("dummy","1234","name","010-0100-1211","ggg@gmail.com");
+//			as.setAttr("member", member);
+//			as.setAttr("id", member.getId());
+//			as.setAttr("name", member.getName());
+//			sysout("로그인 : " + member);
 		}
 		
 		if(i==4) {
@@ -349,7 +376,8 @@ public class AppContainer {
 		}
 		
 		if(i == 7) {
-			addView(new TermsView("title1", "seececesfaefsazc4216542365874463q23743q23684732q86437q2683214563f"));
+			as.getSubApp(LoginApp.class).logout();
+			new ArApplication().run();
 		}
 		if(i == 8) {
 			String className = "app.admin.AdminApp";
