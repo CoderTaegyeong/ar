@@ -45,7 +45,6 @@ public class AppService {
 			appContainer.removeViews(subApp);
 		}
 	}
-
 	
 	public void openView(AppView appView) {
 		appContainer.addView(appView);

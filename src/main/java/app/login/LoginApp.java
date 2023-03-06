@@ -57,7 +57,7 @@ public class LoginApp extends SubApp{
 				new MemberRowMapper(), id).get();
 		AppService.instance().setAttr("member", member);
 		AppService.instance().setAttr("id", member.getId());
-		AppService.instance().setAttr("name", member.getName() );
+		AppService.instance().setAttr("name", member.getName());
 		AppService.instance().closeView(loginView, signUp);
 	}
 	

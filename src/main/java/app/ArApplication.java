@@ -32,7 +32,7 @@ public class ArApplication {
 //		service.setAttr("id", "dummy");
 		service.addSubApp(new LoginApp());
 		service.addSubApp(new DashBoard());
-		service.addSubApp(new AdminApp());
+//		service.addSubApp(new AdminApp());
 		service.addSubApp(new Travel());
 		service.addSubApp(new Membership());
 		service.addSubApp(new CustomerService());
