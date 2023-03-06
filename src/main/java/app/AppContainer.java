@@ -293,8 +293,8 @@ public class AppContainer {
 	 * B6 : Alert Test <br>
 	 * B7 : logout -> Restart App Test <br>
 	 * B8 : Jar 파일에서 AdminApp 클래스 로드 <br>
-	 * B9 : remove AdminApp <br>
-	 * B10 : add AdminApp
+	 * B9 : add AdminApp
+	 * B10 : remove AdminApp <br>
 	 */
 	public void action(int i) {
 		AppService as = AppService.instance();
@@ -317,8 +317,8 @@ public class AppContainer {
 					 "B6 : Alert Test",
 					 "B7 : logout -> Restart App Test",
 					 "B8 : Jar 파일에서 AdminApp 클래스 로드",
-					 "B9 : remove AdminApp",
-					 "B10 : add AdminApp"),250,190,Gui.font(12),3000);
+					 "B9 : Add AdminApp",
+					 "B10 : Remove AdminApp"),250,190,Gui.font(12),3000);
 			topBtnPanel.getButtonList().forEach(b->b.setCursor(new Cursor(Cursor.HAND_CURSOR)));
 			topLeftPan.setPreferredSize(new Dimension(i==1?677:583, 40));
 			topBtnPanel.getPanel().revalidate();
@@ -326,13 +326,7 @@ public class AppContainer {
 		
 		if(i==3) {
 			as.getSubApp(LoginApp.class).login("dummy");
-//			MemberDTO member = new MemberDTO("dummy","1234","name","010-0100-1211","ggg@gmail.com");
-//			as.setAttr("member", member);
-//			as.setAttr("id", member.getId());
-//			as.setAttr("name", member.getName());
-//			sysout("로그인 : " + member);
 		}
-		
 		if(i==4) {
 			addView(
 				new AppView() {
@@ -358,7 +352,6 @@ public class AppContainer {
 				}
 			);
 		}
-		
 		if(i == 5) {
 			PayDTO p = new PayDTO();
 			p.setId(AppService.instance().getAttr("id"));
@@ -387,13 +380,12 @@ public class AppContainer {
 			as.addSubApp(app);
 			as.updateSubAppIcons();
 		}
-		
 		if(i == 9) {
-			as.removeSubApp(as.getSubApp(AdminApp.class));
-		}
-		if(i == 10) {
 			as.addSubApp(new AdminApp());
 			as.updateSubAppIcons();
+		}
+		if(i == 10) {
+			as.removeSubApp(as.getSubApp(AdminApp.class));
 		}
 	}
 	//___________________________________________DEBUG_________________________________________________

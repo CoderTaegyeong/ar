@@ -59,7 +59,7 @@ public class InfoView extends AppView{
 		String title = "# 마일리지 " + (tableIndex != 1 ? "사용 내역" : "적립 내역") ;
 		String tableName = "MILEAGE";
 		String[] columns = {"NUM","TIMESTAMP","ID","MILECHANGE","DETAIL"};
-		String query = StrUtil.selectQuery(tableName, columns, "WHERE ID = ? AND MILECHANGE " + (tableIndex != 1 ? "< 0" : " > 0")); 
+		String query = StrUtil.selectQuery(tableName, columns, "WHERE ID = ? AND MILECHANGE " + (tableIndex != 1 ? "< 0" : " > 0") + "ORDER BY TIMESTAMP DESC"); 
 		
 		titleLabel.setText(title);
 		StringTable table = new StringTable(DAO.sql.select(query, AppService.instance().getAttr("id")), columns);
