@@ -47,7 +47,7 @@ public class ReservView extends AppView{
 		
 	        // 페이지 제목
 		JLabel pageLbl = new JLabel("예약하기");
-		pageLbl.setBounds(194, 10, 80, 27);
+		pageLbl.setBounds(194, 14, 80, 27);
 		pageLbl.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 		panel.add(pageLbl);
 		
